@@ -8,6 +8,7 @@
  "hide_custom": 0,
  "icon": "website",
  "idx": 0,
+ "is_hidden": 1,
  "label": "Website",
  "links": [
   {
@@ -232,16 +233,17 @@
    "type": "Link"
   }
  ],
- "modified": "2022-01-13 17:49:41.527194",
+ "modified": "2023-01-31 15:59:42.195757",
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Website",
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
+ "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 28.0,
+ "sequence_id": 23.0,
  "shortcuts": [
   {
    "color": "Green",

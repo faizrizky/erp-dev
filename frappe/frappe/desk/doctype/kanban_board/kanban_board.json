@@ -84,7 +84,7 @@
   }
  ],
  "links": [],
- "modified": "2022-04-13 12:10:20.284367",
+ "modified": "2023-02-02 22:17:16.810215",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Kanban Board",
@@ -112,6 +112,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Software Developer",
    "share": 1,
    "write": 1
   }

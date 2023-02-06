@@ -427,9 +427,9 @@ frappe.Application = class Application {
 		me.logged_out = true;
 		return frappe.call({
 			method: "logout",
-			callback: function (r) {
-				if (r.exc) {
-					return;
+		callback: function (r) {
+			if (r.exc) {
+				return;
 				}
 				me.redirect_to_login();
 			},
@@ -491,7 +491,7 @@ frappe.Application = class Application {
 		}
 	}
 	redirect_to_login() {
-		window.location.href = "/";
+		window.location.href = "http://192.168.101.153:8000/login#logins";
 	}
 	set_favicon() {
 		var link = $('link[type="image/x-icon"]').remove().attr("href");

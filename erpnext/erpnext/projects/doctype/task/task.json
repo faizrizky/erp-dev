@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "TASK-.YYYY.-.#####",
+ "autoname": "format:subject",
  "creation": "2013-01-29 19:25:50",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
  "field_order": [
   "subject",
+  "task_name",
   "project",
   "issue",
   "type",
@@ -52,7 +53,8 @@
   "company",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "multi"
  ],
  "fields": [
   {
@@ -82,6 +84,7 @@
    "fieldname": "issue",
    "fieldtype": "Link",
    "label": "Issue",
+   "length": 100,
    "options": "Issue"
   },
   {
@@ -267,6 +270,7 @@
    "collapsible": 1,
    "fieldname": "sb_costing",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Costing"
   },
   {
@@ -382,6 +386,20 @@
    "fieldtype": "Date",
    "label": "Completed On",
    "mandatory_depends_on": "eval: doc.status == \"Completed\""
+  },
+  {
+   "fieldname": "task_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Task Name"
+  },
+  {
+   "fieldname": "multi",
+   "fieldtype": "Table MultiSelect",
+   "label": "multi",
+   "options": "Assigment Issue"
   }
  ],
  "icon": "fa fa-check",
@@ -389,33 +407,24 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2022-06-23 16:58:47.005241",
+ "modified": "2023-02-03 16:58:35.105087",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
- "naming_rule": "Expression (old style)",
+ "name_case": "Title Case",
+ "naming_rule": "Expression",
  "nsm_parent_field": "parent_task",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Projects User",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "search_fields": "subject",
  "show_name_in_global_search": 1,
  "show_preview_popup": 1,
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "timeline_field": "project",
  "title_field": "subject",
- "track_seen": 1
+ "track_seen": 1,
+ "translated_doctype": 1
 }

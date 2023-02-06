@@ -8,6 +8,7 @@
  "hide_custom": 0,
  "icon": "tool",
  "idx": 0,
+ "is_hidden": 1,
  "label": "Build",
  "links": [
   {
@@ -273,7 +274,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-02 01:48:28.029135",
+ "modified": "2023-01-31 15:57:57.191995",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Build",

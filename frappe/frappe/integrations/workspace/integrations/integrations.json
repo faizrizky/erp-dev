@@ -8,6 +8,7 @@
  "hide_custom": 0,
  "icon": "integration",
  "idx": 0,
+ "is_hidden": 1,
  "label": "Integrations",
  "links": [
   {
@@ -197,7 +198,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-07-23 18:00:28.805405",
+ "modified": "2023-01-31 15:59:02.390890",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Integrations",
@@ -207,7 +208,7 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 15.0,
+ "sequence_id": 16.0,
  "shortcuts": [],
  "title": "Integrations"
 }

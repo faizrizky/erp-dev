@@ -118,7 +118,7 @@
    "fieldname": "asset_owner",
    "fieldtype": "Select",
    "label": "Asset Owner",
-   "options": "\nCompany\nSupplier\nCustomer"
+   "options": "\nCompany\nSupplier\nCustomer\nDepartment"
   },
   {
    "depends_on": "eval:doc.asset_owner == \"Company\"",
@@ -238,6 +238,7 @@
    "default": "0",
    "fieldname": "is_existing_asset",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Is Existing Asset"
   },
   {
@@ -521,7 +522,7 @@
    "link_fieldname": "asset"
   }
  ],
- "modified": "2023-01-16 23:35:37.423100",
+ "modified": "2023-02-02 13:30:30.387249",
  "modified_by": "Administrator",
  "module": "Assets",
  "name": "Asset",

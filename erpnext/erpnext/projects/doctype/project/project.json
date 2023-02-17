@@ -33,6 +33,7 @@
   "section_break_18",
   "actual_start_date",
   "actual_time",
+  "actual_time_count",
   "column_break_20",
   "actual_end_date",
   "project_details",
@@ -230,17 +231,18 @@
    "collapsible": 1,
    "fieldname": "section_break_18",
    "fieldtype": "Section Break",
-   "label": "Start and End Dates"
+   "label": "Start and End Dates",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "fieldname": "actual_start_date",
    "fieldtype": "Date",
-   "label": "Actual Start Date (via Time Sheet)",
-   "read_only": 1
+   "label": "Actual Start Date (via Time Sheet)"
   },
   {
    "fieldname": "actual_time",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Actual Time (in Hours via Time Sheet)",
    "read_only": 1
   },
@@ -254,7 +256,7 @@
    "label": "Actual End Date (via Time Sheet)",
    "oldfieldname": "act_completion_date",
    "oldfieldtype": "Date",
-   "read_only": 1
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "collapsible": 1,
@@ -447,6 +449,12 @@
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
+  },
+  {
+   "fieldname": "actual_time_count",
+   "fieldtype": "Data",
+   "label": "Actual Time (in Hours via Time Sheet)",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-puzzle-piece",
@@ -454,7 +462,7 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "max_attachments": 4,
- "modified": "2023-02-02 14:07:35.027807",
+ "modified": "2023-02-13 13:55:20.592463",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",

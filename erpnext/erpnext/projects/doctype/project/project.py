@@ -12,6 +12,8 @@ from frappe.utils import add_days, flt, get_datetime, get_time, get_url, nowtime
 from erpnext import get_default_company
 from erpnext.controllers.queries import get_filters_cond
 from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
+from datetime import timedelta
+import re
 
 
 class Project(Document):
@@ -229,6 +231,12 @@ class Project(Document):
 		self.total_costing_amount = from_time_sheet.costing_amount
 		self.total_billable_amount = from_time_sheet.billing_amount
 		self.actual_time = from_time_sheet.time
+
+		# self.actual_time_count = f"${self.actual_time_count:.0f}"
+		if self.actual_time_count == "":
+			self.actual_time_count = str(timedelta(hours=self.actual_time)).split('.')[0]
+		# self.actual_time_count = f'{self.actual_time:.0f}'
+		# self.actual_time_count = self.actual_time_count.replace('.',"")
 
 		self.update_purchase_costing()
 		self.update_sales_amount()

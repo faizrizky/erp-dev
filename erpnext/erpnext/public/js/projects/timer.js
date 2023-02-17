@@ -7,9 +7,9 @@ erpnext.timesheet.timer = function(frm, row, timestamp=0) {
 		[
 			{"fieldtype": "Link", "label": __("Activity Type"), "fieldname": "activity_type",
 				"reqd": 1, "options": "Activity Type"},
-			{"fieldtype": "Link", "label": __("Project"), "fieldname": "project", "options": "Project"},
-			{"fieldtype": "Link", "label": __("Task"), "fieldname": "task", "options": "Task"},
-			{"fieldtype": "Float", "label": __("Expected Hrs"), "fieldname": "expected_hours"},
+			{"fieldtype": "Link", "label": __("Project"), "fieldname": "project","reqd": 1, "options": "Project"},
+			{"fieldtype": "Link", "label": __("Task"), "fieldname": "task","reqd": 1, "options": "Task"},
+			{"fieldtype": "Int", "label": __("Expected Minutes"),"reqd": 1, "fieldname": "expected_hours"},
 			{"fieldtype": "Section Break"},
 			{"fieldtype": "HTML", "fieldname": "timer_html"}
 		]
@@ -26,13 +26,14 @@ erpnext.timesheet.timer = function(frm, row, timestamp=0) {
 	dialog.get_field("timer_html").$wrapper.append(get_timer_html());
 	function get_timer_html() {
 		return `
-			<div class="stopwatch">
+			<div class="stopwatch text-center" style="font-size:35px;">
 				<span class="hours">00</span>
 				<span class="colon">:</span>
 				<span class="minutes">00</span>
 				<span class="colon">:</span>
 				<span class="seconds">00</span>
 			</div>
+			<br>
 			<div class="playpause text-center">
 				<button class= "btn btn-primary btn-start"> ${ __("Start") } </button>
 				<button class= "btn btn-primary btn-complete"> ${ __("Complete") } </button>
@@ -77,6 +78,11 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 			row.project = args.project;
 			row.task = args.task;
 			row.expected_hours = args.expected_hours;
+			row.expected_hours_count = args.expected_hours;
+			row.expected_hours_count = moment.utc((args.expected_hours*1000/60)*3600).format('HH:mm:ss');
+			// const duration = moment.duration(args.expected_hours, 'minutes')
+			// const format = Math.floor(duration.asHours()) + ':' + duration.minutes() + ':' + duration.seconds()
+			// alert(row.expected_hours_count)
 			row.completed = 0;
 			let d = moment(row.from_time);
 			if(row.expected_hours) {
@@ -109,8 +115,12 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 		grid_row.doc.project = args.project;
 		grid_row.doc.task = args.task;
 		grid_row.doc.expected_hours = args.expected_hours;
+		grid_row.doc.expected_hours_count = moment.utc((args.expected_hours*1000/60)*3600).format('HH:mm:ss');
 		grid_row.doc.hours = currentIncrement / 3600;
+		grid_row.doc.hrs = grid_row.doc.hours;
 		grid_row.doc.to_time = frappe.datetime.now_datetime();
+		grid_row.doc.hours_count = moment.utc(currentIncrement*1000).format('HH:mm:ss');
+		
 		grid_row.refresh();
 		frm.dirty();
 		frm.save();

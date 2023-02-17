@@ -10,6 +10,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project_selection_section",
+  "activity_type",
   "title",
   "naming_series",
   "parent_project",
@@ -17,8 +18,8 @@
   "currency",
   "exchange_rate",
   "sales_invoice",
-  "column_break_3",
   "status",
+  "column_break_3",
   "employee_detail",
   "employee_name",
   "department",
@@ -120,6 +121,7 @@
   {
    "fieldname": "parent_project",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Project",
    "options": "Project",
    "print_hide": 1
@@ -171,7 +173,6 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "in_list_view": 1,
    "label": "Start Date",
    "print_hide": 1,
    "read_only": 1
@@ -345,9 +346,12 @@
    "fieldtype": "Column Break"
   },
   {
+   "columns": 1,
    "fetch_from": "employee.branch",
    "fieldname": "branch",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Role",
    "options": "Branch",
    "read_only": 1
@@ -355,19 +359,27 @@
   {
    "fieldname": "project_selection_section",
    "fieldtype": "Section Break",
-   "label": "Project Selection"
+   "label": "Timesheet Status"
   },
   {
    "fieldname": "total_hrs",
    "fieldtype": "Data",
    "label": "Total Working Hours",
    "read_only": 1
+  },
+  {
+   "fetch_from": "amended_from.user",
+   "fieldname": "activity_type",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Activity Type",
+   "options": "Activity Type"
   }
  ],
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-02-03 16:24:55.470968",
+ "modified": "2023-02-08 11:56:32.944200",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

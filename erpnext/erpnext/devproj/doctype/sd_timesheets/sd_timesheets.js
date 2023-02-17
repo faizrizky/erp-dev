@@ -251,7 +251,10 @@ frappe.ui.form.on("Timesheet Detail", {
 		if(frm._setting_hours) return;
 
 		var hours = moment(child.to_time).diff(moment(child.from_time), "seconds") / 3600;
+		var hrs = moment(child.to_time).diff(moment(child.from_time), "seconds") / 3600;
 		frappe.model.set_value(cdt, cdn, "hours", hours);
+		frappe.model.set_value(cdt, cdn, "hrs", hrs);
+		console.log(frappe.model.set_value(cdt, cdn, "hrs", hrs))
 	},
 
 	time_logs_add: function(frm, cdt, cdn) {
@@ -372,6 +375,7 @@ var calculate_time_and_amount = function(frm) {
 	for(var i=0; i<tl.length; i++) {
 		if (tl[i].hours) {
 			total_working_hr += tl[i].hours;
+			total_working_hr = moment.utc(currentIncrement*1000).format('HH:mm:ss');
 			total_billable_amount += tl[i].billing_amount;
 			total_costing_amount += tl[i].costing_amount;
 

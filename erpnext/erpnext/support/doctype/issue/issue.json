@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "field:subject",
  "creation": "2013-02-01 10:36:25",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -14,8 +14,8 @@
   "customer",
   "raised_by",
   "cb00",
-  "status",
   "priority",
+  "status",
   "issue_type",
   "issue_split_from",
   "sb_details",
@@ -47,10 +47,10 @@
   "lead",
   "contact",
   "email_account",
+  "company",
   "column_break_16",
   "customer_name",
   "project",
-  "company",
   "via_customer_portal",
   "attachment",
   "content_type"
@@ -59,6 +59,7 @@
   {
    "fieldname": "subject_section",
    "fieldtype": "Section Break",
+   "label": "Issue Details",
    "options": "fa fa-flag"
   },
   {
@@ -68,16 +69,19 @@
    "no_copy": 1,
    "options": "ISS-.YYYY.-",
    "print_hide": 1,
+   "read_only": 1,
    "set_only_once": 1
   },
   {
    "bold": 1,
+   "description": "Nama issue",
    "fieldname": "subject",
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_standard_filter": 1,
    "label": "Subject",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "customer",
@@ -96,6 +100,7 @@
    "depends_on": "eval:doc.__islocal",
    "fieldname": "raised_by",
    "fieldtype": "Data",
+   "hidden": 1,
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "Raised By (Email)",
@@ -121,6 +126,7 @@
    "search_index": 1
   },
   {
+   "description": "Sebelum menentukan priority, diskusikan ke atasan terlebih dahulu",
    "fieldname": "priority",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -131,15 +137,17 @@
   {
    "fieldname": "issue_type",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Issue Type",
    "options": "Issue Type"
   },
   {
    "collapsible": 1,
    "collapsible_depends_on": "eval:doc.status!=\"Closed\"",
+   "description": "Deskripsikan apa yang sudah kamu lakukan sampai mendapatkan issue ini, mulai dari langkah-langkah hingga log historynya. Masukkan gambar jika diperlukan",
    "fieldname": "sb_details",
    "fieldtype": "Section Break",
-   "label": "Details"
+   "label": "Details for Issue Maker"
   },
   {
    "bold": 1,
@@ -166,7 +174,7 @@
    "depends_on": "eval: doc.status != 'Replied' && doc.service_level_agreement;",
    "fieldname": "response_by",
    "fieldtype": "Datetime",
-   "label": "Response By",
+   "label": "Response By Solver",
    "read_only": 1
   },
   {
@@ -185,6 +193,7 @@
   },
   {
    "collapsible": 1,
+   "description": "Kapan kamu menemukan issue ini. Masukkan tanggal \"Now\" jika menemukannya hari ini",
    "fieldname": "response",
    "fieldtype": "Section Break",
    "label": "Response Details"
@@ -205,10 +214,12 @@
   {
    "fieldname": "lead",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Lead",
    "options": "Lead"
   },
   {
+   "description": "Masukkan kontak yang sudah membuat issue ini",
    "fieldname": "contact",
    "fieldtype": "Link",
    "label": "Contact",
@@ -217,6 +228,7 @@
   {
    "fieldname": "email_account",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Email Account",
    "options": "Email Account"
   },
@@ -248,6 +260,7 @@
   },
   {
    "collapsible": 1,
+   "description": "Apa yang sudah kamu lakukan untuk memperbaiki issue ini",
    "fieldname": "section_break_19",
    "fieldtype": "Section Break",
    "label": "Resolution Details"
@@ -313,6 +326,7 @@
    "default": "0",
    "fieldname": "via_customer_portal",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Via Customer Portal"
   },
   {
@@ -391,11 +405,11 @@
  "icon": "fa fa-ticket",
  "idx": 7,
  "links": [],
- "modified": "2023-02-03 16:48:07.324834",
+ "modified": "2023-02-08 13:37:50.738621",
  "modified_by": "Administrator",
  "module": "Support",
  "name": "Issue",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

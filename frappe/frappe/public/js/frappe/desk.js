@@ -491,7 +491,7 @@ frappe.Application = class Application {
 		}
 	}
 	redirect_to_login() {
-		window.location.href = "http://192.168.101.153:8000/login#logins";
+		window.location.href = window.location.origin+"/login#logins";
 	}
 	set_favicon() {
 		var link = $('link[type="image/x-icon"]').remove().attr("href");

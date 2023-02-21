@@ -1,0 +1,21 @@
+services:
+  configurator:
+    image: custom_app/worker
+
+  backend:
+    image: custom_app/worker
+
+  frontend:
+    image: custom_app/nginx
+
+  queue-short:
+    image: custom_app/worker
+
+  queue-default:
+    image: custom_app/worker
+
+  queue-long:
+    image: custom_app/worker
+
+  scheduler:
+    image: custom_app/worker

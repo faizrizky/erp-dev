@@ -180,7 +180,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-02-22 06:59:13.019634",
+ "modified": "2023-02-22 22:01:46.131247",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Projects",
@@ -193,19 +193,18 @@
  "sequence_id": 2.0,
  "shortcuts": [
   {
-   "color": "Blue",
-   "format": "{} Assigned",
-   "label": "Task",
-   "link_to": "Task",
-   "stats_filter": "{\"_assign\":[\"like\",null]}",
-   "type": "DocType"
-  },
-  {
    "color": "Cyan",
    "doc_view": "List",
    "label": "SD Timesheets",
    "link_to": "SD Timesheets",
-   "stats_filter": "{\"status\":[\"=\",null]}",
+   "stats_filter": "{\"name\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "format": "{} Assigned",
+   "label": "Task",
+   "link_to": "Task",
    "type": "DocType"
   },
   {

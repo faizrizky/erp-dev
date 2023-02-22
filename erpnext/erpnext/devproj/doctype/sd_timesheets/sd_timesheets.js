@@ -22,7 +22,8 @@ frappe.ui.form.on('SD Timesheets', {
 			return{
 				filters: {
 					'project': child.project,
-					'status': ["!=", "Cancelled"]
+					'status': ["!=", "Cancelled"],
+					_assign : ['like', '%'+frappe.session.user+'%']
 				}
 			};
 		};
@@ -30,7 +31,9 @@ frappe.ui.form.on('SD Timesheets', {
 		frm.fields_dict['time_logs'].grid.get_field('project').get_query = function() {
 			return{
 				filters: {
-					'company': frm.doc.company
+					'company': frm.doc.company,
+					'status': ["!=", "Cancelled"],
+					_assign : ['like', '%'+frappe.session.user+'%']
 				}
 			};
 		};

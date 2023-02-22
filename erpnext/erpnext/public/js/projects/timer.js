@@ -5,16 +5,21 @@ erpnext.timesheet.timer = function(frm, row, timestamp=0) {
 		title: __("Timer"),
 		fields:
 		[
+			{"fieldtype": "Link", "label": __("Project"), "fieldname": "project","reqd": 1, "options": "Project", "filters" : {_assign : ['like', '%'+frappe.session.user+'%']}},
 			{"fieldtype": "Link", "label": __("Activity Type"), "fieldname": "activity_type",
 				"reqd": 1, "options": "Activity Type"},
-			{"fieldtype": "Link", "label": __("Project"), "fieldname": "project","reqd": 1, "options": "Project"},
-			{"fieldtype": "Link", "label": __("Task"), "fieldname": "task","reqd": 1, "options": "Task"},
+			{"fieldtype": "Link", "label": __("Task"), "fieldname": "task","reqd": 1, "options": "Task", "filters" : {
+					'status': ["!=", "Completed"],
+					_assign : ['like', '%'+frappe.session.user+'%']
+				}
+			},
 			{"fieldtype": "Int", "label": __("Expected Minutes"),"reqd": 1, "fieldname": "expected_hours"},
 			{"fieldtype": "Section Break"},
 			{"fieldtype": "HTML", "fieldname": "timer_html"}
 		]
 	});
 
+	
 	if (row) {
 		dialog.set_values({
 			'activity_type': row.activity_type,

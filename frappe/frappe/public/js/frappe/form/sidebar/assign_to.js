@@ -169,40 +169,40 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 					});
 				},
 			},
-			{
-				fieldtype: "Section Break",
-			},
-			{
-				label: __("Complete By"),
-				fieldtype: "Date",
-				fieldname: "date",
-			},
-			{
-				fieldtype: "Column Break",
-			},
-			{
-				label: __("Priority"),
-				fieldtype: "Select",
-				fieldname: "priority",
-				options: [
-					{
-						value: "Low",
-						label: __("Low"),
-					},
-					{
-						value: "Medium",
-						label: __("Medium"),
-					},
-					{
-						value: "High",
-						label: __("High"),
-					},
-				],
-				// Pick up priority from the source document, if it exists and is available in ToDo
-				default: ["Low", "Medium", "High"].includes(
-					me.frm && me.frm.doc.priority ? me.frm.doc.priority : "Medium"
-				),
-			},
+			// {
+			// 	fieldtype: "Section Break",
+			// },
+			// {
+			// 	label: __("Complete By"),
+			// 	fieldtype: "Date",
+			// 	fieldname: "date",
+			// },
+			// {
+			// 	fieldtype: "Column Break",
+			// },
+			// {
+			// 	label: __("Priority"),
+			// 	fieldtype: "Select",
+			// 	fieldname: "priority",
+			// 	options: [
+			// 		{
+			// 			value: "Low",
+			// 			label: __("Low"),
+			// 		},
+			// 		{
+			// 			value: "Medium",
+			// 			label: __("Medium"),
+			// 		},
+			// 		{
+			// 			value: "High",
+			// 			label: __("High"),
+			// 		},
+			// 	],
+			// 	// Pick up priority from the source document, if it exists and is available in ToDo
+			// 	default: ["Low", "Medium", "High"].includes(
+			// 		me.frm && me.frm.doc.priority ? me.frm.doc.priority : "Medium"
+			// 	),
+			// },
 			{
 				fieldtype: "Section Break",
 			},

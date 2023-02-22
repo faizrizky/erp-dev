@@ -460,9 +460,10 @@
  "icon": "fa fa-puzzle-piece",
  "idx": 29,
  "index_web_pages_for_search": 1,
+ "is_calendar_and_gantt": 1,
  "links": [],
  "max_attachments": 4,
- "modified": "2023-02-13 13:55:20.592463",
+ "modified": "2023-02-21 17:51:46.002436",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",
@@ -499,7 +500,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "search_fields": "project_name,customer, status, priority, is_active",
  "show_name_in_global_search": 1,
  "sort_field": "modified",

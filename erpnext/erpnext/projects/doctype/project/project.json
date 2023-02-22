@@ -463,7 +463,7 @@
  "is_calendar_and_gantt": 1,
  "links": [],
  "max_attachments": 4,
- "modified": "2023-02-21 17:51:46.002436",
+ "modified": "2023-02-22 10:25:39.481718",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",
@@ -471,21 +471,12 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "Software Developer",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "report": 1,
-   "role": "All"
+   "share": 1
   },
   {
    "create": 1,
@@ -495,9 +486,18 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Leader Software Developer",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Technical Architect Software Developer",
+   "share": 1
   }
  ],
  "search_fields": "project_name,customer, status, priority, is_active",

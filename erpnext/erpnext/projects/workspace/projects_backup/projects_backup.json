@@ -13,8 +13,8 @@
  "hide_custom": 0,
  "icon": "project",
  "idx": 0,
- "is_hidden": 0,
- "label": "Projects",
+ "is_hidden": 1,
+ "label": "Projects Backup",
  "links": [
   {
    "hidden": 0,
@@ -180,10 +180,10 @@
    "type": "Link"
   }
  ],
- "modified": "2023-02-22 22:39:10.735064",
+ "modified": "2023-02-23 22:54:16.982995",
  "modified_by": "Administrator",
  "module": "Projects",
- "name": "Projects",
+ "name": "Projects Backup",
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -238,5 +238,5 @@
    "type": "Dashboard"
   }
  ],
- "title": "Projects"
+ "title": "Projects Backup"
 }

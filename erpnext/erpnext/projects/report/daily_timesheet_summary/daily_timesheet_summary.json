@@ -9,15 +9,16 @@
  "filters": [],
  "idx": 2,
  "is_standard": "Yes",
- "modified": "2023-02-23 22:08:05.387911",
+ "json": "{}",
+ "modified": "2023-02-23 22:29:58.636712",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Daily Timesheet Summary",
  "owner": "Administrator",
  "prepared_report": 0,
- "ref_doctype": "SD Timesheets",
+ "ref_doctype": "Timesheet",
  "report_name": "Daily Timesheet Summary",
- "report_type": "Script Report",
+ "report_type": "Report Builder",
  "roles": [
   {
    "role": "Projects User"

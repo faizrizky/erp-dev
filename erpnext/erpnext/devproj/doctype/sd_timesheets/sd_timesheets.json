@@ -352,7 +352,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Role",
+   "label": "Branch",
    "options": "Branch",
    "read_only": 1
   },
@@ -379,7 +379,7 @@
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-02-08 11:56:32.944200",
+ "modified": "2023-02-23 21:24:11.421069",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

@@ -131,14 +131,300 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 	}
 	assign_to_me() {
 		let me = this;
-		let assign_to = [];
+		// let assign_to = [];
 
 		if (me.dialog.get_value("assign_to_me")) {
-			assign_to.push(frappe.session.user);
+
+			frappe.db.get_list('Employee', {
+				fields: ['user_id']
+
+			}).then(() => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+
+				if (!assign_to.includes(frappe.session.user))
+					return assign_to.push(frappe.session.user);
+
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+				let whoami = frappe.session.user
+				console.log("Record USER : " + whoami)
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(frappe.session.user)
+					if (assign_to.includes(frappe.session.user)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
 		}
 
-		me.dialog.set_value("assign_to", assign_to);
 	}
+	// assign_team() {
+	// 	let me = this;
+
+	// 	if (me.dialog.get_value("assign_team")) {
+
+	// 		frappe.db.get_list('Employee', {
+	// 			filters: { 'branch': me.dialog.get_value("assign_team") },
+	// 			fields: ['user_id']
+
+	// 		}).then((records) => {
+	// 			let assign_to = [];
+
+
+	// 			records.forEach((c) => assign_to.push(c.user_id));
+
+	// 			me.dialog.set_value("assign_to", assign_to);
+	// 		});
+	// 	}
+	// 	else {
+	// 		me.dialog.set_value("assign_to", []);
+	// 	}
+	// 	// values = {'branch':'Level Designer'}
+
+	// 	// me.dialog.set_value("assign_to",frappe.db.sql("""select branch FROM 'tabEmployee'""", values=values, as_dict=0));
+	// 	// subject = frappe.db.get_value('Employee', {'branch': 'Level Designer'}, ['subject'])
+
+	// 	// alert(asd)
+	// }
+
+	assign_ld() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_ld")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Level Designer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+		else {
+			// me.dialog.set_value("assign_to", []);
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Level Designer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				// for (let i = 0; i < records.length; i++) {
+				// 	// console.log(records[i].user_id)
+				// 	if (records.findIndex(records[i].user_id)) {
+				// 		records[i].splice(i, 1);
+				// 		console.log(records[i].user_id);
+				// 		i--;
+				// 	}
+				// }
+				// console.log(assign_to)
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					console.log("Record USER : " + records[i].user_id)
+					console.log("Assign_To USER : " + assign_to)
+					console.log(index)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+					// 	i--;
+					// }
+				}
+				// records.forEach((c) => {
+				// 	console.log(c.user_id)
+				// 	if (assign_to.includes(c.user_id))
+				// 		// console.log(c.user_id)
+				// 		if (assign_to.indexOf(c.user_id))
+				// 			return assign_to.splice(c.user_id, 1);
+				// });
+
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+
+	assign_be() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_be")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Backend Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Backend Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+
+	assign_unityprog() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_unityprog")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Unity Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Unity Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+	assign_de() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_de")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Document Engineer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Document Engineer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+	assign_qa() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_qa")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Quality Assurance' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Quality Assurance' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+
 	set_description_from_doc() {
 		let me = this;
 
@@ -157,6 +443,93 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				default: 0,
 				onchange: () => me.assign_to_me(),
 			},
+
+			// {
+			// 	label: __("Assign Team"),
+			// 	fieldtype: "Select",
+			// 	fieldname: "assign_team",
+			// 	// default: 0,
+			// 	onchange: () => me.assign_team(),
+
+			// 	options: [
+			// 		{
+			// 			value: "-",
+			// 			label: __("-"),
+			// 		},
+			// 		{
+			// 			value: "Backend Programmer",
+			// 			label: __("Backend Programmer"),
+			// 		},
+			// 		{
+			// 			value: "Frontend Programmer",
+			// 			label: __("Frontend Programmer"),
+			// 		},
+			// 		{
+			// 			value: "Unity Programmer",
+			// 			label: __("Unity Programmer"),
+			// 		},
+			// 		{
+			// 			value: "Level Design",
+			// 			label: __("Unity Programmer"),
+			// 		},
+			// 		{
+			// 			value: "Quality Assurance",
+			// 			label: __("Quality Assurance"),
+			// 		},
+			// 	]
+
+			// },
+
+			{
+				label: __("Level Design"),
+				fieldtype: "Check",
+				fieldname: "assign_ld",
+				default: 0,
+				onchange: () => me.assign_ld(),
+			},
+			{
+				label: __("Backend Programmer"),
+				fieldtype: "Check",
+				fieldname: "assign_be",
+				default: 0,
+				onchange: () => me.assign_be(),
+			},
+			{
+				fieldtype: "Column Break",
+			},
+
+
+
+
+
+			{
+				label: __("Unity Programmer"),
+				fieldtype: "Check",
+				fieldname: "assign_unityprog",
+				default: 0,
+				onchange: () => me.assign_unityprog(),
+			},
+			{
+				label: __("Document Engineer"),
+				fieldtype: "Check",
+				fieldname: "assign_de",
+				default: 0,
+				onchange: () => me.assign_de(),
+			},
+			{
+				label: __("Quality Assurance"),
+				fieldtype: "Check",
+				fieldname: "assign_qa",
+				default: 0,
+				onchange: () => me.assign_qa(),
+			},
+			{
+				fieldtype: "Section Break",
+			},
+
+
+
+
 			{
 				fieldtype: "MultiSelectPills",
 				fieldname: "assign_to",
@@ -168,6 +541,11 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 						enabled: 1,
 					});
 				},
+				// get_data: function (txt) {
+				// 	return frappe.db.get_link_options("Employee", txt, {
+				// 		branch: value,
+				// 	});
+				// },
 			},
 			// {
 			// 	fieldtype: "Section Break",

@@ -1,6 +1,8 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
+var isBool = false;
+var arrUser = []
 frappe.ui.form.AssignTo = class AssignTo {
 	constructor(opts) {
 		$.extend(this, opts);
@@ -315,10 +317,13 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 
 			}).then((records) => {
 				let assign_to = me.dialog.get_value("assign_to");
-
+				console.log(records)
 				records.forEach((c) => {
-					if (!assign_to.includes(c.user_id))
+					console.log("Record USER : " + c.user_id)
+					console.log("Assign_To USER : " + assign_to)
+					if (!assign_to.includes(c.user_id)) {
 						return assign_to.push(c.user_id);
+					}
 				});
 
 				me.dialog.set_value("assign_to", assign_to)
@@ -432,164 +437,226 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 			me.dialog.set_value("description", me.frm.doc[me.frm.meta.title_field]);
 		}
 	}
+
+	toggleBoolean(val) {
+		return val;
+	}
+	setToFalse(boolVar) {
+		this.toggleBoolean(boolVar, false);
+	}
+
+	get_user() {
+		//next filter untuk leader, tp masih error
+		frappe.db.get_list('Employee', {
+			filters: { 'branch': 'Leader Programmer' },
+			fields: ['user_id']
+		}).then((records) => {
+			// console.log(records)
+			// console.log(frappe.session.user)
+
+			for (let i = 0; i < records.length; i++) {
+				// console.log(records[i].user_id)
+				if (frappe.session.user.includes(records[i].user_id)) {
+
+					// console.log(isBool)
+					arrUser.push(records[i].user_id);
+					isBool = true;
+					// console.log("INI ARRAY RECORDS 1" + records[i].user_id)
+					// console.log(isBool)
+					// console.log((isBool))
+					// return [
+					// 	{
+					// 		label: __("Assign to me"),
+					// 		fieldtype: "Check",
+					// 		fieldname: "assign_to_me",
+					// 		default: 0,
+					// 		onchange: () => me.assign_to_me(),
+					// 	},
+					// ];
+				}
+
+			}
+			this.get_fields();
+		});
+
+	}
+
 	get_fields() {
 		let me = this;
+		// this.get_user();
+		// console.log("Panjang array : " + arrUser.length)
+		// for (let i = 0; i < arrUser.length; i++) {
 
-		return [
-			{
-				label: __("Assign to me"),
-				fieldtype: "Check",
-				fieldname: "assign_to_me",
-				default: 0,
-				onchange: () => me.assign_to_me(),
-			},
-
-			// {
-			// 	label: __("Assign Team"),
-			// 	fieldtype: "Select",
-			// 	fieldname: "assign_team",
-			// 	// default: 0,
-			// 	onchange: () => me.assign_team(),
-
-			// 	options: [
-			// 		{
-			// 			value: "-",
-			// 			label: __("-"),
-			// 		},
-			// 		{
-			// 			value: "Backend Programmer",
-			// 			label: __("Backend Programmer"),
-			// 		},
-			// 		{
-			// 			value: "Frontend Programmer",
-			// 			label: __("Frontend Programmer"),
-			// 		},
-			// 		{
-			// 			value: "Unity Programmer",
-			// 			label: __("Unity Programmer"),
-			// 		},
-			// 		{
-			// 			value: "Level Design",
-			// 			label: __("Unity Programmer"),
-			// 		},
-			// 		{
-			// 			value: "Quality Assurance",
-			// 			label: __("Quality Assurance"),
-			// 		},
-			// 	]
-
-			// },
-
-			{
-				label: __("Level Design"),
-				fieldtype: "Check",
-				fieldname: "assign_ld",
-				default: 0,
-				onchange: () => me.assign_ld(),
-			},
-			{
-				label: __("Backend Programmer"),
-				fieldtype: "Check",
-				fieldname: "assign_be",
-				default: 0,
-				onchange: () => me.assign_be(),
-			},
-			{
-				fieldtype: "Column Break",
-			},
+		// 	console.log("INI ARRAY RECORDS 2" + arrUser[i])
+		// }
 
 
-
-
-
-			{
-				label: __("Unity Programmer"),
-				fieldtype: "Check",
-				fieldname: "assign_unityprog",
-				default: 0,
-				onchange: () => me.assign_unityprog(),
-			},
-			{
-				label: __("Document Engineer"),
-				fieldtype: "Check",
-				fieldname: "assign_de",
-				default: 0,
-				onchange: () => me.assign_de(),
-			},
-			{
-				label: __("Quality Assurance"),
-				fieldtype: "Check",
-				fieldname: "assign_qa",
-				default: 0,
-				onchange: () => me.assign_qa(),
-			},
-			{
-				fieldtype: "Section Break",
-			},
-
-
-
-
-			{
-				fieldtype: "MultiSelectPills",
-				fieldname: "assign_to",
-				label: __("Assign To"),
-				reqd: true,
-				get_data: function (txt) {
-					return frappe.db.get_link_options("User", txt, {
-						user_type: "System User",
-						enabled: 1,
-					});
+		if (frappe.session.user == "caqa@falahtech.co.id") {
+			// console.log("INIBOOOL : " + isBool)
+			return [
+				{
+					label: __("Assign to me"),
+					fieldtype: "Check",
+					fieldname: "assign_to_me",
+					default: 0,
+					onchange: () => me.assign_to_me(),
 				},
-				// get_data: function (txt) {
-				// 	return frappe.db.get_link_options("Employee", txt, {
-				// 		branch: value,
-				// 	});
+
+				// {
+				// 	label: __("Assign Team"),
+				// 	fieldtype: "Select",
+				// 	fieldname: "assign_team",
+				// 	// default: 0,
+				// 	onchange: () => me.assign_team(),
+
+				// 	options: [
+				// 		{
+				// 			value: "-",
+				// 			label: __("-"),
+				// 		},
+				// 		{
+				// 			value: "Backend Programmer",
+				// 			label: __("Backend Programmer"),
+				// 		},
+				// 		{
+				// 			value: "Frontend Programmer",
+				// 			label: __("Frontend Programmer"),
+				// 		},
+				// 		{
+				// 			value: "Unity Programmer",
+				// 			label: __("Unity Programmer"),
+				// 		},
+				// 		{
+				// 			value: "Level Design",
+				// 			label: __("Unity Programmer"),
+				// 		},
+				// 		{
+				// 			value: "Quality Assurance",
+				// 			label: __("Quality Assurance"),
+				// 		},
+				// 	]
+
 				// },
-			},
-			// {
-			// 	fieldtype: "Section Break",
-			// },
-			// {
-			// 	label: __("Complete By"),
-			// 	fieldtype: "Date",
-			// 	fieldname: "date",
-			// },
-			// {
-			// 	fieldtype: "Column Break",
-			// },
-			// {
-			// 	label: __("Priority"),
-			// 	fieldtype: "Select",
-			// 	fieldname: "priority",
-			// 	options: [
-			// 		{
-			// 			value: "Low",
-			// 			label: __("Low"),
-			// 		},
-			// 		{
-			// 			value: "Medium",
-			// 			label: __("Medium"),
-			// 		},
-			// 		{
-			// 			value: "High",
-			// 			label: __("High"),
-			// 		},
-			// 	],
-			// 	// Pick up priority from the source document, if it exists and is available in ToDo
-			// 	default: ["Low", "Medium", "High"].includes(
-			// 		me.frm && me.frm.doc.priority ? me.frm.doc.priority : "Medium"
-			// 	),
-			// },
-			{
-				fieldtype: "Section Break",
-			},
-			{
-				label: __("Comment"),
-				fieldtype: "Small Text",
-				fieldname: "description",
-			},
-		];
+
+				{
+					label: __("Level Design"),
+					fieldtype: "Check",
+					fieldname: "assign_ld",
+					default: 0,
+					onchange: () => me.assign_ld(),
+				},
+				{
+					label: __("Backend Programmer"),
+					fieldtype: "Check",
+					fieldname: "assign_be",
+					default: 0,
+					onchange: () => me.assign_be(),
+				},
+				{
+					fieldtype: "Column Break",
+				},
+
+
+
+
+
+				{
+					label: __("Unity Programmer"),
+					fieldtype: "Check",
+					fieldname: "assign_unityprog",
+					default: 0,
+					onchange: () => me.assign_unityprog(),
+				},
+				{
+					label: __("Document Engineer"),
+					fieldtype: "Check",
+					fieldname: "assign_de",
+					default: 0,
+					onchange: () => me.assign_de(),
+				},
+				{
+					label: __("Quality Assurance"),
+					fieldtype: "Check",
+					fieldname: "assign_qa",
+					default: 0,
+					onchange: () => me.assign_qa(),
+				},
+				{
+					fieldtype: "Section Break",
+				},
+
+
+
+
+				{
+					fieldtype: "MultiSelectPills",
+					fieldname: "assign_to",
+					label: __("Assign To"),
+					reqd: true,
+					get_data: function (txt) {
+						return frappe.db.get_link_options("User", txt, {
+							user_type: "System User",
+							enabled: 1,
+						});
+					},
+
+				},
+
+				{
+					fieldtype: "Section Break",
+				},
+				{
+					label: __("Comment"),
+					fieldtype: "Small Text",
+					fieldname: "description",
+				},
+			];
+		}
+		else {
+			return [
+				{
+					label: __("Assign to me"),
+					fieldtype: "Check",
+					fieldname: "assign_to_me",
+					default: 0,
+					onchange: () => me.assign_to_me(),
+				},
+
+				{
+					fieldtype: "Section Break",
+				},
+
+
+
+
+				{
+					fieldtype: "MultiSelectPills",
+					fieldname: "assign_to",
+					label: __("Assign To"),
+					reqd: true,
+					get_data: function (txt) {
+						return frappe.db.get_link_options("User", txt, {
+							user_type: "System User",
+							enabled: 1,
+						});
+					},
+
+				},
+
+				{
+					fieldtype: "Section Break",
+				},
+				{
+					label: __("Comment"),
+					fieldtype: "Small Text",
+					fieldname: "description",
+				},
+			];
+		}
+
+
+
+
 	}
 };
 

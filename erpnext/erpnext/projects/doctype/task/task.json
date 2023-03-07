@@ -124,7 +124,7 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "Parent Task\nBacklog\nOpen\nWorking\nPending Review\nQA Tested\nOverdue\nCompleted\nCancelled"
+   "options": "Open\nParent Task\nBacklog\nWorking\nPending Review\nQA Testing\nQA Approved\nOverdue\nCompleted\nCancelled"
   },
   {
    "fieldname": "priority",
@@ -429,7 +429,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-02-22 22:36:15.523080",
+ "modified": "2023-03-07 22:48:01.685172",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

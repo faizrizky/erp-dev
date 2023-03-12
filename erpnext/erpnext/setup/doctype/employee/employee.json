@@ -39,6 +39,7 @@
   "reports_to",
   "column_break_18",
   "branch",
+  "role_profile",
   "employment_details",
   "scheduled_confirmation_date",
   "column_break_32",
@@ -377,7 +378,7 @@
   {
    "fieldname": "branch",
    "fieldtype": "Link",
-   "label": "Branch",
+   "label": "Position",
    "oldfieldname": "branch",
    "oldfieldtype": "Link",
    "options": "Branch"
@@ -804,13 +805,20 @@
   {
    "fieldname": "column_break_104",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "user_id.role_profile_name",
+   "fieldname": "role_profile",
+   "fieldtype": "Data",
+   "label": "Team",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
  "links": [],
- "modified": "2022-09-13 10:27:14.579197",
+ "modified": "2023-03-12 13:56:58.337482",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",

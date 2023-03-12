@@ -25,6 +25,7 @@
   "department",
   "column_break_4",
   "branch",
+  "role_profile",
   "company",
   "employee",
   "column_break_9",
@@ -336,6 +337,7 @@
   {
    "fieldname": "company",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Company",
    "options": "Company",
    "read_only": 1,
@@ -344,17 +346,6 @@
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
-  },
-  {
-   "columns": 1,
-   "fetch_from": "employee.branch",
-   "fieldname": "branch",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Branch",
-   "options": "Branch",
-   "read_only": 1
   },
   {
    "fieldname": "project_selection_section",
@@ -374,12 +365,29 @@
    "hidden": 1,
    "label": "Activity Type",
    "options": "Activity Type"
+  },
+  {
+   "fetch_from": "employee.branch",
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Position",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.role_profile",
+   "fieldname": "role_profile",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Team"
   }
  ],
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-02-23 21:24:11.421069",
+ "modified": "2023-03-12 13:50:03.854533",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

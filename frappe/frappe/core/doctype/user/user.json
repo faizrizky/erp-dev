@@ -668,7 +668,7 @@
    "fieldname": "role",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Branch",
+   "label": "Position",
    "options": "Branch"
   }
  ],
@@ -732,7 +732,7 @@
    "link_fieldname": "user"
   }
  ],
- "modified": "2023-02-23 21:24:31.057638",
+ "modified": "2023-03-12 13:58:10.019001",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

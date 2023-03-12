@@ -306,6 +306,47 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		}
 	}
 
+	assign_fe() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_fe")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Frontend Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Frontend Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+
 	assign_unityprog() {
 		let me = this;
 
@@ -413,6 +454,84 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 			let me = this;
 			frappe.db.get_list('Employee', {
 				filters: { 'branch': 'Quality Assurance' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+	}
+
+	assign_lead() {
+		let me = this;
+
+		if (me.dialog.get_value("assign_lead")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Co Leader Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Co Leader Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+
+				let assign_to = me.dialog.get_value("assign_to");
+
+				for (let i = 0; i < records.length; i++) {
+					let index = assign_to.indexOf(records[i].user_id)
+					if (assign_to.includes(records[i].user_id)) {
+						assign_to.splice(index, 1);
+					}
+				}
+				me.dialog.set_value("assign_to", assign_to);
+			});
+		}
+
+		if (me.dialog.get_value("assign_lead")) {
+
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Leader Programmer' },
+				fields: ['user_id']
+
+			}).then((records) => {
+				let assign_to = me.dialog.get_value("assign_to");
+
+				records.forEach((c) => {
+					if (!assign_to.includes(c.user_id))
+						return assign_to.push(c.user_id);
+				});
+
+				me.dialog.set_value("assign_to", assign_to)
+			});
+		}
+		else {
+			let me = this;
+			frappe.db.get_list('Employee', {
+				filters: { 'branch': 'Leader Programmer' },
 				fields: ['user_id']
 
 			}).then((records) => {
@@ -553,13 +672,22 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 					onchange: () => me.assign_be(),
 				},
 				{
+					label: __("Frontend Programmer"),
+					fieldtype: "Check",
+					fieldname: "assign_fe",
+					default: 0,
+					onchange: () => me.assign_fe(),
+				},
+				{
 					fieldtype: "Column Break",
 				},
-
-
-
-
-
+				{
+					label: __("All Lead"),
+					fieldtype: "Check",
+					fieldname: "assign_lead",
+					default: 0,
+					onchange: () => me.assign_lead(),
+				},
 				{
 					label: __("Unity Programmer"),
 					fieldtype: "Check",
@@ -581,13 +709,10 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 					default: 0,
 					onchange: () => me.assign_qa(),
 				},
+
 				{
 					fieldtype: "Section Break",
 				},
-
-
-
-
 				{
 					fieldtype: "MultiSelectPills",
 					fieldname: "assign_to",
@@ -625,10 +750,6 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				{
 					fieldtype: "Section Break",
 				},
-
-
-
-
 				{
 					fieldtype: "MultiSelectPills",
 					fieldname: "assign_to",

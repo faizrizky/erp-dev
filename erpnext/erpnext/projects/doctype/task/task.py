@@ -10,6 +10,10 @@ from frappe.desk.form.assign_to import clear, close_all_assignments
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import add_days, cstr, date_diff, flt, get_link_to_form, getdate, today
 from frappe.utils.nestedset import NestedSet
+from datetime import datetime
+from datetime import timedelta
+
+
 
 
 class CircularReferenceError(frappe.ValidationError):
@@ -103,12 +107,203 @@ class Task(NestedSet):
 
 			close_all_assignments(self.doctype, self.name)
 
+	days = 0
+	d1 = 0
+	d2 = 0
+
+
 	def validate_progress(self):
+
 		if flt(self.progress or 0) > 100:
 			frappe.throw(_("Progress % for a task cannot be more than 100."))
 
+		if flt(self.individual_progress or 0) > 100:
+			frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+
+		if self.status == "Open":
+
+			self.exp_start_date = ""
+			self.duration = 0
+
 		if self.status == "Completed":
 			self.progress = 100
+
+		if self.status == "Working":
+
+			self.progress = 0
+
+			self.exp_start_date = datetime.now().date()
+
+			# start_date = self.exp_start_date
+
+			# days_to_add = 7
+
+			# current_date = start_date
+
+			# while days_to_add > 0:
+			# 	current_date += timedelta(days=1)
+			# 	if current_date.weekday() < 5:
+			# 		days_to_add -= 1
+
+			# result_date = current_date
+
+			# self.exp_end_date = result_date
+
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.exp_end_date)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+
+			if flt(self.exp_end_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			else:
+				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# delta = self.d2 - self.d1
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
+
+		if self.status == "Pending Review":
+			if flt(self.individual_progress or 0) < 100:
+				frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+			else:
+				self.progress = 50
+
+		if self.status == "QA Testing":
+
+			self.progress = 80
+
+			start_date = datetime.now().date()
+
+			days_to_add = 14
+
+			current_date = start_date
+
+			while days_to_add > 0:
+				current_date += timedelta(days=1)
+				if current_date.weekday() < 5:
+					days_to_add -= 1
+
+			result_date = current_date
+
+			self.exp_end_date = result_date
+
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.exp_end_date)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+
+			if flt(self.exp_end_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			else:
+				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# delta = self.d2 - self.d1
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
+
+		if self.status == "QA Qualified":
+
+			self.progress = 90
+
+			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
+			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan
+
+			start_date = datetime.now().date()
+
+			days_to_add = 14
+
+			current_date = start_date
+
+			while days_to_add > 0:
+				current_date += timedelta(days=1)
+				if current_date.weekday() < 5:
+					days_to_add -= 1
+
+			result_date = current_date
+
+			self.exp_end_date = result_date
+
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.exp_end_date)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+
+			if flt(self.exp_end_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			else:
+				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# delta = self.d2 - self.d1
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
+
+		if self.status == "Cancelled":
+
+			self.progress = 0
+
+			# self.exp_end_date = ""
+
+			# self.exp_start_date = ""
+
+		self.progress = str(self.progress).split('.')[0]
+
+		if self.priority == "Low":
+			if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
+				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 1 to 2"))
+
+			if flt(self.days) > 14:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+
+		if self.priority == "Medium":
+			if self.status != "QA Testing" and self.status != "QA Qualified":
+				if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
+					frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 3 to 5"))
+
+				if flt(self.days) > 7:
+					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+					.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+
+
+		if self.priority == "High":
+			if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
+				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 6 to 8"))
+
+			if flt(self.days) > 5:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+
+
+		if self.priority == "Urgent":
+			if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
+				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 9 to 10"))
+
+			if flt(self.days) > 2:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+
+		# if self.priority == "Medium":
+
+
+		# 	self.exp_start_date =  datetime.now().date()
+		# 	self.exp_end_date = datetime.now() + timedelta(days=1)
+
 
 	def validate_dependencies_for_template_task(self):
 		if self.is_template:

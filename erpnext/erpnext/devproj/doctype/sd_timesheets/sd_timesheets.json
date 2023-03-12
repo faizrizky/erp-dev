@@ -382,13 +382,14 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Team",
-   "options": "Employee"
+   "options": "Employee",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-03-12 15:25:21.977664",
+ "modified": "2023-03-12 15:35:30.102704",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

@@ -169,8 +169,7 @@
    "fieldtype": "Date",
    "label": "Expected Start Date",
    "oldfieldname": "exp_start_date",
-   "oldfieldtype": "Date",
-   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+   "oldfieldtype": "Date"
   },
   {
    "default": "0",
@@ -199,7 +198,6 @@
    "label": "Expected End Date",
    "oldfieldname": "exp_end_date",
    "oldfieldtype": "Date",
-   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1",
    "search_index": 1
   },
   {
@@ -456,7 +454,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-11 22:32:05.460734",
+ "modified": "2023-03-12 21:06:31.585053",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

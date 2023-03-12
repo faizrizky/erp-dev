@@ -809,15 +809,16 @@
   {
    "fetch_from": "user_id.role_profile_name",
    "fieldname": "role_profile",
-   "fieldtype": "Data",
-   "label": "Team"
+   "fieldtype": "Link",
+   "label": "Team",
+   "options": "Role"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
  "links": [],
- "modified": "2023-03-12 15:33:29.764366",
+ "modified": "2023-03-12 15:59:58.902796",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",

@@ -180,7 +180,7 @@ class Task(NestedSet):
 
 			start_date = datetime.now().date()
 
-			days_to_add = 14
+			days_to_add = 10
 
 			current_date = start_date
 
@@ -221,7 +221,7 @@ class Task(NestedSet):
 
 			start_date = datetime.now().date()
 
-			days_to_add = 14
+			days_to_add = 10
 
 			current_date = start_date
 
@@ -265,16 +265,16 @@ class Task(NestedSet):
 
 		if self.priority == "Low":
 			if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
-				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 1 to 2"))
+				frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
 
-			if flt(self.days) > 14:
+			if flt(self.days) > 10:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
 
 		if self.priority == "Medium":
 			if self.status != "QA Testing" and self.status != "QA Qualified":
 				if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
-					frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 3 to 5"))
+					frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
 
 				if flt(self.days) > 7:
 					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
@@ -283,7 +283,7 @@ class Task(NestedSet):
 
 		if self.priority == "High":
 			if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
-				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 6 to 8"))
+				frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
 
 			if flt(self.days) > 5:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
@@ -292,7 +292,7 @@ class Task(NestedSet):
 
 		if self.priority == "Urgent":
 			if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
-				frappe.throw(_("Please set Priority value " + "'" + self.priority + "'" + " " +"between 9 to 10"))
+				frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
 
 			if flt(self.days) > 2:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")

@@ -132,47 +132,47 @@ class Task(NestedSet):
 
 			self.progress = 0
 
-			# self.exp_start_date = datetime.now().date()
+			self.exp_start_date = datetime.now().date()
 
-			# # start_date = self.exp_start_date
+			# start_date = self.exp_start_date
 
-			# # days_to_add = 7
+			# days_to_add = 7
 
-			# # current_date = start_date
+			# current_date = start_date
 
-			# # while days_to_add > 0:
-			# # 	current_date += timedelta(days=1)
-			# # 	if current_date.weekday() < 5:
-			# # 		days_to_add -= 1
+			# while days_to_add > 0:
+			# 	current_date += timedelta(days=1)
+			# 	if current_date.weekday() < 5:
+			# 		days_to_add -= 1
 
-			# # result_date = current_date
+			# result_date = current_date
 
-			# # self.exp_end_date = result_date
+			# self.exp_end_date = result_date
 
-			# self.start_date = str(self.exp_start_date)
-			# self.end_date = str(self.exp_end_date)
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.exp_end_date)
 
-			# self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
 
-			# if flt(self.exp_end_date == None):
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			# else:
-			# 	self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# # delta = self.d2 - self.d1
+			if flt(self.exp_end_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			else:
+				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# delta = self.d2 - self.d1
 
-			# self.daydiff = self.d2.weekday() - self.d1.weekday()
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-			# self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-			# strdays = str(self.days).split('.')[0]
+			strdays = str(self.days).split('.')[0]
 
-			# self.duration = self.days
+			self.duration = self.days
 
-		# if self.status == "Pending Review":
-		# 	if flt(self.individual_progress or 0) < 100:
-		# 		frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-		# 	else:
-		# 		self.progress = 50
+		if self.status == "Pending Review":
+			if flt(self.individual_progress or 0) < 100:
+				frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+			else:
+				self.progress = 50
 
 		if self.status == "QA Testing":
 
@@ -261,50 +261,57 @@ class Task(NestedSet):
 
 			# self.exp_start_date = ""
 
-		# self.progress = str(self.progress).split('.')[0]
+		self.progress = str(self.progress).split('.')[0]
 
-		# if self.priority == "Low":
-		# 	if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
-		# 		# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
-		# 		frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 		.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 2")))
+		if self.priority == "Low":
+			# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
+			if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+				# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
+				frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+				.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 2")))
 
-		# 	if flt(self.days) > 10:
-		# 		frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 		.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
+			if flt(self.days) > 10:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
 
-		# if self.priority == "Medium":
-		# 	if self.status != "QA Testing" and self.status != "QA Qualified":
-		# 		if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
-		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
-		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 		.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("3 to 5")))
+		if self.priority == "Medium":
+			if self.status != "QA Testing" and self.status != "QA Qualified":
+				# if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
+				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
 
-		# 		if flt(self.days) > 7:
-		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 			.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+					# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
+					frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+				.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("3 to 5")))
 
-
-		# if self.priority == "High":
-		# 	if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
-		# 		# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
-		# 		frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 		.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("6 to 8")))
-
-		# 	if flt(self.days) > 5:
-		# 		frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 		.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+				if flt(self.days) > 7:
+					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+					.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 
-		# if self.priority == "Urgent":
-		# 	if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
-		# 		# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
-		# 		frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 		.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("9 to 10")))
+		if self.priority == "High":
+			# if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
+			if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
 
-		# 	if flt(self.days) > 2:
-		# 		frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 		.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+				# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
+				frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+				.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("6 to 8")))
+
+			if flt(self.days) > 5:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+
+
+		if self.priority == "Urgent":
+			# if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
+			if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+
+				# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
+				frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+				.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("9 to 10")))
+
+			if flt(self.days) > 2:
+				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 		# if self.priority == "Medium":
 

@@ -122,7 +122,7 @@ class Task(NestedSet):
 
 		if self.status == "Open":
 
-			self.exp_start_date = ""
+			# self.exp_start_date = ""
 			self.duration = 0
 
 		if self.status == "Completed":

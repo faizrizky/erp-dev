@@ -132,7 +132,9 @@ class Task(NestedSet):
 
 			self.progress = 0
 
-			self.exp_start_date = datetime.now().date()
+			# self.exp_start_date = datetime.now().date()
+			if flt(self.exp_start_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
 
 			# start_date = self.exp_start_date
 

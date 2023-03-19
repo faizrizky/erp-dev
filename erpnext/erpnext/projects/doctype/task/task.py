@@ -111,6 +111,28 @@ class Task(NestedSet):
 	d1 = 0
 	d2 = 0
 
+	def validate_duration(self):
+			if flt(self.exp_start_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
+
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.exp_end_date)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+
+			if flt(self.exp_end_date == None):
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			else:
+				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# delta = self.d2 - self.d1
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			self.strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
 
 	def validate_progress(self):
 
@@ -124,6 +146,8 @@ class Task(NestedSet):
 
 			# self.exp_start_date = ""
 			self.duration = 0
+
+			self.validate_duration()
 
 		if self.status == "Completed":
 			self.progress = 100
@@ -166,7 +190,7 @@ class Task(NestedSet):
 
 			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-			strdays = str(self.days).split('.')[0]
+			self.strdays = str(self.days).split('.')[0]
 
 			self.duration = self.days
 
@@ -274,7 +298,7 @@ class Task(NestedSet):
 
 			if flt(self.days) > 10:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
+				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
 
 		if self.priority == "Medium":
 			if self.status != "QA Testing" and self.status != "QA Qualified":
@@ -287,7 +311,7 @@ class Task(NestedSet):
 
 				if flt(self.days) > 7:
 					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-					.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+					.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 
 		if self.priority == "High":
@@ -300,7 +324,7 @@ class Task(NestedSet):
 
 			if flt(self.days) > 5:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 
 		if self.priority == "Urgent":
@@ -313,7 +337,7 @@ class Task(NestedSet):
 
 			if flt(self.days) > 2:
 				frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-				.format(frappe.bold(f'{strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 3 days")))
 
 		# if self.priority == "Medium":
 

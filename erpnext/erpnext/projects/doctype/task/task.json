@@ -10,6 +10,8 @@
  "field_order": [
   "category_sprint",
   "multi_sprint",
+  "column_break_jsu2l",
+  "ongoing_sprint",
   "task_details",
   "subject",
   "task_name",
@@ -446,6 +448,17 @@
    "label": "Sprint",
    "options": "Assignment Sprint",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+  },
+  {
+   "fieldname": "column_break_jsu2l",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ongoing_sprint",
+   "fieldtype": "Link",
+   "label": "On Going Sprint",
+   "options": "Event",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   }
  ],
  "icon": "fa fa-check",
@@ -454,7 +467,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-12 21:06:31.585053",
+ "modified": "2023-03-19 16:01:41.419865",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

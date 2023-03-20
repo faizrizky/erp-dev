@@ -1,25 +1,45 @@
 frappe.provide("erpnext.timesheet");
 
-erpnext.timesheet.timer = function(frm, row, timestamp=0) {
+erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
 	let dialog = new frappe.ui.Dialog({
 		title: __("Timer"),
 		fields:
-		[
-			{"fieldtype": "Link", "label": __("Project"), "fieldname": "project","reqd": 1, "options": "Project", "filters" : {_assign : ['like', '%'+frappe.session.user+'%']}},
-			{"fieldtype": "Link", "label": __("Activity Type"), "fieldname": "activity_type",
-				"reqd": 1, "options": "Activity Type"},
-			{"fieldtype": "Link", "label": __("Task"), "fieldname": "task","reqd": 1, "options": "Task", "filters" : {
-					'status': ["!=", "Completed"],
-					_assign : ['like', '%'+frappe.session.user+'%']
-				}
-			},
-			{"fieldtype": "Int", "label": __("Expected Minutes"),"reqd": 1, "fieldname": "expected_hours"},
-			{"fieldtype": "Section Break"},
-			{"fieldtype": "HTML", "fieldname": "timer_html"}
-		]
+			[
+				{ "fieldtype": "Link", "label": __("Project"), "fieldname": "project", "reqd": 1, "options": "Project", "filters": { _assign: ['like', '%' + frappe.session.user + '%'] } },
+				{
+					"fieldtype": "Link", "label": __("Activity Type"), "fieldname": "activity_type",
+					"reqd": 1, "options": "Activity Type"
+				},
+				{
+					"fieldtype": "Link", "label": __("Task"), "fieldname": "task", "reqd": 1, "options": "Task"
+				},
+				{ "fieldtype": "Int", "label": __("Expected Minutes"), "reqd": 1, "fieldname": "expected_hours" },
+				{ "fieldtype": "Section Break" },
+				{ "fieldtype": "HTML", "fieldname": "timer_html" }
+			],
 	});
 
-	
+	dialog.fields_dict.task.get_query = function (frm, cdt, cdn) {
+		// var child = locals[cdt][cdn];
+		var project = cur_dialog.fields_dict.project.value;
+		return {
+			filters: {
+				'project': project,
+				'status': ["!=", "Cancelled"],
+				_assign: ['like', '%' + frappe.session.user + '%']
+			}
+		};
+	};
+	// dialog.set_query("task", function () {
+	// 	return {
+	// 		"filters": {
+	// 			'status': ["!=", "Completed"],
+	// 			_assign: ['like', '%' + frappe.session.user + '%']
+	// 		}
+	// 	}
+	// });
+
+
 	if (row) {
 		dialog.set_values({
 			'activity_type': row.activity_type,
@@ -40,8 +60,8 @@ erpnext.timesheet.timer = function(frm, row, timestamp=0) {
 			</div>
 			<br>
 			<div class="playpause text-center">
-				<button class= "btn btn-primary btn-start"> ${ __("Start") } </button>
-				<button class= "btn btn-primary btn-complete"> ${ __("Complete") } </button>
+				<button class= "btn btn-primary btn-start"> ${__("Start")} </button>
+				<button class= "btn btn-primary btn-complete"> ${__("Complete")} </button>
 			</div>
 		`;
 	}
@@ -49,7 +69,7 @@ erpnext.timesheet.timer = function(frm, row, timestamp=0) {
 	dialog.show();
 };
 
-erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
+erpnext.timesheet.control_timer = function (frm, dialog, row, timestamp = 0) {
 	var $btn_start = dialog.$wrapper.find(".playpause .btn-start");
 	var $btn_complete = dialog.$wrapper.find(".playpause .btn-complete");
 	var interval = null;
@@ -69,11 +89,11 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 		$btn_complete.hide();
 	}
 
-	$btn_start.click(function(e) {
+	$btn_start.click(function (e) {
 		if (!initialized) {
 			// New activity if no activities found
 			var args = dialog.get_values();
-			if(!args) return;
+			if (!args) return;
 			if (frm.doc.time_logs.length <= 1 && !frm.doc.time_logs[0].activity_type && !frm.doc.time_logs[0].from_time) {
 				frm.doc.time_logs = [];
 			}
@@ -84,13 +104,13 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 			row.task = args.task;
 			row.expected_hours = args.expected_hours;
 			row.expected_hours_count = args.expected_hours;
-			row.expected_hours_count = moment.utc((args.expected_hours*1000/60)*3600).format('HH:mm:ss');
+			row.expected_hours_count = moment.utc((args.expected_hours * 1000 / 60) * 3600).format('HH:mm:ss');
 			// const duration = moment.duration(args.expected_hours, 'minutes')
 			// const format = Math.floor(duration.asHours()) + ':' + duration.minutes() + ':' + duration.seconds()
 			// alert(row.expected_hours_count)
 			row.completed = 0;
 			let d = moment(row.from_time);
-			if(row.expected_hours) {
+			if (row.expected_hours) {
 				d.add(row.expected_hours, "hours");
 				row.to_time = d.format(frappe.defaultDatetimeFormat);
 			}
@@ -111,8 +131,19 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 		}
 	});
 
+	// frm.task.get_query = function (frm, cdt, cdn) {
+	// 	var child = locals[cdt][cdn];
+	// 	return {
+	// 		filters: {
+	// 			'project': child.project,
+	// 			'status': ["!=", "Cancelled"],
+	// 			_assign: ['like', '%' + frappe.session.user + '%']
+	// 		}
+	// 	};
+	// };
+
 	// Stop the timer and update the time logged by the timer on click of 'Complete' button
-	$btn_complete.click(function() {
+	$btn_complete.click(function () {
 		var grid_row = cur_frm.fields_dict['time_logs'].grid.get_row(row.idx - 1);
 		var args = dialog.get_values();
 		grid_row.doc.completed = 1;
@@ -120,12 +151,12 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 		grid_row.doc.project = args.project;
 		grid_row.doc.task = args.task;
 		grid_row.doc.expected_hours = args.expected_hours;
-		grid_row.doc.expected_hours_count = moment.utc((args.expected_hours*1000/60)*3600).format('HH:mm:ss');
+		grid_row.doc.expected_hours_count = moment.utc((args.expected_hours * 1000 / 60) * 3600).format('HH:mm:ss');
 		grid_row.doc.hours = currentIncrement / 3600;
 		grid_row.doc.hrs = grid_row.doc.hours;
 		grid_row.doc.to_time = frappe.datetime.now_datetime();
-		grid_row.doc.hours_count = moment.utc(currentIncrement*1000).format('HH:mm:ss');
-		
+		grid_row.doc.hours_count = moment.utc(currentIncrement * 1000).format('HH:mm:ss');
+
 		grid_row.refresh();
 		frm.dirty();
 		frm.save();
@@ -134,7 +165,7 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 	});
 
 	function initializeTimer() {
-		interval = setInterval(function() {
+		interval = setInterval(function () {
 			var current = setCurrentIncrement();
 			updateStopwatch(current);
 		}, 1000);
@@ -149,10 +180,10 @@ erpnext.timesheet.control_timer = function(frm, dialog, row, timestamp=0) {
 		if (!$('.modal-dialog').is(':visible')) {
 			reset();
 		}
-		if(hours > 99999)
+		if (hours > 99999)
 			reset();
-		if(cur_dialog && cur_dialog.get_value('expected_hours') > 0) {
-			if(flag && (currentIncrement >= (cur_dialog.get_value('expected_hours') * 3600))) {
+		if (cur_dialog && cur_dialog.get_value('expected_hours') > 0) {
+			if (flag && (currentIncrement >= (cur_dialog.get_value('expected_hours') * 3600))) {
 				frappe.utils.play_sound("alert");
 				frappe.msgprint(__("Timer exceeded the given hours."));
 				flag = false;

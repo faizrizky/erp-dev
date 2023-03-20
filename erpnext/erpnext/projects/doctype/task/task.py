@@ -112,27 +112,27 @@ class Task(NestedSet):
 	d2 = 0
 
 	def validate_duration(self):
-			if flt(self.exp_start_date == None):
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
+		if flt(self.exp_start_date == None):
+			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
 
-			self.start_date = str(self.exp_start_date)
-			self.end_date = str(self.exp_end_date)
+		self.start_date = str(self.exp_start_date)
+		self.end_date = str(self.exp_end_date)
 
-			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+		self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
 
-			if flt(self.exp_end_date == None):
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			else:
-				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+		if flt(self.exp_end_date == None):
+			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+		else:
+			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 			# delta = self.d2 - self.d1
 
-			self.daydiff = self.d2.weekday() - self.d1.weekday()
+		self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+		self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-			self.strdays = str(self.days).split('.')[0]
+		self.strdays = str(self.days).split('.')[0]
 
-			self.duration = self.days
+		self.duration = self.days
 
 	def validate_progress(self):
 

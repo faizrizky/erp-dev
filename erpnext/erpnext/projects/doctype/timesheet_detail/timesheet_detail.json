@@ -104,6 +104,7 @@
   },
   {
    "columns": 2,
+   "depends_on": "eval: doc.project != null",
    "fieldname": "task",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -285,7 +286,7 @@
  "idx": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-02-22 05:28:25.222088",
+ "modified": "2023-03-21 03:48:26.010889",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Timesheet Detail",

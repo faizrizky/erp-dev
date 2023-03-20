@@ -126,7 +126,7 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 		});
 	}
 
-	render_list() {}
+	render_list() { }
 
 	on_filter_change() {
 		if (JSON.stringify(this.board.filters_array) !== JSON.stringify(this.filter_area.get())) {
@@ -253,9 +253,8 @@ frappe.views.KanbanView.get_kanbans = function (doctype) {
 	return get_kanban_boards().then((kanban_boards) => {
 		if (kanban_boards) {
 			kanban_boards.forEach((board) => {
-				let route = `/app/${frappe.router.slug(board.reference_doctype)}/view/kanban/${
-					board.name
-				}`;
+				let route = `/app/${frappe.router.slug(board.reference_doctype)}/view/kanban/${board.name
+					}`;
 				kanbans.push({ name: board.name, route: route });
 			});
 		}
@@ -335,8 +334,8 @@ frappe.views.KanbanView.show_kanban_dialog = function (doctype) {
 					<div>
 						<p class="text-medium">
 						${__(
-							'No fields found that can be used as a Kanban Column. Use the Customize Form to add a Custom Field of type "Select".'
-						)}
+						'No fields found that can be used as a Kanban Column. Use the Customize Form to add a Custom Field of type "Select".'
+					)}
 						</p>
 					</div>
 				`,

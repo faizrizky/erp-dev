@@ -238,7 +238,7 @@ class Task(NestedSet):
 
 			# self.duration = self.days
 
-		if self.status == "QA Qualified":
+		if self.status == "QA Integration Testing":
 
 			self.progress = 90
 

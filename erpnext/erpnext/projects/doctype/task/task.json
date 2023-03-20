@@ -130,7 +130,7 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "Open\nParent Task\nBacklog\nWorking\nPending Review\nQA Testing\nQA Qualified\nOverdue\nCompleted\nCancelled"
+   "options": "Open\nParent Task\nBacklog\nWorking\nPending Review\nQA Testing\nQA Integration Testing\nOverdue\nCompleted\nCancelled"
   },
   {
    "fieldname": "priority",
@@ -169,7 +169,7 @@
   {
    "fieldname": "exp_start_date",
    "fieldtype": "Date",
-   "label": "Expected Start Date",
+   "label": "Start Date",
    "oldfieldname": "exp_start_date",
    "oldfieldtype": "Date"
   },
@@ -198,7 +198,7 @@
    "fieldname": "exp_end_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Expected End Date",
+   "label": "End Date",
    "oldfieldname": "exp_end_date",
    "oldfieldtype": "Date",
    "search_index": 1
@@ -466,7 +466,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-21 05:09:42.263589",
+ "modified": "2023-03-21 05:33:42.400815",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

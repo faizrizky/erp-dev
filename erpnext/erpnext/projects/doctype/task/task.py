@@ -301,7 +301,7 @@ class Task(NestedSet):
 				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
 
 		if self.priority == "Medium":
-			if self.status != "QA Testing" and self.status != "QA Qualified":
+			if self.status != "QA Testing" and self.status != "QA Integration Testing":
 				# if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
 				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
 

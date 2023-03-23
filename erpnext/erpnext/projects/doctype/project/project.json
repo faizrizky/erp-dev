@@ -237,7 +237,8 @@
   {
    "fieldname": "actual_start_date",
    "fieldtype": "Date",
-   "label": "Actual Start Date (via Time Sheet)"
+   "label": "Actual Start Date (via Time Sheet)",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "fieldname": "actual_time",
@@ -363,12 +364,14 @@
    "collapsible": 1,
    "fieldname": "monitor_progress",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Monitor Progress"
   },
   {
    "default": "0",
    "fieldname": "collect_progress",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Collect Progress"
   },
   {
@@ -463,7 +466,7 @@
  "is_calendar_and_gantt": 1,
  "links": [],
  "max_attachments": 4,
- "modified": "2023-02-22 10:25:39.481718",
+ "modified": "2023-03-23 14:58:48.030732",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",

@@ -42,6 +42,7 @@ class Task(NestedSet):
 		self.validate_parent_project_dates()
 		self.validate_progress()
 		self.validate_status()
+		# self.validate_status_child()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
 		self.validate_completed_on()
@@ -93,6 +94,18 @@ class Task(NestedSet):
 				getdate(expected_end_date), self, "act_start_date", "act_end_date", "Actual"
 			)
 
+
+	def validate_status_child(self):
+
+		if self.status != self.get_db_value("status") and self.status == "Open":
+			for d in self.depends_on:
+				task_subject = frappe.db.get_value('Task', d.task, ['subject'])
+				frappe.db.set_value('Task', task_subject, 'status', 'Open')
+
+
+
+
+
 	def validate_status(self):
 		if self.is_template and self.status != "Template":
 			self.status = "Template"
@@ -106,6 +119,7 @@ class Task(NestedSet):
 					)
 
 			close_all_assignments(self.doctype, self.name)
+
 
 	days = 0
 	d1 = 0
@@ -140,7 +154,9 @@ class Task(NestedSet):
 			frappe.throw(_("Progress % for a task cannot be more than 100."))
 
 		if flt(self.individual_progress or 0) > 100:
-			frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+			# frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+			frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{1}'")
+				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%")))
 
 		if self.status == "Open":
 
@@ -196,7 +212,9 @@ class Task(NestedSet):
 
 		if self.status == "Pending Review":
 			if flt(self.individual_progress or 0) < 100:
-				frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+				frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{2}'")
+				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%")))
 			else:
 				self.progress = 50
 
@@ -473,6 +491,14 @@ class Task(NestedSet):
 			if self.name not in [row.task for row in parent.depends_on]:
 				parent.append(
 					"depends_on", {"doctype": "Task Depends On", "task": self.name, "subject": self.subject}
+				)
+				parent.save()
+
+		if self.ongoing_sprint:
+			parent = frappe.get_doc("Event", self.ongoing_sprint)
+			if self.name not in [row.task_id for row in parent.task_list]:
+				parent.append(
+					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
 				)
 				parent.save()
 

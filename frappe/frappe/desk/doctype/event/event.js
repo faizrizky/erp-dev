@@ -32,15 +32,18 @@ frappe.ui.form.on("Event", {
 			});
 		}
 
-		frm.page.set_inner_btn_group_as_primary(__("Add Participants"));
+		if (frm.doc.event_category != "Sprint") {
 
-		frm.add_custom_button(
-			__("Add Contacts"),
-			function () {
-				new frappe.desk.eventParticipants(frm, "Contact");
-			},
-			__("Add Participants")
-		);
+			frm.page.set_inner_btn_group_as_primary(__("Add Participants"));
+
+			frm.add_custom_button(
+				__("Add Contacts"),
+				function () {
+					new frappe.desk.eventParticipants(frm, "Contact");
+				},
+				__("Add Participants")
+			);
+		}
 
 		const [ends_on_date] = frm.doc.ends_on
 			? frm.doc.ends_on.split(" ")

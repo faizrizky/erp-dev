@@ -90,7 +90,7 @@ def update_order(board_name, order):
 	doctype = board.reference_doctype
 	fieldname = board.field_name
 	order_dict = json.loads(order)
-
+ 
 	updated_cards = []
 	for col_name, cards in order_dict.items():
 		for card in cards:

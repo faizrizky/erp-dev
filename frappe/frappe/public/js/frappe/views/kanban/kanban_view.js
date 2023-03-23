@@ -165,6 +165,17 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 	render() {
 		const board_name = this.board_name;
 		if (!this.kanban) {
+
+			var result = Object.keys(this.data).map((key) => [Number(key), this.data[key]]).length;
+			console.log(result);
+			for (let property in this.data) {
+				let propertyValue = this.data[property];
+
+				if (propertyValue.hide_in_kanban == true) {
+					console.log(propertyValue.name + ' : ' + propertyValue.hide_in_kanban);
+					console.log(this.data)
+				}
+			}
 			this.kanban = new frappe.views.KanbanBoard({
 				doctype: this.doctype,
 				board: this.board,

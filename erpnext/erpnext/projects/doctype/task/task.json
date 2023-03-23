@@ -3,7 +3,7 @@
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:subject",
- "creation": "2023-03-21 15:50:38.220311",
+ "creation": "2023-03-23 10:21:55.159501",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -464,6 +464,7 @@
    "default": "0",
    "fieldname": "hide_in_kanban",
    "fieldtype": "Check",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Hide in Kanban"
   }
@@ -474,7 +475,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-23 10:20:26.260657",
+ "modified": "2023-03-23 15:05:57.594549",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

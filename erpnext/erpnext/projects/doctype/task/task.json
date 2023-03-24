@@ -445,6 +445,7 @@
   {
    "fieldname": "multi_sprint",
    "fieldtype": "Table MultiSelect",
+   "in_standard_filter": 1,
    "label": "Sprint",
    "options": "Assignment Sprint",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
@@ -456,6 +457,7 @@
   {
    "fieldname": "ongoing_sprint",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "On Going Sprint",
    "options": "Event",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
@@ -475,7 +477,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-23 15:05:57.594549",
+ "modified": "2023-03-24 07:52:10.592500",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

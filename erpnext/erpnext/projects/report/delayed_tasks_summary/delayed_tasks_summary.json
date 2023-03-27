@@ -9,7 +9,7 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2021-04-15 15:49:35.432486",
+ "modified": "2023-03-27 11:03:22.338993",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Delayed Tasks Summary",
@@ -24,6 +24,12 @@
   },
   {
    "role": "Projects Manager"
+  },
+  {
+   "role": "Technical Architect Software Developer"
+  },
+  {
+   "role": "Leader Software Developer"
   }
  ]
 }

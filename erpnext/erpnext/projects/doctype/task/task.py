@@ -495,12 +495,30 @@ class Task(NestedSet):
 				parent.save()
 
 		if self.ongoing_sprint:
+			# print(self.ongoing_sprint)
 			parent = frappe.get_doc("Event", self.ongoing_sprint)
 			if self.name not in [row.task_id for row in parent.task_list]:
 				parent.append(
 					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
 				)
 				parent.save()
+
+
+		# if self.ongoing_sprint:
+		# 	# frappe.db.set_value("DocType", docname, "fieldname", value_to_set)
+		# 	# parent = frappe.db.get_value("Event", {"ongoing_sprint": parent})
+		# 	parent = frappe.get_doc("Event", self.ongoing_sprint)
+		# 	print(parent)
+		# parent.append(
+		# 		"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
+            #             )
+		# parent.save()
+		# if self.name not in [row.sprint_id for row in multi_issue_value.multi_sprint]:
+		# self.ongoing_sprint.append(
+		# 		"multi_sprint", {"doctype": "Assignment Sprint", "sprint_id": self.name}
+            #             )
+		# self.ongoing_sprint.save()
+
 
 	def on_trash(self):
 		if check_if_child_exists(self.name):

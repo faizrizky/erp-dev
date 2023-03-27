@@ -24,6 +24,16 @@ frappe.ui.form.on("Task", {
 			};
 		})
 
+		frm.set_query("ongoing_sprint", function () {
+			let filters = {
+				status: ["=", "Open"]
+			};
+
+			return {
+				filters: filters
+			};
+		})
+
 		frm.set_query("parent_task", function () {
 			let filters = {
 				"is_group": 1,

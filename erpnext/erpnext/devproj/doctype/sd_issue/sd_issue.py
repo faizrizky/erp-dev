@@ -41,7 +41,7 @@ class SDIssue(Document):
 		if self.task_issue:
 			task_issue = frappe.get_doc("Task", self.task_issue)
 			print(task_issue.multi_issue)
-			if self.name not in [row.issue_id for row in task_issue.multi_issue]:
+			if self.name not in [row.task for row in task_issue.multi_issue]:
 				task_issue.append(
 					"multi_issue", {"doctype": "Assigment Issue", "issue_id": self.name}
 				)

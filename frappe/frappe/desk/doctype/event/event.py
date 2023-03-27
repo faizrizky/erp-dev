@@ -64,6 +64,7 @@ class Event(Document):
 
 	def on_update(self):
 		self.sync_communication()
+		set_status_of_events()
 
 	def on_trash(self):
 		communications = frappe.get_all(

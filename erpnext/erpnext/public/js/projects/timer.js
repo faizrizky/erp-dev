@@ -22,13 +22,27 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
 	dialog.fields_dict.task.get_query = function (frm, cdt, cdn) {
 		// var child = locals[cdt][cdn];
 		var project = cur_dialog.fields_dict.project.value;
-		return {
-			filters: {
-				'project': project,
-				'status': ["!=", "Cancelled"],
-				_assign: ['like', '%' + frappe.session.user + '%']
-			}
+
+		let filters = {
+			'project': project,
+			'status': ["!=", "Cancelled"],
+			'ongoing_sprint': ["!=", ""],
+			_assign: ['like', '%' + frappe.session.user + '%']
 		};
+		// if (project) {
+		// 	frm.set_query("ongoing_sprint", function () {
+		// 		filters = {
+		// 			status: ["=", "Open"]
+		// 		};
+		// 		return {
+		// 			filters: filters
+		// 		};
+		// 	})
+		// }
+		return {
+			filters: filters
+		};
+
 	};
 	// dialog.set_query("task", function () {
 	// 	return {

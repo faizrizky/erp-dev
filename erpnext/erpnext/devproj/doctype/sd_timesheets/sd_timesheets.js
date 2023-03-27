@@ -17,11 +17,22 @@ frappe.ui.form.on('SD Timesheets', {
 			};
 		};
 
+		frm.set_query("ongoing_sprint", function () {
+			let filters = {
+				status: ["=", "Open"]
+			};
+
+			return {
+				filters: filters
+			};
+		})
+
 		frm.fields_dict['time_logs'].grid.get_field('task').get_query = function (frm, cdt, cdn) {
 			var child = locals[cdt][cdn];
 			return {
 				filters: {
 					'project': child.project,
+					'ongoing_sprint': ["!=", ""],
 					'status': ["!=", "Cancelled"],
 					_assign: ['like', '%' + frappe.session.user + '%']
 				}

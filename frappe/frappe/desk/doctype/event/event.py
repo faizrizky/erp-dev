@@ -58,13 +58,17 @@ class Event(Document):
 
 		if not self.sync_with_google_calendar:
 			self.add_video_conferencing = 0
+		
+		self.set_name()
 
 	def before_save(self):
 		self.set_participants_email()
 
 	def on_update(self):
 		self.sync_communication()
-		set_status_of_events()
+
+	def set_name(self):
+		self.subject = self.name + " : " + " " + self.starts_on + " - " + self.ends_on
 
 	def on_trash(self):
 		communications = frappe.get_all(

@@ -108,30 +108,33 @@ class Task(NestedSet):
 
 	def validate_on_going_sprint(self):
 
-		events = frappe.get_list(
-						"Event", filters={"status": "Open"}, fields=["name", "starts_on"]
-					)
-		for event in events:
-			if (event.starts_on and getdate(event.starts_on) == getdate(nowdate())):
-				# ongoing=frappe.db.set_value('Task', event.name, 'ongoing_sprint', event.name)
-				self.ongoing_sprint = frappe.db.get_value("Event",event.name,'name')
-				# task_subject = frappe.db.get_value('Event', event.name, 'name')
-				# print(task_subject)
-				# asd =frappe.db.set_value('Task', task_subject, 'ongoing_sprint', event.name)
-				# print(asd)
-				# print(ongoing_sprint)
+		# events = frappe.get_list(
+		# 				"Event", filters={"status": "Open"}, fields=["name", "starts_on"]
+		# 			)
+		# for event in events:
+		# 	if (event.starts_on and getdate(event.starts_on) == getdate(nowdate())):
+		# 		# ongoing=frappe.db.set_value('Task', event.name, 'ongoing_sprint', event.name)
+		# 		self.ongoing_sprint = frappe.db.get_value("Event",event.name,'name')
+		# 		# task_subject = frappe.db.get_value('Event', event.name, 'name')
+		# 		# print(task_subject)
+		# 		# asd =frappe.db.set_value('Task', task_subject, 'ongoing_sprint', event.name)
+		# 		# print(asd)
+		# 		# print(ongoing_sprint)
 
 		arr = [] 
 		for items in self.multi_sprint:
 			doc = frappe.get_doc('Event', items.sprint_id)
 			arr.append(doc.starts_on)
-			# if (doc.status == "Open"):
-			# 	if (doc.starts_on and getdate(doc.starts_on) == getdate(nowdate())):
-			# 		# self.ongoing_sprint = doc
-			# 		# print(doc)
-			# 		# min_val = max(arr)
-			# 		self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
+			if (doc.status == "Open"):
+				if (doc.starts_on and getdate(doc.starts_on) == getdate(nowdate())):
+					# self.ongoing_sprint = doc
+					# print(doc)
+					# min_val = max(arr)
+					self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
+
 			# print("Minimum value in the array:", min_val)
+		if (len(arr) <= 0):
+			self.ongoing_sprint = ""
 
 	def validate_status(self):
 		if self.is_template and self.status != "Template":

@@ -107,7 +107,8 @@
   {
    "fieldname": "ends_on",
    "fieldtype": "Date",
-   "label": "Ends on"
+   "label": "Ends on",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -313,7 +314,7 @@
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2023-03-28 11:28:25.487933",
+ "modified": "2023-03-30 12:00:06.586555",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",

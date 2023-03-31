@@ -19,121 +19,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Projects",
-   "link_count": 0,
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project",
-   "link_count": 0,
-   "link_to": "Project",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Task",
-   "link_count": 0,
-   "link_to": "Task",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project Template",
-   "link_count": 0,
-   "link_to": "Project Template",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project Type",
-   "link_count": 0,
-   "link_to": "Project Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "dependencies": "Project",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project Update",
-   "link_count": 0,
-   "link_to": "Project Update",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 0,
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "Timesheet",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Daily Timesheet Summary",
-   "link_count": 0,
-   "link_to": "Daily Timesheet Summary",
-   "link_type": "Report",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "Project",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Project wise Stock Tracking",
-   "link_count": 0,
-   "link_to": "Project wise Stock Tracking",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "dependencies": "Project",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Project Billing Summary",
-   "link_count": 0,
-   "link_to": "Project Billing Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "dependencies": "Task",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Delayed Tasks Summary",
-   "link_count": 0,
-   "link_to": "Delayed Tasks Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Settings",
    "link_count": 1,
    "onboard": 0,
@@ -178,9 +63,91 @@
    "link_type": "DocType",
    "onboard": 1,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project",
+   "link_count": 0,
+   "link_to": "Project",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Type",
+   "link_count": 0,
+   "link_to": "Project Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Project",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project wise Stock Tracking",
+   "link_count": 0,
+   "link_to": "Project wise Stock Tracking",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Project",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Billing Summary",
+   "link_count": 0,
+   "link_to": "Project Billing Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Delayed Tasks Summary",
+   "link_count": 0,
+   "link_to": "Delayed Tasks Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2023-03-23 13:44:31.927292",
+ "modified": "2023-03-29 15:48:14.869190",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Projects",

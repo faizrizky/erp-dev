@@ -1,0 +1,13 @@
+{
+ "creation": "2023-03-29 15:27:07.632804",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart Source",
+ "idx": 0,
+ "modified": "2023-03-29 15:27:07.632804",
+ "modified_by": "Administrator",
+ "module": "Projects",
+ "name": "SD Chart List",
+ "owner": "Administrator",
+ "source_name": "SD Chart List",
+ "timeseries": 0
+}

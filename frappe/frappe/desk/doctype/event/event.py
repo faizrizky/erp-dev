@@ -12,6 +12,7 @@ from frappe.desk.doctype.notification_settings.notification_settings import (
 )
 from frappe.desk.reportview import get_filters_cond
 from frappe.model.document import Document
+from datetime import datetime
 from frappe.utils import (
 	add_days,
 	add_months,
@@ -61,6 +62,20 @@ class Event(Document):
 		
 		self.set_name()
 
+		events = frappe.get_list(
+		"Event", filters={"status": "Open","name" : ['!=', self.name], "event_category" : "Sprint"}, fields=["name", "starts_on"])
+		# self.d1 = datetime.strptime(self.starts_on, "%Y-%m-%d").date()
+		# print([row.starts_on for row in events],self.d1)
+		# print(type(self.starts_on))
+		
+		if datetime.strptime(self.starts_on, "%Y-%m-%d").date() in [row.starts_on for row in events]:
+				frappe.throw(
+							_(
+								"Cannot create event {0} same event already created"
+							).format(frappe.bold(self.name))
+						)
+
+
 	def before_save(self):
 		self.set_participants_email()
 
@@ -68,7 +83,7 @@ class Event(Document):
 		self.sync_communication()
 
 	def set_name(self):
-		self.subject = self.name + " : " + " " + self.starts_on + " - " + self.ends_on
+		self.subject = str(self.name) + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)
 
 	def on_trash(self):
 		communications = frappe.get_all(
@@ -77,7 +92,7 @@ class Event(Document):
 		if communications:
 			for communication in communications:
 				frappe.delete_doc_if_exists("Communication", communication.name)
-
+	
 	def sync_communication(self):
 		if self.event_participants:
 			for participant in self.event_participants:
@@ -454,4 +469,4 @@ def set_status_of_events():
 			event.repeat_till and getdate(event.repeat_till) < getdate(nowdate())
 		):
 
-			frappe.db.set_value("Event", event.name, "status", "Closed")
+			frappe.db.set_value("Event", event.name, "status", "Completed")

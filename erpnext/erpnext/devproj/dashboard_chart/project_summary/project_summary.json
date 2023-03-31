@@ -10,7 +10,7 @@
  "idx": 0,
  "is_public": 1,
  "is_standard": 1,
- "modified": "2023-02-22 10:43:53.650333",
+ "modified": "2023-03-29 15:51:50.982667",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Project Summary",
@@ -31,5 +31,19 @@
  "timeseries": 0,
  "type": "Bar",
  "use_report_chart": 1,
- "y_axis": []
+ "x_field": "name",
+ "y_axis": [
+  {
+   "y_field": "total_tasks"
+  },
+  {
+   "y_field": "completed_tasks"
+  },
+  {
+   "y_field": "overdue_tasks"
+  },
+  {
+   "y_field": "percent_complete"
+  }
+ ]
 }

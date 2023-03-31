@@ -462,15 +462,15 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		let new_button_label =
 			filters && filters.length
 				? __(
-						"Create a new {0}",
-						[__(this.doctype)],
-						"Create a new document from list view"
-				  )
+					"Create a new {0}",
+					[__(this.doctype)],
+					"Create a new document from list view"
+				)
 				: __(
-						"Create your first {0}",
-						[__(this.doctype)],
-						"Create a new document from list view"
-				  );
+					"Create your first {0}",
+					[__(this.doctype)],
+					"Create a new document from list view"
+				);
 		let empty_state_image =
 			this.settings.empty_state_image ||
 			"/assets/frappe/images/ui-states/list-empty-state.svg";
@@ -644,10 +644,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 				return `
 				<div class="${classes}">
-					${
-						col.type === "Subject"
-							? subject_html
-							: `
+					${col.type === "Subject"
+						? subject_html
+						: `
 						<span>${__((col.df && col.df.label) || col.type)}</span>`
 					}
 				</div>
@@ -1459,7 +1458,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		return frappe.model.user_settings.save(this.doctype, this.view_name, obj);
 	}
 
-	on_update() {}
+	on_update() { }
 
 	update_url_with_filters() {
 		if (frappe.get_route_str() == this.page_name && !this.report_name) {
@@ -1686,6 +1685,20 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				standard: true,
 			};
 		};
+		// const bulk_assignment_multi_sprint = () => {
+		// 	return {
+		// 		label: __("Apply Multi Sprint", null, "Button in list view actions menu"),
+		// 		action: () => {
+		// 			this.disable_list_update = true;
+		// 			bulk_operations.apply_multi_sprint(this.get_checked_items(true), () => {
+		// 				this.disable_list_update = false;
+		// 				this.clear_checked_items();
+		// 				this.refresh();
+		// 			});
+		// 		},
+		// 		standard: true,
+		// 	};
+		// };
 
 		const bulk_add_tags = () => {
 			return {
@@ -1844,6 +1857,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		actions_menu_items.push(bulk_assignment_rule());
 
 		actions_menu_items.push(bulk_add_tags());
+
+		// actions_menu_items.push(bulk_assignment_multi_sprint());
 
 		// bulk printing
 		if (frappe.model.can_print(doctype)) {

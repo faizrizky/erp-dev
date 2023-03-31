@@ -97,18 +97,18 @@ export default class BulkOperations {
 
 			const w = window.open(
 				"/api/method/frappe.utils.print_format.download_multi_pdf?" +
-					"doctype=" +
-					encodeURIComponent(this.doctype) +
-					"&name=" +
-					encodeURIComponent(json_string) +
-					"&format=" +
-					encodeURIComponent(print_format) +
-					"&no_letterhead=" +
-					(with_letterhead ? "0" : "1") +
-					"&letterhead=" +
-					encodeURIComponent(letterhead) +
-					"&options=" +
-					encodeURIComponent(pdf_options)
+				"doctype=" +
+				encodeURIComponent(this.doctype) +
+				"&name=" +
+				encodeURIComponent(json_string) +
+				"&format=" +
+				encodeURIComponent(print_format) +
+				"&no_letterhead=" +
+				(with_letterhead ? "0" : "1") +
+				"&letterhead=" +
+				encodeURIComponent(letterhead) +
+				"&options=" +
+				encodeURIComponent(pdf_options)
 			);
 
 			if (!w) {
@@ -184,6 +184,24 @@ export default class BulkOperations {
 			frappe.msgprint(__("Select records for assignment"));
 		}
 	}
+
+	// apply_multi_sprint(docnames, done) {
+	// 	if (docnames.length > 0) {
+	// 		const assign_to = new frappe.ui.form.AssignToDialog({
+	// 			obj: this,
+	// 			method: "frappe.desk.form.assign_to.add_multiple",
+	// 			doctype: this.doctype,
+	// 			docname: docnames,
+	// 			bulk_assign: true,
+	// 			re_assign: true,
+	// 			callback: done,
+	// 		});
+	// 		assign_to.dialog.clear();
+	// 		assign_to.dialog.show();
+	// 	} else {
+	// 		frappe.msgprint(__("Select records for assignment"));
+	// 	}
+	// }
 
 	apply_assignment_rule(docnames, done) {
 		if (docnames.length > 0) {

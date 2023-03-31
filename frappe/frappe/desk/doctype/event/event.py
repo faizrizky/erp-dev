@@ -68,12 +68,12 @@ class Event(Document):
 		# print([row.starts_on for row in events],self.d1)
 		# print(type(self.starts_on))
 		
-		if datetime.strptime(self.starts_on, "%Y-%m-%d").date() in [row.starts_on for row in events]:
-				frappe.throw(
-							_(
-								"Cannot create event {0} same event already created"
-							).format(frappe.bold(self.name))
-						)
+		# if datetime.strptime(self.starts_on, "%Y-%m-%d").date() in [row.starts_on for row in events]:
+		# 		frappe.throw(
+		# 					_(
+		# 						"Cannot create event {0} same event already created"
+		# 					).format(frappe.bold(self.name))
+		# 				)
 
 
 	def before_save(self):

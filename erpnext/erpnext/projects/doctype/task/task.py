@@ -346,7 +346,7 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 
 		self.progress = str(self.progress).split('.')[0]
-		if (self.is_group != True):
+		if (self.is_group != True and self.status != "Open"):
 			if self.priority == "Low":
 				# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
 				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:

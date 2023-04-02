@@ -193,7 +193,7 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 			self.duration = 0
 
-			self.validate_duration()
+			# self.validate_duration()
 
 		if self.status == "Completed":
 			self.progress = 100
@@ -202,55 +202,61 @@ class Task(NestedSet):
 
 			self.progress = 0
 
+			self.validate_duration()
+
 			# self.exp_start_date = datetime.now().date()
-			if flt(self.exp_start_date == None):
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
+			# if flt(self.exp_start_date == None):
+			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
 
-			# start_date = self.exp_start_date
+			# # start_date = self.exp_start_date
 
-			# days_to_add = 7
+			# # days_to_add = 7
 
-			# current_date = start_date
+			# # current_date = start_date
 
-			# while days_to_add > 0:
-			# 	current_date += timedelta(days=1)
-			# 	if current_date.weekday() < 5:
-			# 		days_to_add -= 1
+			# # while days_to_add > 0:
+			# # 	current_date += timedelta(days=1)
+			# # 	if current_date.weekday() < 5:
+			# # 		days_to_add -= 1
 
-			# result_date = current_date
+			# # result_date = current_date
 
-			# self.exp_end_date = result_date
+			# # self.exp_end_date = result_date
 
-			self.start_date = str(self.exp_start_date)
-			self.end_date = str(self.exp_end_date)
+			# self.start_date = str(self.exp_start_date)
+			# self.end_date = str(self.exp_end_date)
 
-			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+			# self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
 
-			if flt(self.exp_end_date == None):
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			else:
-				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# delta = self.d2 - self.d1
+			# if flt(self.exp_end_date == None):
+			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
+			# else:
+			# 	self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			# # delta = self.d2 - self.d1
 
-			self.daydiff = self.d2.weekday() - self.d1.weekday()
+			# self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			# self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-			self.strdays = str(self.days).split('.')[0]
+			# self.strdays = str(self.days).split('.')[0]
 
-			self.duration = self.days
+			# self.duration = self.days
 
 		if self.status == "Pending Review":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-				frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{2}'")
-				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%")))
+				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
 				self.progress = 50
 
 		if self.status == "QA Testing":
-
-			self.progress = 80
+			if flt(self.individual_progress or 0) < 100:
+				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			else:
+				self.progress = 80
 
 			# start_date = datetime.now().date()
 
@@ -287,8 +293,12 @@ class Task(NestedSet):
 			# self.duration = self.days
 
 		if self.status == "QA Integration Testing":
-
-			self.progress = 90
+			if flt(self.individual_progress or 0) < 100:
+				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			else:
+				self.progress = 90
 
 			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
 			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan

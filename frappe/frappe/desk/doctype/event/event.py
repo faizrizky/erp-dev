@@ -64,16 +64,18 @@ class Event(Document):
 
 		events = frappe.get_list(
 		"Event", filters={"status": "Open","name" : ['!=', self.name], "event_category" : "Sprint"}, fields=["name", "starts_on"])
-		# self.d1 = datetime.strptime(self.starts_on, "%Y-%m-%d").date()
+		d1 = self.starts_on
+		if (isinstance(self.starts_on,str)):
+			d1 = datetime.strptime(self.starts_on, "%Y-%m-%d").date()
 		# print([row.starts_on for row in events],self.d1)
 		# print(type(self.starts_on))
 		
-		# if datetime.strptime(self.starts_on, "%Y-%m-%d").date() in [row.starts_on for row in events]:
-		# 		frappe.throw(
-		# 					_(
-		# 						"Cannot create event {0} same event already created"
-		# 					).format(frappe.bold(self.name))
-		# 				)
+		if d1 in [row.starts_on for row in events]:
+				frappe.throw(
+							_(
+								"Cannot create event {0} same event already created"
+							).format(frappe.bold(self.name))
+						)
 
 
 	def before_save(self):

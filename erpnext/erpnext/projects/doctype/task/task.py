@@ -43,7 +43,8 @@ class Task(NestedSet):
 		self.validate_progress()
 		self.validate_status()
 		# self.validate_status_child()
-		self.validate_on_going_sprint()
+		# self.validate_sprint()
+		# self.validate_on_going_sprint()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
 		self.validate_completed_on()
@@ -106,9 +107,16 @@ class Task(NestedSet):
 
 
 
+
+
+
+
+
+
+
 	def validate_on_going_sprint(self):
 
-		# events = frappe.get_list(
+		# events = frappe.get_list(	
 		# 				"Event", filters={"status": "Open"}, fields=["name", "starts_on"]
 		# 			)
 		# for event in events:
@@ -125,8 +133,8 @@ class Task(NestedSet):
 		for items in self.multi_sprint:
 			doc = frappe.get_doc('Event', items.sprint_id)
 			arr.append(doc.starts_on)
-			if (doc.status == "Open"):
-				if (doc.starts_on and getdate(doc.starts_on) == getdate(nowdate())):
+			if (doc.status == "Open" and doc.starts_on):
+				if (getdate(doc.ends_on) >= getdate(nowdate()) and getdate(doc.starts_on) <= getdate(nowdate())):
 					# self.ongoing_sprint = doc
 					# print(doc)
 					# min_val = max(arr)
@@ -577,6 +585,54 @@ class Task(NestedSet):
 				self.db_set("status", "Overdue", update_modified=False)
 				self.update_project()
 
+
+
+@frappe.whitelist()
+def validate_sprint():
+
+	event = frappe.db.get_list('Event', pluck='name',
+		filters={
+			'starts_on': ['<=', getdate(nowdate())]
+		},
+						fields=['starts_on', 'name'],
+						order_by='starts_on desc',
+						page_length=2,
+						as_list=False
+						)
+	print(event)
+
+	assigment_sprint = frappe.db.get_list('Assignment Sprint', 
+		filters={
+			'sprint_id': ['in',event]
+		},
+						fields=['parent', 'name', 'sprint_id'],
+						page_length=10000,
+						as_list=False
+						)
+	print(assigment_sprint)
+
+	before_assignment_task = []
+	ongoing_sprint = []
+	print(event[0])
+	for task in assigment_sprint:
+		if task.sprint_id == event[0]:
+			ongoing_sprint.append(task.parent)
+		else:
+			before_assignment_task.append(task.parent)
+
+	sql_bulk = """UPDATE `tabTask` SET `ongoing_sprint` =%(status)s WHERE `name` in {name}"""
+	# sql_bulk = """UPDATE `tabTask` SET `ongoing_sprint` =%(status)s WHERE `name` in {name}"""
+
+	ongoing_sprint_val = {"status" : event[0]}
+
+	before_assignment_task_val = {"status" : ""}
+
+
+	print(sql_bulk.format(name = "('" + "', ".join(ongoing_sprint) + "')"))
+	frappe.db.sql(sql_bulk.format(name = "('" + "', '".join(before_assignment_task) + "')"), before_assignment_task_val, debug=True)
+	frappe.db.commit()
+	frappe.db.sql(sql_bulk.format(name = "('" + "', '".join(ongoing_sprint) + "')"), ongoing_sprint_val,  debug=True, auto_commit=0, update=True, as_dict=1)
+	frappe.db.commit()
 
 @frappe.whitelist()
 def check_if_child_exists(name):

@@ -610,7 +610,8 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		// }
 
 
-		if (frappe.session.user == "caqa@falahtech.co.id") {
+		// if (frappe.session.user == "caqa@falahtech.co.id") {
+		if (frappe.user.has_role('Software Developer') != 1) {
 			// console.log("INIBOOOL : " + isBool)
 			return [
 				{

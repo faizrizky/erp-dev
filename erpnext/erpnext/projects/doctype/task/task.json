@@ -462,7 +462,7 @@
    "in_standard_filter": 1,
    "label": "On Going Sprint",
    "options": "Event",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only": 1
   },
   {
    "default": "0",
@@ -479,7 +479,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-03-29 09:21:08.104455",
+ "modified": "2023-04-03 11:28:32.937312",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

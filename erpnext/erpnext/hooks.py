@@ -383,12 +383,12 @@ scheduler_events = {
 			"erpnext.stock.reorder_item.reorder_item",
 		],
 		# "* * * * * *": [
-		# 	"erpnext.projects.doctype.task.task.validate_on_going_sprint"
+		# 	"erpnext.projects.doctype.task.task.validate_sprint"
 		# ],
 
-		# "0 0 * * 1":[
-		# 	"erpnext.projects.doctype.task.task.validate_on_going_sprint"
-		# ]
+		"0 1 * * 1":[
+			"erpnext.projects.doctype.task.task.validate_sprint"
+		]
 	},
 	"all": [
 		"erpnext.projects.doctype.project.project.project_status_update_reminder",

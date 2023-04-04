@@ -60,8 +60,17 @@ frappe.treeview_settings['Task'] = {
 								in_list_view: 1,
 								reqd: 1,
 								label: __("Subject")
-							}]
+							},
+								// {
+								// 	fieldtype: 'Date',
+								// 	fieldname: "exp_start_date",
+								// 	in_list_view: 1,
+								// 	reqd: 1,
+								// 	label: __("Starts On")
+								// }
+							]
 						},
+
 					],
 					primary_action: function () {
 						dialog.hide();

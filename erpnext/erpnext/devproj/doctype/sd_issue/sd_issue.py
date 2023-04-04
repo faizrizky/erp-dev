@@ -37,15 +37,22 @@ class SDIssue(Document):
 			self.flags.communication_created = None
 
 	def populate_depends_on(self):
-		print(self.task_issue)
-		if self.task_issue:
-			task_issue = frappe.get_doc("Task", self.task_issue)
-			print(task_issue.multi_issue)
-			if self.name not in [row.task for row in task_issue.multi_issue]:
+
+		# print(self.task_issue)
+		task_issue = frappe.get_doc("Task", self.task_issue)
+		if self.task_issue and self.status == "Open":
+			# print(task_issue.multi_issue)
+			if self.name not in [row.issue_id for row in task_issue.multi_issue]:
 				task_issue.append(
 					"multi_issue", {"doctype": "Assigment Issue", "issue_id": self.name}
 				)
 				task_issue.save()
+
+		if self.status == "Closed":
+			for _, row in enumerate(task_issue.multi_issue):
+				if row.issue_id == self.name:
+					row.delete()
+
 
 
 	def set_lead_contact(self, email_id):

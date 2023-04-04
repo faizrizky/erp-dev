@@ -170,6 +170,7 @@
   {
    "fieldname": "exp_start_date",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "Start Date",
    "oldfieldname": "exp_start_date",
    "oldfieldtype": "Date"
@@ -479,7 +480,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-03 11:28:32.937312",
+ "modified": "2023-04-03 13:23:19.610785",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

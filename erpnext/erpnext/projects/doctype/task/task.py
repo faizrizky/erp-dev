@@ -37,6 +37,7 @@ class Task(NestedSet):
 			return ret
 
 	def validate(self):
+		self.validate_on_going_sprint()
 		self.validate_dates()
 		self.validate_parent_expected_end_date()
 		self.validate_parent_project_dates()
@@ -44,7 +45,6 @@ class Task(NestedSet):
 		self.validate_status()
 		# self.validate_status_child()
 		# self.validate_sprint()
-		# self.validate_on_going_sprint()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
 		self.validate_completed_on()
@@ -128,21 +128,77 @@ class Task(NestedSet):
 		# 		# asd =frappe.db.set_value('Task', task_subject, 'ongoing_sprint', event.name)
 		# 		# print(asd)
 		# 		# print(ongoing_sprint)
+		# print(self.multi_sprint.items());
+
+		# event = frappe.db.get_list('Event', pluck='starts_on',
+		# filters={
+		# 	# 'starts_on': ['<=', getdate(nowdate())],
+		# 	"name" : ["in", self.multi_sprint]
+		# },
+		# 				fields=['starts_on', 'name'],
+		# 				order_by='starts_on desc',
+		# 				page_length=2,
+		# 				as_list=False
+		# 				)
+		# assigment_sprint = frappe.db.get_list('Assignment Sprint', 
+		# filters={
+		# 	'parent': self.name
+		# },
+		# 				fields=['parent', 'name', 'sprint_id'],
+		# 				page_length=10000,
+		# 				as_list=False
+		# 				)
+
+
+		# self.exp_start_date = event[1] if event[1] else event[0]
 
 		arr = [] 
 		for items in self.multi_sprint:
 			doc = frappe.get_doc('Event', items.sprint_id)
-			arr.append(doc.starts_on)
-			if (doc.status == "Open" and doc.starts_on):
-				if (getdate(doc.ends_on) >= getdate(nowdate()) and getdate(doc.starts_on) <= getdate(nowdate())):
-					# self.ongoing_sprint = doc
-					# print(doc)
-					# min_val = max(arr)
-					self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
 
-			# print("Minimum value in the array:", min_val)
+			arr.append(doc.starts_on)
+			arr.append(doc.ends_on)
+
 		if (len(arr) <= 0):
-			self.ongoing_sprint = ""
+			frappe.throw(_("You need to fill {0} field in Category Sprint to continue").format(frappe.bold("Sprint")))
+
+		print(min(arr),max(arr))
+		self.exp_start_date =min(arr)
+		self.exp_end_date = max(arr)
+
+
+
+		# for items in self.multi_sprint:
+		# 	doc = frappe.get_doc('Event', items.sprint_id)
+		# 	arr.append(doc.starts_on)
+		# 	if (doc.ends_on):
+		# 		if (getdate(doc.ends_on) >= getdate(nowdate())):
+		# 			# self.ongoing_sprint = doc
+		# 			# print("ends on",doc.ends_on)
+		# 			# min_val = max(arr)
+		# 			# self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
+		# 			self.exp_end_date = frappe.db.get_value("Event",doc.name,'ends_on')
+		# 		elif (doc.starts_on):
+
+		# 			if (getdate(doc.starts_on) <= getdate(nowdate())):
+		# 				# self.ongoing_sprint = doc
+		# 				print(doc)
+		# 				# min_val = max(arr)
+		# 				# self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
+		# 				self.exp_start_date = frappe.db.get_value("Event",doc.name,'starts_on')
+		# 				self.exp_end_date = frappe.db.get_value("Event",doc.name,'ends_on')
+
+
+
+
+		# 	# print("Minimum value in the array:", min_val)
+		# if (len(arr) <= 0):
+		# 	# 	# self.ongoing_sprint = ""
+		# 	# self.exp_start_date = ""
+		# 	# self.exp_end_date = ""
+		# 	frappe.throw(_("You need to fill {0} field in Category Sprint to continue").format(frappe.bold("Sprint")))
+
+
 
 	def validate_status(self):
 		if self.is_template and self.status != "Template":
@@ -176,8 +232,9 @@ class Task(NestedSet):
 			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
 		else:
 			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# delta = self.d2 - self.d1
+		# 	# delta = self.d2 - self.d1
 
+		self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 		self.daydiff = self.d2.weekday() - self.d1.weekday()
 
 		self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
@@ -212,44 +269,6 @@ class Task(NestedSet):
 
 			self.validate_duration()
 
-			# self.exp_start_date = datetime.now().date()
-			# if flt(self.exp_start_date == None):
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
-
-			# # start_date = self.exp_start_date
-
-			# # days_to_add = 7
-
-			# # current_date = start_date
-
-			# # while days_to_add > 0:
-			# # 	current_date += timedelta(days=1)
-			# # 	if current_date.weekday() < 5:
-			# # 		days_to_add -= 1
-
-			# # result_date = current_date
-
-			# # self.exp_end_date = result_date
-
-			# self.start_date = str(self.exp_start_date)
-			# self.end_date = str(self.exp_end_date)
-
-			# self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
-
-			# if flt(self.exp_end_date == None):
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			# else:
-			# 	self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# # delta = self.d2 - self.d1
-
-			# self.daydiff = self.d2.weekday() - self.d1.weekday()
-
-			# self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-
-			# self.strdays = str(self.days).split('.')[0]
-
-			# self.duration = self.days
-
 		if self.status == "Pending Review":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
@@ -276,40 +295,6 @@ class Task(NestedSet):
 			else:
 				self.progress = 80
 
-			# start_date = datetime.now().date()
-
-			# days_to_add = 10
-
-			# current_date = start_date
-
-			# while days_to_add > 0:
-			# 	current_date += timedelta(days=1)
-			# 	if current_date.weekday() < 5:
-			# 		days_to_add -= 1
-
-			# result_date = current_date
-
-			# self.exp_end_date = result_date
-
-			# self.start_date = str(self.exp_start_date)
-			# self.end_date = str(self.exp_end_date)
-
-			# self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
-
-			# if flt(self.exp_end_date == None):
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			# else:
-			# 	self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# # delta = self.d2 - self.d1
-
-			# self.daydiff = self.d2.weekday() - self.d1.weekday()
-
-			# self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-
-			# strdays = str(self.days).split('.')[0]
-
-			# self.duration = self.days
-
 		if self.status == "QA Integration Testing":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
@@ -321,40 +306,6 @@ class Task(NestedSet):
 			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
 			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan
 
-			# start_date = datetime.now().date()
-
-			# days_to_add = 10
-
-			# current_date = start_date
-
-			# while days_to_add > 0:
-			# 	current_date += timedelta(days=1)
-			# 	if current_date.weekday() < 5:
-			# 		days_to_add -= 1
-
-			# result_date = current_date
-
-			# self.exp_end_date = result_date
-
-			# self.start_date = str(self.exp_start_date)
-			# self.end_date = str(self.exp_end_date)
-
-			# self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
-
-			# if flt(self.exp_end_date == None):
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-			# else:
-			# 	self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			# # delta = self.d2 - self.d1
-
-			# self.daydiff = self.d2.weekday() - self.d1.weekday()
-
-			# self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-
-			# strdays = str(self.days).split('.')[0]
-
-			# self.duration = self.days
-
 		if self.status == "Cancelled":
 
 			self.progress = 0
@@ -364,62 +315,62 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 
 		self.progress = str(self.progress).split('.')[0]
-		if (self.is_group != True and self.status != "Open"):
-			if self.priority == "Low":
-				# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
-				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-					# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
-					frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-					.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
+		# if (self.is_group != True and self.status != "Open"):
+		# 	if self.priority == "Low":
+		# 		# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
+		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
+		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
 
-				if flt(self.days) > 10:
-					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-					.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
+		# 		if flt(self.days) > 10:
+		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
 
-			if self.priority == "Medium":
-				# if self.status != "QA Testing" and self.status != "QA Integration Testing":
-				# if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
-				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+		# 	if self.priority == "Medium":
+		# 		# if self.status != "QA Testing" and self.status != "QA Integration Testing":
+		# 		# if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
+		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
 
-					# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
-					frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-					.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
+		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
+		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
 
-				if flt(self.days) > 7:
-					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-						.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
-
-
-			if self.priority == "High":
-				# if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
-				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-
-					# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
-					frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-					.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
-
-				if flt(self.days) > 5:
-					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-					.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
+		# 		if flt(self.days) > 7:
+		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+		# 				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 
-			if self.priority == "Urgent":
-				# if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
-				if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+		# 	if self.priority == "High":
+		# 		# if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
+		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
 
-					# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
-					frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-					.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
+		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
+		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
 
-				if flt(self.days) > 2:
-					frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-					.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 3 days")))
-
-			# if self.priority == "Medium":
+		# 		if flt(self.days) > 5:
+		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
 
 
-			# 	self.exp_start_date =  datetime.now().date()
-			# 	self.exp_end_date = datetime.now() + timedelta(days=1)
+		# 	if self.priority == "Urgent":
+		# 		# if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
+		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+
+		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
+		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
+		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
+
+		# 		if flt(self.days) > 2:
+		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
+		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 3 days")))
+
+		# if self.priority == "Medium":
+
+
+		# 	self.exp_start_date =  datetime.now().date()
+		# 	self.exp_end_date = datetime.now() + timedelta(days=1)
 
 
 	def validate_dependencies_for_template_task(self):

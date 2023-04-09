@@ -30,12 +30,14 @@
   "parent_task",
   "completed_by",
   "completed_on",
+  "review_section",
+  "review_date",
   "sb_timeline",
+  "start",
   "exp_start_date",
   "individual_progress",
   "expected_time",
   "is_milestone",
-  "start",
   "column_break_11",
   "exp_end_date",
   "progress",
@@ -55,7 +57,6 @@
   "column_break_20",
   "total_billing_amount",
   "sb_more_info",
-  "review_date",
   "closing_date",
   "department",
   "column_break_22",
@@ -173,7 +174,8 @@
    "in_standard_filter": 1,
    "label": "Start Date",
    "oldfieldname": "exp_start_date",
-   "oldfieldtype": "Date"
+   "oldfieldtype": "Date",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -203,6 +205,7 @@
    "label": "End Date",
    "oldfieldname": "exp_end_date",
    "oldfieldtype": "Date",
+   "read_only": 1,
    "search_index": 1
   },
   {
@@ -459,8 +462,6 @@
   {
    "fieldname": "ongoing_sprint",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "On Going Sprint",
    "options": "Event",
    "read_only": 1
@@ -472,6 +473,12 @@
    "hidden": 1,
    "in_list_view": 1,
    "label": "Hide in Kanban"
+  },
+  {
+   "description": "Isi tanggal ketika Technical Architect sudah melakukan pengecekan terhadap task yang bersangkutan",
+   "fieldname": "review_section",
+   "fieldtype": "Section Break",
+   "label": "Review Section"
   }
  ],
  "icon": "fa fa-check",
@@ -480,7 +487,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-03 13:23:19.610785",
+ "modified": "2023-04-06 16:00:07.723439",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

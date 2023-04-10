@@ -28,7 +28,9 @@
   "priority",
   "task_weight",
   "parent_task",
+  "completed_status_details",
   "completed_by",
+  "column_break_erpzz",
   "completed_on",
   "review_section",
   "review_date",
@@ -388,8 +390,10 @@
    "fieldname": "completed_by",
    "fieldtype": "Link",
    "label": "Completed By",
+   "mandatory_depends_on": "eval: doc.status == \"Completed\"",
    "no_copy": 1,
-   "options": "User"
+   "options": "User",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "default": "0",
@@ -416,7 +420,8 @@
    "fieldname": "completed_on",
    "fieldtype": "Date",
    "label": "Completed On",
-   "mandatory_depends_on": "eval: doc.status == \"Completed\""
+   "mandatory_depends_on": "eval: doc.status == \"Completed\"",
+   "read_only": 1
   },
   {
    "fieldname": "task_name",
@@ -479,6 +484,15 @@
    "fieldname": "review_section",
    "fieldtype": "Section Break",
    "label": "Review Section"
+  },
+  {
+   "fieldname": "completed_status_details",
+   "fieldtype": "Section Break",
+   "label": "Completed Status Details"
+  },
+  {
+   "fieldname": "column_break_erpzz",
+   "fieldtype": "Column Break"
   }
  ],
  "icon": "fa fa-check",
@@ -487,7 +501,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-10 09:08:57.893443",
+ "modified": "2023-04-10 10:32:58.513212",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

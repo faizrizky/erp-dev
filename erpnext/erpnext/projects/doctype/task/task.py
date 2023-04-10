@@ -45,6 +45,7 @@ class Task(NestedSet):
 		self.validate_status()
 		# self.validate_status_child()
 		# self.validate_sprint()
+		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
 		self.validate_completed_on()
@@ -104,14 +105,6 @@ class Task(NestedSet):
 			for d in self.depends_on:
 				task_subject = frappe.db.get_value('Task', d.task, ['subject'])
 				frappe.db.set_value('Task', task_subject, 'status', 'Open')
-
-
-
-
-
-
-
-
 
 
 	def validate_on_going_sprint(self):
@@ -214,6 +207,10 @@ class Task(NestedSet):
 
 			close_all_assignments(self.doctype, self.name)
 
+	def validate_completed_task(self):
+		if self.status == "Completed":
+			self.completed_by = frappe.session.user
+			self.completed_on = datetime.now()
 
 	days = 0
 	d1 = 0
@@ -261,7 +258,11 @@ class Task(NestedSet):
 			# self.validate_duration()
 
 		if self.status == "Completed":
-			self.progress = 100
+			if flt(self.individual_progress or 0) < 100:			
+				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			else:
+				self.progress = 100
 
 		if self.status == "Working":
 
@@ -287,7 +288,7 @@ class Task(NestedSet):
 			else:
 				self.progress = 60
 
-		if self.status == "QA Integration Testing":
+		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
 				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")

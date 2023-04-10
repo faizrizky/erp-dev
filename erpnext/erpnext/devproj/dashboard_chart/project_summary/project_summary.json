@@ -2,7 +2,7 @@
  "chart_name": "Project Summary",
  "chart_type": "Report",
  "creation": "2020-07-20 20:17:16.363681",
- "custom_options": "{\"type\": \"bar\", \"colors\": [\"#7575ff\", \"#14de32\", \"#CB2929\"], \"axisOptions\": { \"shortenYAxisNumbers\": 1}, \"barOptions\": { \"stacked\": 1 }}",
+ "custom_options": "{\"type\": \"bar\", \"colors\": [\"#7575ff\", \"#14de32\", \"#CB2929\", \"#43f0f0\"], \"axisOptions\": { \"shortenYAxisNumbers\": 1}, \"barOptions\": { \"stacked\": 1 }}",
  "docstatus": 0,
  "doctype": "Dashboard Chart",
  "dynamic_filters_json": "{\"company\":\"frappe.defaults.get_user_default(\\\"Company\\\")\"}",
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_public": 1,
  "is_standard": 1,
- "modified": "2023-04-10 14:09:20.986150",
+ "modified": "2023-04-10 16:25:41.279921",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Project Summary",
@@ -43,7 +43,7 @@
    "y_field": "overdue_tasks"
   },
   {
-   "color": "#4463F0",
+   "color": "#43f0f0",
    "y_field": "percent_complete"
   }
  ]

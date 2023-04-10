@@ -1,23 +1,11 @@
 {
  "charts": [
   {
-   "chart_name": "test",
-   "label": "asd"
-  },
-  {
    "chart_name": "Project Summary",
    "label": "Open Projects"
-  },
-  {
-   "chart_name": "Project Summary",
-   "label": "VTS Desktop"
-  },
-  {
-   "chart_name": "test",
-   "label": "test"
   }
  ],
- "content": "[{\"id\":\"N2HjdbBLV0\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Open Projects\",\"col\":12}},{\"id\":\"pWExGcXz-K\",\"type\":\"chart\",\"data\":{\"chart_name\":\"asd\",\"col\":12}},{\"id\":\"7AuBcV8Z9q\",\"type\":\"chart\",\"data\":{\"chart_name\":\"test\",\"col\":12}},{\"id\":\"mji9Luf0vK\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"4IbDC6Krvy\",\"type\":\"chart\",\"data\":{\"chart_name\":\"VTS Desktop\",\"col\":12}},{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"HhD5NxJuD8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboard\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
+ "content": "[{\"id\":\"N2HjdbBLV0\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Open Projects\",\"col\":12}},{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"HhD5NxJuD8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboard\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
  "creation": "2020-03-02 15:46:04.874669",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -159,7 +147,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-04-10 15:02:24.061565",
+ "modified": "2023-04-10 16:23:38.710727",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Projects",

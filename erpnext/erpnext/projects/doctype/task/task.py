@@ -287,7 +287,7 @@ class Task(NestedSet):
 			else:
 				self.progress = 60
 
-		if self.status == "Integration":
+		if self.status == "QA Integration Testing":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
 				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")

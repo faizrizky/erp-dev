@@ -177,7 +177,7 @@
    "label": "Start Date",
    "oldfieldname": "exp_start_date",
    "oldfieldtype": "Date",
-   "read_only": 1
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "default": "0",
@@ -207,7 +207,7 @@
    "label": "End Date",
    "oldfieldname": "exp_end_date",
    "oldfieldtype": "Date",
-   "read_only": 1,
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
    "search_index": 1
   },
   {
@@ -221,6 +221,7 @@
    "default": "0",
    "fieldname": "is_milestone",
    "fieldtype": "Check",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Is Milestone",
    "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
@@ -390,7 +391,6 @@
    "fieldname": "completed_by",
    "fieldtype": "Link",
    "label": "Completed By",
-   "mandatory_depends_on": "eval: doc.status == \"Completed\"",
    "no_copy": 1,
    "options": "User",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
@@ -399,6 +399,7 @@
    "default": "0",
    "fieldname": "is_template",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Is Template",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
@@ -501,7 +502,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-10 10:32:58.513212",
+ "modified": "2023-04-10 16:10:35.722087",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

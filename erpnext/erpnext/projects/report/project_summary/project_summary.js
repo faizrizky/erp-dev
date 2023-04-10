@@ -4,13 +4,21 @@
 
 frappe.query_reports["Project Summary"] = {
 	"filters": [
+		// {
+		// 	"fieldname": "company",
+		// 	"label": __("Company"),
+		// 	"fieldtype": "Link",
+		// 	"options": "Company",
+		// 	"default": frappe.defaults.get_user_default("Company"),
+		// 	"reqd": 1
+		// },
 		{
-			"fieldname": "company",
-			"label": __("Company"),
-			"fieldtype": "Link",
-			"options": "Company",
-			"default": frappe.defaults.get_user_default("Company"),
-			"reqd": 1
+			fieldname: "name",
+			label: __("Project"),
+			fieldtype: "Link",
+			options: "Project",
+			default: frappe.defaults.get_user_default("Project"),
+			reqd: 0
 		},
 		{
 			"fieldname": "is_active",

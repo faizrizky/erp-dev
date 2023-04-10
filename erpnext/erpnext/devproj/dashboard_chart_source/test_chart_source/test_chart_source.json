@@ -1,13 +1,13 @@
 {
- "creation": "2023-03-29 15:25:45.276722",
+ "creation": "2023-04-10 11:04:29.604736",
  "docstatus": 0,
  "doctype": "Dashboard Chart Source",
  "idx": 0,
- "modified": "2023-03-29 15:25:45.276722",
+ "modified": "2023-04-10 11:04:29.604736",
  "modified_by": "Administrator",
  "module": "DevProj",
- "name": "nn",
+ "name": "Test Chart Source",
  "owner": "Administrator",
- "source_name": "nn",
+ "source_name": "Test Chart Source",
  "timeseries": 0
 }

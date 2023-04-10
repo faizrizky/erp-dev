@@ -262,7 +262,8 @@ class Task(NestedSet):
 				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
-				self.progress = 100
+				if self.is_group != True:
+					self.progress = 100
 
 		if self.status == "Working":
 
@@ -302,7 +303,8 @@ class Task(NestedSet):
 				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
-				self.progress = 90
+				if self.is_group != True:
+					self.progress = 90
 
 			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
 			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan

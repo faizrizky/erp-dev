@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-04-11 11:43:44.853040",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "task_id",
+  "column_break_miwtn",
+  "subject",
+  "completion"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_id",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Task",
+   "options": "Task"
+  },
+  {
+   "columns": 2,
+   "default": "0",
+   "fieldname": "completion",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Completion"
+  },
+  {
+   "fieldname": "column_break_miwtn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Subject"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-04-11 11:58:54.454684",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "Assignment Sub Task",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

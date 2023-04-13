@@ -1,8 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "allow_rename": 1,
- "autoname": "SPRINT - .#",
+ "autoname": "format: SPRINT - ",
  "creation": "2013-06-10 13:17:47",
  "doctype": "DocType",
  "document_type": "Document",
@@ -57,12 +56,13 @@
    "oldfieldtype": "Section Break"
   },
   {
+   "description": "Ex : SPRINT - 1",
    "fieldname": "subject",
    "fieldtype": "Small Text",
-   "hidden": 1,
    "in_global_search": 1,
    "in_list_view": 1,
-   "label": "Subject"
+   "label": "Subject",
+   "reqd": 1
   },
   {
    "fieldname": "event_category",
@@ -314,11 +314,11 @@
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2023-03-30 12:00:06.586555",
+ "modified": "2023-04-13 14:59:11.886947",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

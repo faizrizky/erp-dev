@@ -147,7 +147,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-04-10 16:23:38.710727",
+ "modified": "2023-04-13 15:03:26.375898",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Projects",
@@ -160,19 +160,20 @@
  "sequence_id": 2.0,
  "shortcuts": [
   {
-   "color": "Blue",
-   "format": "{} Assigned",
-   "label": "Task",
-   "link_to": "Task",
-   "stats_filter": "{\"_assign\":[\"like\",null]}",
-   "type": "DocType"
-  },
-  {
    "color": "Grey",
    "doc_view": "List",
    "label": "Project Summary Report",
    "link_to": "Project Summary",
    "type": "Report"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "Calendar",
+   "format": "{} Total Open",
+   "label": "Sprint",
+   "link_to": "Event",
+   "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
+   "type": "DocType"
   },
   {
    "color": "Red",
@@ -183,11 +184,12 @@
    "type": "DocType"
   },
   {
-   "color": "Cyan",
+   "color": "Pink",
    "doc_view": "List",
+   "format": "{} Total Today",
    "label": "SD Timesheets",
    "link_to": "SD Timesheets",
-   "stats_filter": "{\"name\":[\"=\",null]}",
+   "stats_filter": "{\"start_date\":[\"Timespan\",\"today\"]}",
    "type": "DocType"
   },
   {
@@ -199,20 +201,19 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
-   "doc_view": "Calendar",
-   "format": "{} Open",
-   "label": "Sprint",
-   "link_to": "Event",
-   "stats_filter": "{\"status\":[\"=\",null]}",
-   "type": "DocType"
-  },
-  {
    "color": "Green",
    "doc_view": "List",
    "label": "Note",
    "link_to": "Note",
    "stats_filter": "{\"public\":[\"=\",1]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "format": "{} Total",
+   "label": "Task",
+   "link_to": "Task",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
    "type": "DocType"
   },
   {

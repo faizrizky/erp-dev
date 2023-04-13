@@ -85,7 +85,9 @@ class Event(Document):
 		self.sync_communication()
 
 	def set_name(self):
-		self.subject = str(self.name) + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)
+		subject = str(self.subject).upper() 
+		self.subject = str(self.subject).upper() + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)		
+		self.name = subject
 
 	def on_trash(self):
 		communications = frappe.get_all(

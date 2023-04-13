@@ -3,6 +3,13 @@
 frappe.provide("frappe.desk");
 
 frappe.ui.form.on("Event", {
+	onload_post_render(frm) {
+		frm.set_df_property('subject', 'read_only', 1)
+	},
+	after_save(frm) {
+		frm.set_df_property('subject', 'read_only', 1)
+	},
+
 	onload: function (frm) {
 		frm.set_query("reference_doctype", "event_participants", function () {
 			return {

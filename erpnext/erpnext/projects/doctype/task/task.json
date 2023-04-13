@@ -44,6 +44,8 @@
   "exp_end_date",
   "progress",
   "duration",
+  "sub_task_table_section",
+  "sub_task",
   "sb_details",
   "description",
   "sb_depends_on",
@@ -494,6 +496,17 @@
   {
    "fieldname": "column_break_erpzz",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sub_task_table_section",
+   "fieldtype": "Section Break",
+   "label": "Sub Task Table"
+  },
+  {
+   "fieldname": "sub_task",
+   "fieldtype": "Table",
+   "label": "Sub Task",
+   "options": "Assignment Sub Task"
   }
  ],
  "icon": "fa fa-check",
@@ -502,7 +515,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-10 16:10:35.722087",
+ "modified": "2023-04-13 13:23:05.329683",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

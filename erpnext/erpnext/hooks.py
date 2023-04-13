@@ -388,6 +388,9 @@ scheduler_events = {
 
 		"0 1 * * 1":[
 			"erpnext.projects.doctype.task.task.validate_sprint"
+		],
+		"0 18 * * *":[
+			"erpnext.projects.doctype.task.task.validate_sprint"
 		]
 	},
 	"all": [

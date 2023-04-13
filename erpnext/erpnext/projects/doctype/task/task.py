@@ -45,6 +45,7 @@ class Task(NestedSet):
 		self.validate_status()
 		# self.validate_status_child()
 		# self.validate_sprint()
+		self.validate_sub_task()
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
@@ -98,6 +99,16 @@ class Task(NestedSet):
 			)
 
 
+	def validate_sub_task(self):
+
+		for d in self.sub_task:
+			jumlah_total_elemen = len(self.sub_task)
+
+			jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
+			persentase = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
+			print(persentase)
+			# if d.task and d.task not in depends_on_tasks:
+			# 	depends_on_tasks += d.task + ","
 
 	def validate_status_child(self):
 

@@ -100,15 +100,37 @@ class Task(NestedSet):
 
 
 	def validate_sub_task(self):
+		arr = []
+		if len(self.sub_task) > 0:
+			for d in self.sub_task:
+				jumlah_total_elemen = len(self.sub_task)
 
-		for d in self.sub_task:
-			jumlah_total_elemen = len(self.sub_task)
+				jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
+				sub_task_percentage = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
 
-			jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
-			persentase = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
-			print(persentase)
-			# if d.task and d.task not in depends_on_tasks:
-			# 	depends_on_tasks += d.task + ","
+				if sub_task_percentage == 100:
+					arr.append(sub_task_percentage)
+
+				print(sub_task_percentage)
+				count_true = len(arr)
+
+			percentage = (count_true / len(self.sub_task)) * 100
+			self.individual_progress = percentage
+			print("Total Percentage : "+ str(percentage))
+		else:
+			print("Manual Percentage")
+
+		# # if d.task and d.task not in depends_on_tasks:
+		# # 	depends_on_tasks += d.task + ","
+
+		# boolean_arr = [d.completion == True for d.completion in self.sub_task]
+		# print(boolean_arr) 
+		# # Menghitung jumlah True dalam array boolean
+		# count_true = sum(boolean_arr)
+		# print(count_true)  # Output: 3
+		# # percentage = (count_true / len(d)) * 100
+		# # print(percentage)  # Output: 60.0
+
 
 	def validate_status_child(self):
 

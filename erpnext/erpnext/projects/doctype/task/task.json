@@ -335,6 +335,7 @@
    "fieldname": "review_date",
    "fieldtype": "Date",
    "label": "Review Date",
+   "mandatory_depends_on": "eval:doc.status == \"Pending Review\"",
    "oldfieldname": "review_date",
    "oldfieldtype": "Date"
   },
@@ -438,10 +439,10 @@
    "options": "Assigment Issue"
   },
   {
+   "description": "Hanya bisa di edit jika tidak memiliki Sub Task",
    "fieldname": "individual_progress",
    "fieldtype": "Percent",
-   "label": "% Individual Task Progress",
-   "read_only_depends_on": "eval:doc.status != \"Working\""
+   "label": "% Individual Task Progress"
   },
   {
    "fieldname": "category_sprint",
@@ -514,7 +515,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-14 10:37:55.910771",
+ "modified": "2023-04-14 16:16:09.346501",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

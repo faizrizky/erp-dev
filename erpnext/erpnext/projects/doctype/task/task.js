@@ -13,6 +13,16 @@ frappe.ui.form.on("Task", {
 		}
 	},
 
+	refresh(frm) {
+		if (frm.doc.sub_task.length > 0) {
+			console.log(frm.doc.sub_task.length)
+			frm.set_df_property('individual_progress', 'read_only', 1)
+		}
+		else
+			frm.set_df_property('individual_progress', 'read_only', 0)
+
+	},
+
 	onload: function (frm) {
 		frm.set_query("task", "depends_on", function () {
 			let filters = {

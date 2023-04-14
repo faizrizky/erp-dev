@@ -395,7 +395,7 @@
    "label": "Completed By",
    "no_copy": 1,
    "options": "User",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only": 1
   },
   {
    "default": "0",
@@ -423,7 +423,6 @@
    "fieldname": "completed_on",
    "fieldtype": "Date",
    "label": "Completed On",
-   "mandatory_depends_on": "eval: doc.status == \"Completed\"",
    "read_only": 1
   },
   {
@@ -515,7 +514,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-13 13:23:05.329683",
+ "modified": "2023-04-14 10:37:55.910771",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

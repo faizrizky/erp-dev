@@ -37,6 +37,7 @@ class Task(NestedSet):
 			return ret
 
 	def validate(self):
+		self.validate_completed_on()
 		self.validate_on_going_sprint()
 		self.validate_dates()
 		self.validate_parent_expected_end_date()
@@ -49,7 +50,6 @@ class Task(NestedSet):
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
-		self.validate_completed_on()
 
 	def validate_dates(self):
 		if (

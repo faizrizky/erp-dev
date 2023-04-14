@@ -477,7 +477,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		if (me.dialog.get_value("assign_lead")) {
 
 			frappe.db.get_list('Employee', {
-				filters: { 'branch': 'Co Leader Programmer' },
+				filters: { 'branch': 'Co Division Software Programmer' },
 				fields: ['user_id']
 
 			}).then((records) => {
@@ -494,7 +494,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		else {
 			let me = this;
 			frappe.db.get_list('Employee', {
-				filters: { 'branch': 'Co Leader Programmer' },
+				filters: { 'branch': 'Co Division Software Programmer' },
 				fields: ['user_id']
 
 			}).then((records) => {
@@ -514,7 +514,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		if (me.dialog.get_value("assign_lead")) {
 
 			frappe.db.get_list('Employee', {
-				filters: { 'branch': 'Leader Programmer' },
+				filters: { 'branch': 'HOD Software Programmer' },
 				fields: ['user_id']
 
 			}).then((records) => {
@@ -531,7 +531,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		else {
 			let me = this;
 			frappe.db.get_list('Employee', {
-				filters: { 'branch': 'Leader Programmer' },
+				filters: { 'branch': 'HOD Software Programmer' },
 				fields: ['user_id']
 
 			}).then((records) => {

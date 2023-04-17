@@ -551,7 +551,7 @@ class Task(NestedSet):
 				parent.append(
 					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
 				)
-				# parent.save()
+				parent.save()
 
 
 		# if self.ongoing_sprint:

@@ -98,6 +98,10 @@ class Task(NestedSet):
 				getdate(expected_end_date), self, "act_start_date", "act_end_date", "Actual"
 			)
 
+	def before_save(doc, event):
+	    # Set the "read-only" flag to True if a certain condition is met
+		if doc.some_field == "Some Value":
+			doc.read_only = 1
 
 	def validate_sub_task(self):
 		arr = []
@@ -539,6 +543,7 @@ class Task(NestedSet):
 				)
 				parent.save()
 
+		#save for later
 		if self.ongoing_sprint:
 			# print(self.ongoing_sprint)
 			parent = frappe.get_doc("Event", self.ongoing_sprint)
@@ -546,7 +551,7 @@ class Task(NestedSet):
 				parent.append(
 					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
 				)
-				parent.save()
+				# parent.save()
 
 
 		# if self.ongoing_sprint:

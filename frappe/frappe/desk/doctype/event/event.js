@@ -3,12 +3,9 @@
 frappe.provide("frappe.desk");
 
 frappe.ui.form.on("Event", {
-	onload_post_render(frm) {
-		frm.set_df_property('subject', 'read_only', 1)
-	},
-	after_save(frm) {
-		frm.set_df_property('subject', 'read_only', 1)
-	},
+	// onload_post_render(frm) {
+	// 	frm.set_df_property('subject', 'read_only', 1)
+	// },
 
 	onload: function (frm) {
 		frm.set_query("reference_doctype", "event_participants", function () {
@@ -27,6 +24,9 @@ frappe.ui.form.on("Event", {
 		});
 	},
 	refresh: function (frm) {
+
+		frm.set_df_property('subject', 'read_only', 1)
+
 		if (frm.doc.event_participants) {
 			frm.doc.event_participants.forEach((value) => {
 				frm.add_custom_button(

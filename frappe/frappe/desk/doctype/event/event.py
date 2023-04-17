@@ -60,7 +60,6 @@ class Event(Document):
 		if not self.sync_with_google_calendar:
 			self.add_video_conferencing = 0
 		
-		self.set_name()
 
 		events = frappe.get_list(
 		"Event", filters={"status": "Open","name" : ['!=', self.name], "event_category" : "Sprint"}, fields=["name", "starts_on"])
@@ -77,6 +76,7 @@ class Event(Document):
 							).format(frappe.bold(self.name))
 						)
 
+		self.set_name()
 
 	def before_save(self):
 		self.set_participants_email()
@@ -85,9 +85,10 @@ class Event(Document):
 		self.sync_communication()
 
 	def set_name(self):
-		subject = str(self.subject).upper() 
-		self.subject = str(self.subject).upper() + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)		
-		self.name = subject
+		# subject = str(self.subject).upper() 
+		# self.subject = str(self.subject).upper() + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)		
+		self.subject = str(self.subject).upper()		
+		# self.name = subject
 
 	def on_trash(self):
 		communications = frappe.get_all(

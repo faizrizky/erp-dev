@@ -541,7 +541,7 @@ class Task(NestedSet):
 				parent.append(
 					"depends_on", {"doctype": "Task Depends On", "task": self.name, "subject": self.subject}
 				)
-				parent.save()
+				# parent.save()
 
 		#save for later
 		if self.ongoing_sprint:

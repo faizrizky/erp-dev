@@ -174,15 +174,15 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "Start Date",
-   "print_hide": 1,
    "read_only": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "End Date",
-   "print_hide": 1,
    "read_only": 1
   },
   {
@@ -315,26 +315,6 @@
    "label": "Note"
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Timesheet",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Timesheet",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
    "fieldname": "company",
    "fieldtype": "Link",
    "hidden": 1,
@@ -383,12 +363,21 @@
    "in_standard_filter": 1,
    "label": "Team",
    "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "SD Timesheets",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-03-13 09:41:44.244541",
+ "modified": "2023-04-27 14:57:03.744686",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

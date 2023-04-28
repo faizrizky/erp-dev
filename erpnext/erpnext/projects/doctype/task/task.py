@@ -105,19 +105,34 @@ class Task(NestedSet):
 
 	def validate_sub_task(self):
 		arr = []
+		check_val = dict([])
+		has_error = []
+
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
-				jumlah_total_elemen = len(self.sub_task)
+				# check if the same pa aji
+				if d.subject not in check_val :
+					check_val[d.subject] = 1
+				else:
+					check_val[d.subject] += 1
 
-				jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
-				sub_task_percentage = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
+				if check_val[d.subject] <= 1:
 
-				if sub_task_percentage == 100:
-					arr.append(sub_task_percentage)
+					jumlah_total_elemen = len(self.sub_task)
 
-				print(sub_task_percentage)
-				count_true = len(arr)
+					jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
+					sub_task_percentage = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
 
+					if sub_task_percentage == 100:
+						arr.append(sub_task_percentage)
+
+					print(sub_task_percentage)
+					count_true = len(arr)
+				else:
+					has_error.append(d.subject)
+
+			if len(has_error) > 0 : 
+				frappe.throw(_("{0} name in {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
 			percentage = (count_true / len(self.sub_task)) * 100
 			self.individual_progress = percentage
 			print("Total Percentage : "+ str(percentage))

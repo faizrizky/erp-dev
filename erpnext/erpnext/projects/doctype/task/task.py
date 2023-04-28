@@ -562,11 +562,15 @@ class Task(NestedSet):
 		if self.ongoing_sprint:
 			# print(self.ongoing_sprint)
 			parent = frappe.get_doc("Event", self.ongoing_sprint)
-			if self.name not in [row.task_id for row in parent.task_list]:
-				parent.append(
-					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
-				)
-				parent.save()
+
+			# print("SPRINT STATUS : ",parent.status)
+
+			if parent.status == "Open":
+				if self.name not in [row.task_id for row in parent.task_list]:
+					parent.append(
+						"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
+					)
+					parent.save()
 
 
 		# if self.ongoing_sprint:

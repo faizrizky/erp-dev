@@ -25,7 +25,7 @@ frappe.ui.form.on("Event", {
 	},
 	refresh: function (frm) {
 
-		frm.set_df_property('subject', 'read_only', 1)
+		// frm.set_df_property('subject', 'read_only', 1)
 
 		if (frm.doc.event_participants) {
 			frm.doc.event_participants.forEach((value) => {

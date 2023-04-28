@@ -176,12 +176,12 @@
    "fieldtype": "Date",
    "in_standard_filter": 1,
    "label": "Start Date",
+   "print_hide": 1,
    "read_only": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "in_standard_filter": 1,
    "label": "End Date",
    "read_only": 1
   },
@@ -377,7 +377,7 @@
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-04-27 14:57:03.744686",
+ "modified": "2023-04-27 15:53:15.251817",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

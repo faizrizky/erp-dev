@@ -76,10 +76,11 @@ class Event(Document):
 							).format(frappe.bold(self.name))
 						)
 
-		self.set_name()
+		# self.set_name()
 
 	def before_save(self):
 		self.set_participants_email()
+		self.set_name()
 
 	def on_update(self):
 		self.sync_communication()
@@ -87,8 +88,9 @@ class Event(Document):
 	def set_name(self):
 		# subject = str(self.subject).upper() 
 		# self.subject = str(self.subject).upper() + " : " + " " + str(self.starts_on) + " - " + str(self.ends_on)		
-		self.subject = str(self.subject).upper()		
-		# self.name = subject
+		self.subject = self.subject.upper()
+		# print(self.subject)		
+		self.name = self.subject
 
 	def on_trash(self):
 		communications = frappe.get_all(

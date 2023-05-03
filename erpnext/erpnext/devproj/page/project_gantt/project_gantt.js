@@ -105,6 +105,28 @@ frappe.test_app_page = {
 	</div>`,
 	ganttTemplate : function(title,id) {
 		return /*html */`
+
+		<style>
+			.gantt .bar-progress {
+				fill: var(--blue-500);
+				dominant-baseline: central;
+				text-anchor: middle;
+				font-size: 12px;
+				font-weight: 400;
+			}
+			
+			.gantt .bar-wrapper:hover .bar-progress {
+				fill: var(--blue-600);
+				dominant-baseline: central;
+				text-anchor: middle;
+				font-size: 12px;
+				font-weight: 400;
+			}
+			.gantt .bar-label {
+				font-weight:400;
+			}
+		</style>
+
 		<div>
 			<h3 class="mt-3"> ${title} </h3>
 			<div class="d-flex align-items-center" style="height:200px" id="loading-${id}">

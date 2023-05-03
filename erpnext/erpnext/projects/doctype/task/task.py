@@ -37,6 +37,7 @@ class Task(NestedSet):
 			return ret
 
 	def validate(self):
+		self.validate_completed_on()
 		self.validate_on_going_sprint()
 		self.validate_dates()
 		self.validate_parent_expected_end_date()
@@ -45,10 +46,10 @@ class Task(NestedSet):
 		self.validate_status()
 		# self.validate_status_child()
 		# self.validate_sprint()
+		self.validate_sub_task()
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
-		self.validate_completed_on()
 
 	def validate_dates(self):
 		if (
@@ -97,6 +98,57 @@ class Task(NestedSet):
 				getdate(expected_end_date), self, "act_start_date", "act_end_date", "Actual"
 			)
 
+	# def before_save(doc):
+	#     # Set the "read-only" flag to True if a certain condition is met
+	# 	if doc.some_field == "Some Value":
+	# 		doc.read_only = 1
+
+	def validate_sub_task(self):
+		arr = []
+		check_val = dict([])
+		has_error = []
+
+		if len(self.sub_task) > 0:
+			for d in self.sub_task:
+				# check if the same pa aji
+				if d.subject not in check_val :
+					check_val[d.subject] = 1
+				else:
+					check_val[d.subject] += 1
+
+				if check_val[d.subject] <= 1:
+
+					jumlah_total_elemen = len(self.sub_task)
+
+					jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
+					sub_task_percentage = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
+
+					if sub_task_percentage == 100:
+						arr.append(sub_task_percentage)
+
+					print(sub_task_percentage)
+					count_true = len(arr)
+				else:
+					has_error.append(d.subject)
+
+			if len(has_error) > 0 : 
+				frappe.throw(_("{0} name in {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
+			percentage = (count_true / len(self.sub_task)) * 100
+			self.individual_progress = percentage
+			print("Total Percentage : "+ str(percentage))
+		else:
+			print("Manual Percentage")
+
+		# # if d.task and d.task not in depends_on_tasks:
+		# # 	depends_on_tasks += d.task + ","
+
+		# boolean_arr = [d.completion == True for d.completion in self.sub_task]
+		# print(boolean_arr) 
+		# # Menghitung jumlah True dalam array boolean
+		# count_true = sum(boolean_arr)
+		# print(count_true)  # Output: 3
+		# # percentage = (count_true / len(d)) * 100
+		# # print(percentage)  # Output: 60.0
 
 
 	def validate_status_child(self):
@@ -504,16 +556,21 @@ class Task(NestedSet):
 				parent.append(
 					"depends_on", {"doctype": "Task Depends On", "task": self.name, "subject": self.subject}
 				)
-				parent.save()
+				# parent.save()
 
+		#save for later
 		if self.ongoing_sprint:
 			# print(self.ongoing_sprint)
 			parent = frappe.get_doc("Event", self.ongoing_sprint)
-			if self.name not in [row.task_id for row in parent.task_list]:
-				parent.append(
-					"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
-				)
-				parent.save()
+
+			# print("SPRINT STATUS : ",parent.status)
+
+			if parent.status == "Open":
+				if self.name not in [row.task_id for row in parent.task_list]:
+					parent.append(
+						"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
+					)
+					parent.save()
 
 
 		# if self.ongoing_sprint:
@@ -545,7 +602,7 @@ class Task(NestedSet):
 		if self.status not in ("Cancelled", "Completed") and self.exp_end_date:
 			from datetime import datetime
 
-			if self.exp_end_date < datetime.now().date():
+			if self.exp_end_date + timedelta(days=3) < datetime.now().date():
 				self.db_set("status", "Overdue", update_modified=False)
 				self.update_project()
 

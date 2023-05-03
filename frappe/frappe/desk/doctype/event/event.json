@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "SPRINT - .#",
+ "autoname": "field:subject",
  "creation": "2013-06-10 13:17:47",
  "doctype": "DocType",
  "document_type": "Document",
@@ -57,18 +57,20 @@
    "oldfieldtype": "Section Break"
   },
   {
+   "description": "Ex : SPRINT - 1",
    "fieldname": "subject",
-   "fieldtype": "Small Text",
-   "hidden": 1,
+   "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
-   "label": "Subject"
+   "label": "Subject",
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "event_category",
    "fieldtype": "Select",
    "label": "Event Category",
-   "options": "Event\nSprint\nMeeting\nCall\nSent/Received Email\nOther"
+   "options": "Sprint\nEvent\nMeeting\nCall\nSent/Received Email\nOther"
   },
   {
    "fieldname": "event_type",
@@ -78,7 +80,7 @@
    "label": "Event Type",
    "oldfieldname": "event_type",
    "oldfieldtype": "Select",
-   "options": "Private\nPublic\nCancelled",
+   "options": "Public\nPrivate\nCancelled",
    "reqd": 1,
    "search_index": 1
   },
@@ -314,11 +316,11 @@
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2023-03-30 12:00:06.586555",
+ "modified": "2023-04-28 10:47:53.756936",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

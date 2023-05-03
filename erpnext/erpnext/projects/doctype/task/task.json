@@ -44,6 +44,8 @@
   "exp_end_date",
   "progress",
   "duration",
+  "sub_task_table_section",
+  "sub_task",
   "sb_details",
   "description",
   "sb_depends_on",
@@ -333,6 +335,7 @@
    "fieldname": "review_date",
    "fieldtype": "Date",
    "label": "Review Date",
+   "mandatory_depends_on": "eval:doc.status == \"Pending Review\"",
    "oldfieldname": "review_date",
    "oldfieldtype": "Date"
   },
@@ -393,7 +396,7 @@
    "label": "Completed By",
    "no_copy": 1,
    "options": "User",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only": 1
   },
   {
    "default": "0",
@@ -421,7 +424,6 @@
    "fieldname": "completed_on",
    "fieldtype": "Date",
    "label": "Completed On",
-   "mandatory_depends_on": "eval: doc.status == \"Completed\"",
    "read_only": 1
   },
   {
@@ -437,10 +439,10 @@
    "options": "Assigment Issue"
   },
   {
+   "description": "Hanya bisa di edit jika tidak memiliki Sub Task",
    "fieldname": "individual_progress",
    "fieldtype": "Percent",
-   "label": "% Individual Task Progress",
-   "read_only_depends_on": "eval:doc.status != \"Working\""
+   "label": "% Individual Task Progress"
   },
   {
    "fieldname": "category_sprint",
@@ -494,6 +496,17 @@
   {
    "fieldname": "column_break_erpzz",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sub_task_table_section",
+   "fieldtype": "Section Break",
+   "label": "Sub Task Table"
+  },
+  {
+   "fieldname": "sub_task",
+   "fieldtype": "Table",
+   "label": "Sub Task",
+   "options": "Assignment Sub Task"
   }
  ],
  "icon": "fa fa-check",
@@ -502,7 +515,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-04-10 16:10:35.722087",
+ "modified": "2023-04-14 16:16:09.346501",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

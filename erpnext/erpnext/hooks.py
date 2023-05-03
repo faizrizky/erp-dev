@@ -382,9 +382,10 @@ scheduler_events = {
 		"45 0 * * *": [
 			"erpnext.stock.reorder_item.reorder_item",
 		],
-		# "* * * * * *": [
-		# 	"erpnext.projects.doctype.task.task.validate_sprint"
-		# ],
+        
+		"* * * * * *": [
+			"erpnext.projects.doctype.task.task.validate_sprint"
+		],
 
 		"0 1 * * 1":[
 			"erpnext.projects.doctype.task.task.validate_sprint"

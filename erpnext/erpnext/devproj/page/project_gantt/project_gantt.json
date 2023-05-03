@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2023-04-12 14:48:01.065321",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2023-04-12 14:48:01.065321",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "project_gantt",
+ "owner": "Administrator",
+ "page_name": "project_gantt",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Project Dashboard"
+}

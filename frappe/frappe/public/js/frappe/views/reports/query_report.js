@@ -718,8 +718,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				window.open(
 					frappe.urllib.get_full_url(
 						"/api/method/frappe.core.doctype.prepared_report.prepared_report.download_attachment?" +
-							"dn=" +
-							encodeURIComponent(doc.name)
+						"dn=" +
+						encodeURIComponent(doc.name)
 					)
 				);
 			});
@@ -823,17 +823,17 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			reports.length == 1
 				? `<a class="underline" href="${route}">${__("1 Report")}</a>`
 				: `<a class="underline" href="${route}">${__("{0} Reports", [
-						reports.length,
-				  ])}</a>`;
+					reports.length,
+				])}</a>`;
 
 		const no_of_reports_html =
 			reports.length == 1
 				? `${__("There is {0} with the same filters already in the queue:", [
-						report_link_html,
-				  ])}`
+					report_link_html,
+				])}`
 				: `${__("There are {0} with the same filters already in the queue:", [
-						report_link_html,
-				  ])}`;
+					report_link_html,
+				])}`;
 
 		let warning_message = `
 			<p>
@@ -966,8 +966,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		let options = this.report_settings.get_chart_data
 			? this.report_settings.get_chart_data(data.columns, data.result)
 			: data.chart
-			? data.chart
-			: undefined;
+				? data.chart
+				: undefined;
 
 		if (!(options && options.data && options.data.labels && options.data.labels.length > 0))
 			return;
@@ -1896,8 +1896,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		let message =
 			this.prepared_report && !this.prepared_report_document
 				? __(
-						"This is a background report. Please set the appropriate filters and then generate a new one."
-				  )
+					"This is a background report. Please set the appropriate filters and then generate a new one."
+				)
 				: this.get_no_result_message();
 
 		this.toggle_message(flag, message);

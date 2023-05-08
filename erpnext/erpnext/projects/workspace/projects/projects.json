@@ -1,221 +1,210 @@
 {
-  "charts": [],
-  "content": "[{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"HhD5NxJuD8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboard\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
-  "creation": "2020-03-02 15:46:04.874669",
-  "docstatus": 0,
-  "doctype": "Workspace",
-  "for_user": "",
-  "hide_custom": 0,
-  "icon": "project",
-  "idx": 0,
-  "is_hidden": 0,
-  "label": "Projects",
-  "links": [
-    {
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Settings",
-      "link_count": 1,
-      "onboard": 0,
-      "type": "Card Break"
-    },
-    {
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Projects Settings",
-      "link_count": 0,
-      "link_to": "Projects Settings",
-      "link_type": "DocType",
-      "onboard": 0,
-      "type": "Link"
-    },
-    {
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Time Tracking",
-      "link_count": 2,
-      "onboard": 0,
-      "type": "Card Break"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "SD Timesheet",
-      "link_count": 0,
-      "link_to": "SD Timesheets",
-      "link_type": "DocType",
-      "onboard": 1,
-      "type": "Link"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Activity Type",
-      "link_count": 0,
-      "link_to": "Activity Type",
-      "link_type": "DocType",
-      "onboard": 1,
-      "type": "Link"
-    },
-    {
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Projects",
-      "link_count": 3,
-      "onboard": 0,
-      "type": "Card Break"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Project",
-      "link_count": 0,
-      "link_to": "Project",
-      "link_type": "DocType",
-      "onboard": 1,
-      "type": "Link"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Task",
-      "link_count": 0,
-      "link_to": "Task",
-      "link_type": "DocType",
-      "onboard": 1,
-      "type": "Link"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Project Type",
-      "link_count": 0,
-      "link_to": "Project Type",
-      "link_type": "DocType",
-      "onboard": 0,
-      "type": "Link"
-    },
-    {
-      "hidden": 0,
-      "is_query_report": 0,
-      "label": "Reports",
-      "link_count": 3,
-      "onboard": 0,
-      "type": "Card Break"
-    },
-    {
-      "dependencies": "Project",
-      "hidden": 0,
-      "is_query_report": 1,
-      "label": "Project wise Stock Tracking",
-      "link_count": 0,
-      "link_to": "Project wise Stock Tracking",
-      "link_type": "Report",
-      "onboard": 0,
-      "type": "Link"
-    },
-    {
-      "dependencies": "Project",
-      "hidden": 0,
-      "is_query_report": 1,
-      "label": "Project Billing Summary",
-      "link_count": 0,
-      "link_to": "Project Billing Summary",
-      "link_type": "Report",
-      "onboard": 0,
-      "type": "Link"
-    },
-    {
-      "dependencies": "",
-      "hidden": 0,
-      "is_query_report": 1,
-      "label": "Delayed Tasks Summary",
-      "link_count": 0,
-      "link_to": "Delayed Tasks Summary",
-      "link_type": "Report",
-      "onboard": 0,
-      "type": "Link"
-    }
-  ],
-  "modified": "2023-04-27 09:43:16.752272",
-  "modified_by": "Administrator",
-  "module": "Projects",
-  "name": "Projects",
-  "owner": "Administrator",
-  "parent_page": "",
-  "public": 1,
-  "quick_lists": [],
-  "restrict_to_domain": "",
-  "roles": [],
-  "sequence_id": 2.0,
-  "shortcuts": [
-    {
-      "color": "Grey",
-      "doc_view": "List",
-      "label": "Project Summary Report",
-      "link_to": "Project Summary",
-      "type": "Report"
-    },
-    {
-      "color": "Cyan",
-      "doc_view": "Calendar",
-      "format": "{} Total Open",
-      "label": "Sprint",
-      "link_to": "Event",
-      "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
-      "type": "DocType"
-    },
-    {
-      "color": "Red",
-      "doc_view": "List",
-      "label": "SD Issues",
-      "link_to": "SD Issue",
-      "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
-      "type": "DocType"
-    },
-    {
-      "color": "Pink",
-      "doc_view": "List",
-      "format": "{} Total Today",
-      "label": "SD Timesheets",
-      "link_to": "SD Timesheets",
-      "stats_filter": "{\"start_date\":[\"Timespan\",\"today\"]}",
-      "type": "DocType"
-    },
-    {
-      "color": "Blue",
-      "format": "{} Open",
-      "label": "Project",
-      "link_to": "Project",
-      "stats_filter": "{\"status\":[\"=\",null]}",
-      "type": "DocType"
-    },
-    {
-      "color": "Green",
-      "doc_view": "List",
-      "label": "Note",
-      "link_to": "Note",
-      "stats_filter": "{\"public\":[\"=\",1]}",
-      "type": "DocType"
-    },
-    {
-      "color": "Blue",
-      "format": "{} Total",
-      "label": "Task",
-      "link_to": "Task",
-      "stats_filter": "{\"idx\":[\"=\",null]}",
-      "type": "DocType"
-    },
-    {
-      "label": "Dashboard",
-      "link_to": "Project",
-      "type": "Dashboard"
-    }
-  ],
-  "title": "Projects"
+ "charts": [],
+ "content": "[{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"HhD5NxJuD8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboard\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
+ "creation": "2020-03-02 15:46:04.874669",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "project",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Projects",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Settings",
+   "link_count": 1,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects Settings",
+   "link_count": 0,
+   "link_to": "Projects Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Time Tracking",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "SD Timesheet",
+   "link_count": 0,
+   "link_to": "SD Timesheets",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Activity Type",
+   "link_count": 0,
+   "link_to": "Activity Type",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project",
+   "link_count": 0,
+   "link_to": "Project",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Type",
+   "link_count": 0,
+   "link_to": "Project Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Project",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project wise Stock Tracking",
+   "link_count": 0,
+   "link_to": "Project wise Stock Tracking",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Project",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Billing Summary",
+   "link_count": 0,
+   "link_to": "Project Billing Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-05-08 15:14:40.085927",
+ "modified_by": "Administrator",
+ "module": "Projects",
+ "name": "Projects",
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Project Summary Report",
+   "link_to": "Project Summary",
+   "type": "Report"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "Calendar",
+   "format": "{} Total Open",
+   "label": "Sprint",
+   "link_to": "Event",
+   "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "SD Issues",
+   "link_to": "SD Issue",
+   "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Total Today",
+   "label": "SD Timesheets",
+   "link_to": "SD Timesheets",
+   "stats_filter": "{\"start_date\":[\"Timespan\",\"today\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "format": "{} Open",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "{\"status\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Note",
+   "link_to": "Note",
+   "stats_filter": "{\"public\":[\"=\",1]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "format": "{} Total",
+   "label": "Task",
+   "link_to": "Task",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "label": "Dashboard",
+   "link_to": "Project",
+   "type": "Dashboard"
+  }
+ ],
+ "title": "Projects"
 }

@@ -1,0 +1,23 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2023-05-03 14:38:43.920930",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Falah Letter Head",
+ "modified": "2023-05-03 14:38:43.920930",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "Employee Report Project",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Project",
+ "report_name": "Employee Report Project",
+ "report_type": "Script Report",
+ "roles": []
+}

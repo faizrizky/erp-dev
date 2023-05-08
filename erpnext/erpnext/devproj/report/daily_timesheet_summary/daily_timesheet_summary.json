@@ -10,7 +10,7 @@
  "idx": 2,
  "is_standard": "Yes",
  "json": "{}",
- "modified": "2023-04-27 16:07:08.334088",
+ "modified": "2023-05-02 16:24:03.902476",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Daily Timesheet Summary",
@@ -18,7 +18,7 @@
  "prepared_report": 0,
  "ref_doctype": "SD Timesheets",
  "report_name": "Daily Timesheet Summary",
- "report_type": "Report Builder",
+ "report_type": "Script Report",
  "roles": [
   {
    "role": "Projects User"

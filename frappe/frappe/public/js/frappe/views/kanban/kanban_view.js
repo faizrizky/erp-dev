@@ -126,7 +126,7 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 		});
 	}
 
-	render_list() { }
+	render_list() { this.render() }
 
 	on_filter_change() {
 		if (JSON.stringify(this.board.filters_array) !== JSON.stringify(this.filter_area.get())) {

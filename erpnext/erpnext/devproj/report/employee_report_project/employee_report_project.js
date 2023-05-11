@@ -12,5 +12,13 @@ frappe.query_reports["Employee Report Project"] = {
 			default: frappe.defaults.get_user_default("Project"),
 			reqd: 0
 		},
+		{
+			fieldname: "team",
+			label: __("Position"),
+			fieldtype: "Link",
+			options: "Branch",
+			// default: frappe.defaults.get_user_default("Project"),
+			reqd: 0
+		},
 	]
 };

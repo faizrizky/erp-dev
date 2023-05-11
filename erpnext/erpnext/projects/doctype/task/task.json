@@ -32,8 +32,14 @@
   "completed_by",
   "column_break_erpzz",
   "completed_on",
+  "progress_view_date_section",
+  "programmer_total_date",
+  "column_break_vvzsu",
+  "qa_total_date",
   "review_section",
   "review_date",
+  "column_break_wgsdv",
+  "qa_start_working_date",
   "sb_timeline",
   "start",
   "exp_start_date",
@@ -331,13 +337,13 @@
    "label": "More Info"
   },
   {
-   "depends_on": "eval:doc.status == \"Closed\" || doc.status == \"Pending Review\"",
+   "depends_on": "eval:doc.status != \"Closed\" || doc.status != \"Open\" || doc.status != \"Working\"",
    "fieldname": "review_date",
    "fieldtype": "Date",
    "label": "Review Date",
-   "mandatory_depends_on": "eval:doc.status == \"Pending Review\"",
    "oldfieldname": "review_date",
-   "oldfieldtype": "Date"
+   "oldfieldtype": "Date",
+   "read_only_depends_on": "eval:doc.status != \"Pending Review\" || frappe.user.has_role('Software Developer') == 1"
   },
   {
    "depends_on": "eval:doc.status == \"Closed\"",
@@ -507,6 +513,38 @@
    "fieldtype": "Table",
    "label": "Sub Task",
    "options": "Assignment Sub Task"
+  },
+  {
+   "fieldname": "column_break_wgsdv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "qa_start_working_date",
+   "fieldtype": "Date",
+   "label": "QA Start Working Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "progress_view_date_section",
+   "fieldtype": "Section Break",
+   "label": "Progress View Date"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "programmer_total_date",
+   "fieldtype": "Data",
+   "label": "Programmer Total Date"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "qa_total_date",
+   "fieldtype": "Data",
+   "label": "QA Total Date"
+  },
+  {
+   "fieldname": "column_break_vvzsu",
+   "fieldtype": "Column Break"
   }
  ],
  "icon": "fa fa-check",
@@ -515,7 +553,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-11 14:56:02.735903",
+ "modified": "2023-05-11 17:06:10.149779",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

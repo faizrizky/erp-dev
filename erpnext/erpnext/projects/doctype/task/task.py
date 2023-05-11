@@ -50,6 +50,8 @@ class Task(NestedSet):
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
+		self.validate_duration_programmer()
+		self.validate_duration_qa()
 
 	def validate_dates(self):
 		if (
@@ -262,11 +264,63 @@ class Task(NestedSet):
 	def validate_completed_task(self):
 		if self.status == "Completed":
 			self.completed_by = frappe.session.user
-			self.completed_on = datetime.now()
+			self.completed_on = getdate(today())
 
 	days = 0
 	d1 = 0
 	d2 = 0
+
+	def validate_duration_qa(self):
+		if self.qa_start_working_date != "" and self.completed_on != "":
+			self.start_date = str(self.qa_start_working_date)
+			self.end_date = str(self.completed_on)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			self.strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
+
+			self.qa_total_date = self.duration
+
+			print("TOTAL DAYS QA : ", self.duration)
+
+	def validate_duration_programmer(self):
+
+		event = frappe.db.get_list('Event', pluck='starts_on',
+		filters={
+			'starts_on': ['<=', getdate(nowdate())]
+		},
+						fields=['starts_on', 'name'],
+						order_by='starts_on asc',
+						# page_length=2,
+						as_list=False
+						)
+		print(event[0])
+
+		if self.review_date != "":
+			self.start_date = str(event[0])
+			self.end_date = str(self.review_date)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			self.strdays = str(self.days).split('.')[0]
+
+			self.duration = self.days
+
+			self.programmer_total_date = self.duration
+
+			print("TOTAL DAYS PROGRAMMER: ", self.duration)
 
 	def validate_duration(self):
 		if flt(self.exp_start_date == None):
@@ -321,6 +375,8 @@ class Task(NestedSet):
 
 			self.progress = 0
 
+			self.review_date = ""
+
 			self.validate_duration()
 
 		if self.status == "Pending Review":
@@ -331,6 +387,18 @@ class Task(NestedSet):
 			else:
 				self.progress = 50
 
+		if self.status == "QA Open":
+			if flt(self.individual_progress or 0) < 100:
+				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
+				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			else:
+				self.progress = 50
+
+
+				self.review_date = getdate(today())
+
+				self.qa_start_working_date = ""
 
 
 		if self.status == "QA Testing":
@@ -340,6 +408,8 @@ class Task(NestedSet):
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
 				self.progress = 60
+
+				self.qa_start_working_date = getdate(today())
 
 		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:

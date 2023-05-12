@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "Falah Letter Head",
- "modified": "2023-05-03 14:38:43.920930",
+ "modified": "2023-05-12 17:21:42.787449",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Employee Report Project",
@@ -19,5 +19,12 @@
  "ref_doctype": "Project",
  "report_name": "Employee Report Project",
  "report_type": "Script Report",
- "roles": []
+ "roles": [
+  {
+   "role": "Leader Software Developer"
+  },
+  {
+   "role": "Chief Technology Officer"
+  }
+ ]
 }

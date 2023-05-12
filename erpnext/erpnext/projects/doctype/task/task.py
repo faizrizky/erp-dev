@@ -50,8 +50,8 @@ class Task(NestedSet):
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
-		# self.validate_duration_programmer()
-		# self.validate_duration_qa()
+		self.validate_duration_programmer()
+		self.validate_duration_qa()
 
 	def validate_dates(self):
 		if (
@@ -271,7 +271,7 @@ class Task(NestedSet):
 	d2 = 0
 
 	def validate_duration_qa(self):
-		if self.qa_start_working_date != "" and self.completed_on != "":
+		if self.review_date is not None and self.qa_start_working_date is not None and self.completed_on is not None:
 			self.start_date = str(self.qa_start_working_date)
 			self.end_date = str(self.completed_on)
 
@@ -296,6 +296,7 @@ class Task(NestedSet):
 		print("INI START DATE : ",self.exp_start_date)
 		print("INI REVIEW DATE : ",self.review_date)
 		if self.review_date is not None:
+
 			self.start_date = str(self.exp_start_date)
 			self.end_date = str(self.review_date)
 
@@ -367,7 +368,9 @@ class Task(NestedSet):
 
 			self.progress = 0
 
-			self.review_date = ""
+			self.review_date = None
+
+			self.completed_on = None
 
 			self.validate_duration()
 
@@ -387,10 +390,9 @@ class Task(NestedSet):
 			else:
 				self.progress = 50
 
-
 				self.review_date = getdate(today())
 
-				self.qa_start_working_date = ""
+				# self.qa_start_working_date = None
 
 
 		if self.status == "QA Testing":
@@ -401,7 +403,8 @@ class Task(NestedSet):
 			else:
 				self.progress = 60
 
-				self.qa_start_working_date = getdate(today())
+				if self.qa_start_working_date is None:
+					self.qa_start_working_date = getdate(today())
 
 		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:

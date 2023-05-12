@@ -10,7 +10,7 @@
  "idx": 2,
  "is_standard": "Yes",
  "json": "{}",
- "modified": "2023-05-02 16:24:03.902476",
+ "modified": "2023-05-12 17:21:50.025870",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Daily Timesheet Summary",
@@ -34,6 +34,12 @@
   },
   {
    "role": "Leader Software Developer"
+  },
+  {
+   "role": "Technical Architect Software Developer"
+  },
+  {
+   "role": "Chief Technology Officer"
   }
  ]
 }

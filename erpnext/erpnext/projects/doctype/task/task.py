@@ -50,8 +50,8 @@ class Task(NestedSet):
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
-		self.validate_duration_programmer()
-		self.validate_duration_qa()
+		# self.validate_duration_programmer()
+		# self.validate_duration_qa()
 
 	def validate_dates(self):
 		if (
@@ -292,19 +292,11 @@ class Task(NestedSet):
 
 	def validate_duration_programmer(self):
 
-		event = frappe.db.get_list('Event', pluck='starts_on',
-		filters={
-			'starts_on': ['<=', getdate(nowdate())]
-		},
-						fields=['starts_on', 'name'],
-						order_by='starts_on asc',
-						# page_length=2,
-						as_list=False
-						)
-		print(event[0])
 
-		if self.review_date != "":
-			self.start_date = str(event[0])
+		print("INI START DATE : ",self.exp_start_date)
+		print("INI REVIEW DATE : ",self.review_date)
+		if self.review_date is not None:
+			self.start_date = str(self.exp_start_date)
 			self.end_date = str(self.review_date)
 
 			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")

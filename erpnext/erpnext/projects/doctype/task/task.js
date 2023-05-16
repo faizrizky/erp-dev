@@ -14,7 +14,7 @@ frappe.ui.form.on("Task", {
 	},
 
 	refresh(frm) {
-		if (frm.doc.sub_task.length > 0) {
+		if (frm.doc.sub_task.length > 0 || frm.doc.status != "Working") {
 			console.log(frm.doc.sub_task.length)
 			frm.set_df_property('individual_progress', 'read_only', 1)
 		}

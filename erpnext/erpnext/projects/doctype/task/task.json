@@ -450,8 +450,7 @@
    "description": "Hanya bisa di edit jika tidak memiliki Sub Task",
    "fieldname": "individual_progress",
    "fieldtype": "Percent",
-   "label": "% Individual Task Progress",
-   "read_only_depends_on": "eval:doc.status != \"Pending Review\" && doc.status != \"Working\""
+   "label": "% Individual Task Progress"
   },
   {
    "fieldname": "category_sprint",
@@ -543,14 +542,16 @@
    "fieldname": "start_date_integration",
    "fieldtype": "Date",
    "label": "Start Date Integration",
-   "read_only": 1
+   "mandatory_depends_on": "eval:doc.status == \"Integration\"",
+   "read_only_depends_on": "eval:doc.status != \"Integration\""
   },
   {
    "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
    "fieldname": "end_date_integration",
    "fieldtype": "Date",
    "label": "End Date Integration",
-   "read_only": 1
+   "mandatory_depends_on": "eval:doc.status == \"Integration\"",
+   "read_only_depends_on": "eval:doc.status != \"Integration\""
   },
   {
    "fieldname": "duration_section",
@@ -568,7 +569,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-15 16:04:00.284282",
+ "modified": "2023-05-16 12:45:32.590529",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

@@ -42,6 +42,7 @@ class Task(NestedSet):
 		self.validate_dates()
 		self.validate_parent_expected_end_date()
 		self.validate_parent_project_dates()
+		self.validate_duration()
 		self.validate_progress()
 		self.validate_status()
 		# self.validate_status_child()
@@ -271,6 +272,8 @@ class Task(NestedSet):
 	d2 = 0
 
 	def validate_duration_qa(self):
+		if self.qa_total_day is None:
+			self.qa_total_day = 0
 		if self.review_date is not None and self.end_date_integration is not None and self.start_date_integration is not None and self.exp_start_date is not None and self.completed_on is not None:
 			self.start_date = str(self.exp_start_date)
 			self.end_date = str(self.completed_on)
@@ -306,6 +309,9 @@ class Task(NestedSet):
 
 		# print("INI START DATE : ",self.exp_start_date)
 		# print("INI REVIEW DATE : ",self.review_date)
+		if self.programmer_total_day is None:
+			self.programmer_total_day = 0
+
 		if self.review_date is not None:
 
 			self.start_date = str(self.exp_start_date)
@@ -383,7 +389,7 @@ class Task(NestedSet):
 
 			self.completed_on = None
 
-			self.validate_duration()
+			# self.validate_duration()
 
 		if self.status == "Pending Review":
 			if flt(self.individual_progress or 0) < 100:
@@ -401,7 +407,8 @@ class Task(NestedSet):
 			else:
 				self.progress = 50
 
-				self.review_date = getdate(today())
+				if self.review_date is None:
+					self.review_date = getdate(today())
 
 				# self.qa_start_working_date = None
 
@@ -427,7 +434,7 @@ class Task(NestedSet):
 
 				if self.start_date_integration is None:
 					self.start_date_integration = getdate(today())
-					print("START INTEGRATION : ", self.start_date_integration)
+					# print("START INTEGRATION : ", self.start_date_integration)
 
 		if self.status == "QA Integration Testing":
 			if flt(self.individual_progress or 0) < 100:
@@ -437,9 +444,9 @@ class Task(NestedSet):
 			else:
 				if self.is_group != True:
 					self.progress = 90
-				print("END INTEGRATION : ", self.end_date_integration)
+				# print("END INTEGRATION : ", self.end_date_integration)
 				if self.end_date_integration is None:
-					self.end_date_integration = getdate(today()) + timedelta(days=10)
+					self.end_date_integration = getdate(today())
 			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
 			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan
 

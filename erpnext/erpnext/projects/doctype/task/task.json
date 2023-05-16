@@ -32,24 +32,25 @@
   "completed_by",
   "column_break_erpzz",
   "completed_on",
-  "progress_view_date_section",
-  "programmer_total_date",
-  "column_break_vvzsu",
-  "qa_total_date",
   "review_section",
   "review_date",
-  "column_break_wgsdv",
-  "qa_start_working_date",
   "sb_timeline",
-  "start",
   "exp_start_date",
-  "individual_progress",
+  "start_date_integration",
+  "start",
+  "programmer_total_day",
   "expected_time",
+  "total_day_integration",
   "is_milestone",
   "column_break_11",
   "exp_end_date",
-  "progress",
+  "end_date_integration",
+  "qa_total_day",
   "duration",
+  "duration_section",
+  "individual_progress",
+  "column_break_mwf3j",
+  "progress",
   "sub_task_table_section",
   "sub_task",
   "sb_details",
@@ -176,7 +177,7 @@
    "collapsible_depends_on": "eval:doc.__islocal",
    "fieldname": "sb_timeline",
    "fieldtype": "Section Break",
-   "label": "Timeline"
+   "label": "Task Timeline"
   },
   {
    "fieldname": "exp_start_date",
@@ -191,6 +192,7 @@
    "default": "0",
    "fieldname": "expected_time",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Expected Time (in hours)",
    "oldfieldname": "exp_total_hrs",
    "oldfieldtype": "Data",
@@ -343,7 +345,7 @@
    "label": "Review Date",
    "oldfieldname": "review_date",
    "oldfieldtype": "Date",
-   "read_only_depends_on": "eval:doc.status != \"Pending Review\" || frappe.user.has_role('Software Developer') == 1"
+   "read_only_depends_on": "eval:doc.status != \"Pending Review\""
   },
   {
    "depends_on": "eval:doc.status == \"Closed\"",
@@ -422,7 +424,7 @@
   {
    "fieldname": "duration",
    "fieldtype": "Int",
-   "label": "Duration (Days)",
+   "label": "Task Duration (Days)",
    "read_only": 1
   },
   {
@@ -448,7 +450,8 @@
    "description": "Hanya bisa di edit jika tidak memiliki Sub Task",
    "fieldname": "individual_progress",
    "fieldtype": "Percent",
-   "label": "% Individual Task Progress"
+   "label": "% Individual Task Progress",
+   "read_only_depends_on": "eval:doc.status != \"Pending Review\" && doc.status != \"Working\""
   },
   {
    "fieldname": "category_sprint",
@@ -515,37 +518,47 @@
    "options": "Assignment Sub Task"
   },
   {
-   "fieldname": "column_break_wgsdv",
-   "fieldtype": "Column Break"
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "programmer_total_day",
+   "fieldtype": "Data",
+   "label": "Programmer Total (Days)",
+   "read_only": 1
   },
   {
    "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
-   "fieldname": "qa_start_working_date",
+   "fieldname": "qa_total_day",
+   "fieldtype": "Data",
+   "label": "QA Total (Days)",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "total_day_integration",
+   "fieldtype": "Data",
+   "label": "Integration Total (Days)",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "start_date_integration",
    "fieldtype": "Date",
-   "label": "QA Start Working Date",
+   "label": "Start Date Integration",
    "read_only": 1
   },
   {
-   "fieldname": "progress_view_date_section",
+   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
+   "fieldname": "end_date_integration",
+   "fieldtype": "Date",
+   "label": "End Date Integration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "duration_section",
    "fieldtype": "Section Break",
-   "label": "Progress View Date"
+   "label": "Progress"
   },
   {
-   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
-   "fieldname": "programmer_total_date",
-   "fieldtype": "Data",
-   "label": "Programmer Total Date",
-   "read_only": 1
-  },
-  {
-   "depends_on": "eval:frappe.user.has_role('Software Developer') != 1",
-   "fieldname": "qa_total_date",
-   "fieldtype": "Data",
-   "label": "QA Total Date",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_vvzsu",
+   "fieldname": "column_break_mwf3j",
    "fieldtype": "Column Break"
   }
  ],
@@ -555,7 +568,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-12 16:54:09.347966",
+ "modified": "2023-05-15 16:04:00.284282",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

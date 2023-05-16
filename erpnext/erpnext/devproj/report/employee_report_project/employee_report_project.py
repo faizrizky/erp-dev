@@ -63,10 +63,10 @@ def get_column2():
 		{"fieldname": "Total_Weight", "fieldtype": "", "label": _("Total Weight"), "width": 120,"height":150},
 		{"fieldname": "User", "fieldtype": "", "label": _("User"),"height":150, "width": 200},
 		{"fieldname": "Team", "fieldtype": "", "label": _("Team"),"height":150, "width": 150,"align": "left"},
-		{"fieldname": "project", "fieldtype": "", "label": _("Projects"),"height":150, "width": 150},
+
 		{"fieldname": "Total_Task", "fieldtype": "", "label": _("Task Taken")},
 		{"fieldname": "Task", "fieldtype": "", "label": _("Task"),"height":500, "width": 350},
-		{"fieldname": "Completed_On", "fieldtype": "", "label": _("Completed On"),"height":150, "width": 150,"align": "left"},
+		{"fieldname": "Total Days", "fieldtype": "", "label": _("Total Days"),"height":150, "width": 150,"align": "left"},
 
 	]
 
@@ -83,10 +83,14 @@ def get_data(conditions,filters):
         IFNULL(tabEmployee.last_name, '')
    		) as User,
 		tabEmployee.branch,
-		tabTask.project,
 		count(*) as Total_Task, 
 		group_concat(tabTask.name SEPARATOR '<br/>') as Task,
-		group_concat(completed_on SEPARATOR '<br/>') as Completed_On
+		group_concat(
+        CASE
+            WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
+            ELSE tabTask.programmer_total_date
+        END SEPARATOR '<br/>'
+    	) as Total_Days
 		FROM 
 		tabTask,
     	JSON_TABLE(`tabTask`._assign,"$[*]" COLUMNS(User VARCHAR(30) PATH "$")) alias_table, tabEmployee

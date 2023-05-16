@@ -271,30 +271,41 @@ class Task(NestedSet):
 	d2 = 0
 
 	def validate_duration_qa(self):
-		if self.review_date is not None and self.qa_start_working_date is not None and self.completed_on is not None:
-			self.start_date = str(self.qa_start_working_date)
+		if self.review_date is not None and self.end_date_integration is not None and self.start_date_integration is not None and self.exp_start_date is not None and self.completed_on is not None:
+			self.start_date = str(self.exp_start_date)
 			self.end_date = str(self.completed_on)
+
+			self.integration_start = str(self.start_date_integration)
+			self.integration_end = str(self.end_date_integration)
 
 			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
 			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 
+			self.integration1 = datetime.strptime(self.integration_start, "%Y-%m-%d")
+			self.integration2 = datetime.strptime(self.integration_end, "%Y-%m-%d")
+
 			self.daydiff = self.d2.weekday() - self.d1.weekday()
+			self.daydiffIntegration = self.integration2.weekday() - self.integration1.weekday()
 
-			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			self.qa_total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			self.daysIntegration = ((self.integration2-self.integration1).days - self.daydiffIntegration) / 7 * 5 + min(self.daydiffIntegration,5) - (max(self.integration2.weekday() - 4, 0) % 5) + 1
 
-			self.strdays = str(self.days).split('.')[0]
+			# self.strdays = str(self.days).split('.')[0]
 
-			self.duration = self.days
+			self.qa_total_day = self.qa_total_day - self.programmer_total_day - self.daysIntegration
 
-			self.qa_total_date = self.duration
+			if self.qa_total_day < 0 :
+				self.qa_total_day = 0
 
-			print("TOTAL DAYS QA : ", self.duration)
+			if self.daysIntegration < 0:
+				self.total_day_integration = 0
+			else:
+				self.total_day_integration = self.daysIntegration
 
 	def validate_duration_programmer(self):
 
-
-		print("INI START DATE : ",self.exp_start_date)
-		print("INI REVIEW DATE : ",self.review_date)
+		# print("INI START DATE : ",self.exp_start_date)
+		# print("INI REVIEW DATE : ",self.review_date)
 		if self.review_date is not None:
 
 			self.start_date = str(self.exp_start_date)
@@ -305,15 +316,15 @@ class Task(NestedSet):
 
 			self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-			self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			self.programmer_total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-			self.strdays = str(self.days).split('.')[0]
+			# self.strdays = str(self.days).split('.')[0]
 
-			self.duration = self.days
+			# self.duration = self.days
 
-			self.programmer_total_date = self.duration
+			# self.programmer_total_day = self.duration
 
-			print("TOTAL DAYS PROGRAMMER: ", self.duration)
+			# print("TOTAL DAYS PROGRAMMER: ", self.duration)
 
 	def validate_duration(self):
 		if flt(self.exp_start_date == None):
@@ -333,11 +344,11 @@ class Task(NestedSet):
 		self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 		self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-		self.days = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+		self.duration = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-		self.strdays = str(self.days).split('.')[0]
+		# self.strdays = str(self.days).split('.')[0]
 
-		self.duration = self.days
+		# self.duration = self.days
 
 	def validate_progress(self):
 
@@ -403,8 +414,8 @@ class Task(NestedSet):
 			else:
 				self.progress = 60
 
-				if self.qa_start_working_date is None:
-					self.qa_start_working_date = getdate(today())
+				# if self.qa_start_working_date is None:
+				# 	self.qa_start_working_date = getdate(today())
 
 		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:
@@ -414,6 +425,10 @@ class Task(NestedSet):
 			else:
 				self.progress = 80
 
+				if self.start_date_integration is None:
+					self.start_date_integration = getdate(today())
+					print("START INTEGRATION : ", self.start_date_integration)
+
 		if self.status == "QA Integration Testing":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
@@ -422,7 +437,9 @@ class Task(NestedSet):
 			else:
 				if self.is_group != True:
 					self.progress = 90
-
+				print("END INTEGRATION : ", self.end_date_integration)
+				if self.end_date_integration is None:
+					self.end_date_integration = getdate(today()) + timedelta(days=10)
 			#1. harus get doc Event sprint yg sedang open, kemudian get starts_on dan ends_on nya kapan
 			#2. selisihkan start time dengan ends_on sprint yg sedang berjalan
 
@@ -435,6 +452,11 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 
 		self.progress = str(self.progress).split('.')[0]
+
+		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
+			frappe.throw(_("Please set {0} value between {1}")
+					.format(frappe.bold("Weight"), frappe.bold("1 to 10")))
+
 		# if (self.is_group != True and self.status != "Open"):
 		# 	if self.priority == "Low":
 		# 		# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:

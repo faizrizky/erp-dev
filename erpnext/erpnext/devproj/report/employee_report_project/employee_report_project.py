@@ -91,7 +91,7 @@ def get_data(conditions,filters):
 		SUM(
         CASE
             WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
-            ELSE IFNULL(tabTask.programmer_total_day, '0')
+            ELSE IFNULL(tabTask.qa_total_day, '0')
         END
     	) as Total_Days
 		FROM 

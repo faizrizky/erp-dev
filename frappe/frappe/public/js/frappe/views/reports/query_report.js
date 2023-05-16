@@ -1400,7 +1400,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			.map((fieldname) => {
 				const label = frappe.query_report.get_filter(fieldname).df.label;
 				const value = applied_filters[fieldname];
-				return `<h6>${__(label)}: ${value}</h6>`;
+				return `<h4>${__(label)}: ${value}</h4>`;
 			})
 			.join("");
 	}

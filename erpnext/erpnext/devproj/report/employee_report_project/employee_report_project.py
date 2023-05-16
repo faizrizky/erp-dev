@@ -65,7 +65,7 @@ def get_column2():
 		{"fieldname": "Team", "fieldtype": "", "label": _("Team"),"height":150, "width": 150,"align": "left"},
 
 		{"fieldname": "Total_Task", "fieldtype": "", "label": _("Task Taken")},
-		{"fieldname": "Task", "fieldtype": "", "label": _("Task"),"height":500, "width": 350},
+		{"fieldname": "Task", "fieldtype": "", "label": _("Task (Days)"),"height":500, "width": 350},
 		{"fieldname": "Total Days", "fieldtype": "", "label": _("Total Days"),"height":150, "width": 150,"align": "left"},
 
 	]
@@ -74,7 +74,7 @@ def get_column2():
 def get_data(conditions,filters):
 	report = frappe.db.sql(
 		"""SELECT
-		sum(task_weight) as Total_Weight,
+		SUM(task_weight) as Total_Weight,
 		CONCAT(
         IFNULL(tabEmployee.first_name, ''),
         ' ',
@@ -83,20 +83,23 @@ def get_data(conditions,filters):
         IFNULL(tabEmployee.last_name, '')
    		) as User,
 		tabEmployee.branch,
-		count(*) as Total_Task, 
-		group_concat(tabTask.name SEPARATOR '<br/>') as Task,
-		group_concat(
+		COUNT(*) as Total_Task, 
+		GROUP_CONCAT(CONCAT(tabTask.name, ' ( ', CASE
+            WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
+            ELSE IFNULL(tabTask.programmer_total_day, '0')
+        END , ' days ) ') SEPARATOR '<br />') AS Task,
+		SUM(
         CASE
             WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
-            ELSE tabTask.programmer_total_date
-        END SEPARATOR '<br/>'
+            ELSE IFNULL(tabTask.programmer_total_day, '0')
+        END
     	) as Total_Days
 		FROM 
 		tabTask,
     	JSON_TABLE(`tabTask`._assign,"$[*]" COLUMNS(User VARCHAR(30) PATH "$")) alias_table, tabEmployee
 		WHERE tabTask._assign IS NOT NULL AND alias_table.User COLLATE utf8mb4_unicode_ci = tabEmployee.user_id
-		AND  %s GROUP BY tabTask.project,
-    alias_table.User""" % (conditions),filters, as_list=1)
+		AND  %s GROUP BY tabTask.project, alias_table.User 
+		Order By Total_Weight DESC""" % (conditions),filters, as_list=1)
 
 	return report
 

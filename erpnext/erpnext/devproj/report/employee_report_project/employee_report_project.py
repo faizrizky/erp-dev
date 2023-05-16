@@ -86,12 +86,12 @@ def get_data(conditions,filters):
 		COUNT(*) as Total_Task, 
 		GROUP_CONCAT(CONCAT(tabTask.name, ' ( ', CASE
             WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
-            ELSE IFNULL(tabTask.programmer_total_day, '0')
+            ELSE IFNULL(tabTask.programmer_total_day, '0') AND IFNULL(tabTask.qa_total_day, '0')
         END , ' days ) ') SEPARATOR '<br />') AS Task,
 		SUM(
         CASE
             WHEN tabEmployee.branch = 'Quality Assurance' THEN tabTask.qa_total_day
-            ELSE IFNULL(tabTask.qa_total_day, '0')
+            ELSE IFNULL(tabTask.programmer_total_day, '0')
         END
     	) as Total_Days
 		FROM 

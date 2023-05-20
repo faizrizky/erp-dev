@@ -1,0 +1,159 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"Pj-UOKo3Px\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"XlpM8182iW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset\",\"col\":3}},{\"id\":\"5rTf_LlZg9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset Movement\",\"col\":4}},{\"id\":\"jVJpNqtr_v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Store Asset\",\"col\":4}},{\"id\":\"ZLKaEpieia\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ZpqfyCp44i\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Assets &amp; Maintenance</b></span>\",\"col\":12}},{\"id\":\"G4o0mbEejH\",\"type\":\"card\",\"data\":{\"card_name\":\"Assets\",\"col\":4}},{\"id\":\"vc_-vYz-kP\",\"type\":\"card\",\"data\":{\"card_name\":\"Maintenance\",\"col\":4}}]",
+ "creation": "2023-05-17 11:50:51.060968",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "assets",
+ "idx": 0,
+ "is_hidden": 1,
+ "label": "Assets",
+ "links": [
+  {
+   "dependencies": "Asset",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Asset Depreciation Ledger",
+   "link_count": 0,
+   "link_to": "Asset Depreciation Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Asset",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Asset Depreciations and Balances",
+   "link_count": 0,
+   "link_to": "Asset Depreciations and Balances",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Asset Maintenance",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Asset Maintenance",
+   "link_count": 0,
+   "link_to": "Asset Maintenance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Maintenance",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Asset Maintenance Team",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Asset Maintenance",
+   "link_count": 0,
+   "link_to": "Asset Maintenance",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Asset",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Asset Repair",
+   "link_count": 0,
+   "link_to": "Asset Repair",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Assets",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "SD Asset",
+   "link_count": 0,
+   "link_to": "SD Asset",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "SD Asset Movement",
+   "link_count": 0,
+   "link_to": "SD Asset Movement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "SD Store Asset",
+   "link_count": 0,
+   "link_to": "SD Store Asset",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-05-20 20:09:11.471477",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "Assets",
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 6.1,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "",
+   "format": "Total Asset : {} ",
+   "label": "SD Asset",
+   "link_to": "SD Asset",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "Total Log : {}",
+   "label": "SD Asset Movement",
+   "link_to": "SD Asset Movement",
+   "stats_filter": "{\"purpose\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "format": "Total Log : {}",
+   "label": "SD Store Asset",
+   "link_to": "SD Store Asset",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
+   "type": "DocType"
+  }
+ ],
+ "title": "Assets"
+}

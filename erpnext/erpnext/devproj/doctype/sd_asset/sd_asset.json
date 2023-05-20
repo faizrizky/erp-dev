@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:asset_name",
+ "creation": "2023-05-17 15:55:30.067047",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "asset_name",
+  "custodian",
+  "asset_owner",
+  "task_name",
+  "column_break0",
+  "status",
+  "asset_owner_company",
+  "department",
+  "sb_details",
+  "description",
+  "maintenance_required",
+  "image"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Task Name"
+  },
+  {
+   "fieldname": "column_break0",
+   "fieldtype": "Column Break",
+   "oldfieldtype": "Column Break",
+   "print_width": "50%",
+   "width": "50%"
+  },
+  {
+   "bold": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "oldfieldname": "status",
+   "oldfieldtype": "Select",
+   "options": "Stored\nBorrowed\nIn Maintenance\nMissing",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Details",
+   "oldfieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Asset Description",
+   "oldfieldname": "description",
+   "oldfieldtype": "Text Editor",
+   "print_width": "300px",
+   "width": "300px"
+  },
+  {
+   "fieldname": "asset_owner",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Asset Owner",
+   "oldfieldname": "priority",
+   "oldfieldtype": "Select",
+   "options": "\nCompany\nSupplier\nCustomer\nDepartment",
+   "search_index": 1
+  },
+  {
+   "depends_on": "eval:doc.asset_owner == \"Company\"",
+   "fieldname": "asset_owner_company",
+   "fieldtype": "Link",
+   "label": "Asset Owner Company",
+   "options": "Company"
+  },
+  {
+   "default": "0",
+   "description": "Contact your lead if Asset requires Preventive Maintenance or Calibration",
+   "fieldname": "maintenance_required",
+   "fieldtype": "Check",
+   "label": "Maintenance Required",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+  },
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Data",
+   "label": "Asset Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "Image",
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
+   "depends_on": "eval:doc.asset_owner == \"Department\"",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "custodian",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Custodian",
+   "options": "Employee",
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-check",
+ "image_field": "image",
+ "links": [],
+ "max_attachments": 5,
+ "modified": "2023-05-20 15:01:26.502820",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "SD Asset",
+ "name_case": "Title Case",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Software Developer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Leader Software Developer",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_name_in_global_search": 1,
+ "show_preview_popup": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "translated_doctype": 1
+}

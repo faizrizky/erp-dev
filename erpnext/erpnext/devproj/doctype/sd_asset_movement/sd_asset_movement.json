@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "format:SD-ACC-{YYYY}-{#####}",
+ "creation": "2023-05-17 11:54:36.240317",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "purpose",
+  "column_break_4",
+  "transaction_date",
+  "section_break_10",
+  "assets",
+  "borrowed_asset",
+  "amended_from",
+  "reference",
+  "reference_doctype",
+  "column_break_9",
+  "reference_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "remember_last_selected_value": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "purpose",
+   "fieldtype": "Select",
+   "label": "Purpose",
+   "options": "\nBorrow\nTransfer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Transaction Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_10",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.purpose == \"Transfer\"",
+   "fieldname": "assets",
+   "fieldtype": "Table",
+   "label": "Transfered Asset List",
+   "mandatory_depends_on": "eval: doc.purpose == \"Transfer\"",
+   "options": "SD Asset Movement Item"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "reference",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Reference"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Reference Document Type",
+   "no_copy": 1,
+   "options": "DocType"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "hidden": 1,
+   "label": "Reference Document Name",
+   "no_copy": 1,
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "SD Asset Movement"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "SD Asset Movement"
+  },
+  {
+   "depends_on": "eval: doc.purpose == \"Borrow\"",
+   "fieldname": "borrowed_asset",
+   "fieldtype": "Table",
+   "label": "Borrowed Asset List",
+   "mandatory_depends_on": "eval: doc.purpose == \"Borrow\"",
+   "options": "SD Borrowed Asset"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-05-20 14:36:12.360893",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "SD Asset Movement",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

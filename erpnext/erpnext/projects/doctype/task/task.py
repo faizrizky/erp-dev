@@ -77,6 +77,9 @@ class Task(NestedSet):
 				)
 			)
 
+		if getdate(self.qa_open_date) > getdate(self.qa_testing_date):
+			frappe.throw(_("{0} Cannot be greater than {1}").format(frappe.bold("QA Start Working Date"),frappe.bold("QA End Working Date")))
+
 	def validate_parent_expected_end_date(self):
 		if self.parent_task:
 			parent_exp_end_date = frappe.db.get_value("Task", self.parent_task, "exp_end_date")
@@ -253,7 +256,7 @@ class Task(NestedSet):
 			self.status = "Template"
 		if self.status != self.get_db_value("status") and self.status == "Completed":
 			for d in self.depends_on:
-				if frappe.db.get_value("Task", d.task, "status") not in ("Completed", "Cancelled"):
+				if frappe.db.get_value("Task", d.task, "status") not in ("Completed", "Cancelled", ""):
 					frappe.throw(
 						_(
 							"Cannot complete task {0} as its dependant task {1} are not completed / cancelled."
@@ -271,39 +274,56 @@ class Task(NestedSet):
 	d1 = 0
 	d2 = 0
 
-	def validate_duration_qa(self):
-		if self.qa_total_day is None:
-			self.qa_total_day = 0
-		if self.review_date is not None and self.end_date_integration is not None and self.start_date_integration is not None and self.exp_start_date is not None and self.completed_on is not None:
-			self.start_date = str(self.exp_start_date)
-			self.end_date = str(self.completed_on)
-
+	def validate_duration_integration(self):
+		if self.start_date_integration is not None and self.end_date_integration is not None:
 			self.integration_start = str(self.start_date_integration)
 			self.integration_end = str(self.end_date_integration)
-
-			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
-			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 
 			self.integration1 = datetime.strptime(self.integration_start, "%Y-%m-%d")
 			self.integration2 = datetime.strptime(self.integration_end, "%Y-%m-%d")
 
-			self.daydiff = self.d2.weekday() - self.d1.weekday()
 			self.daydiffIntegration = self.integration2.weekday() - self.integration1.weekday()
-
-			self.qa_total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 			self.daysIntegration = ((self.integration2-self.integration1).days - self.daydiffIntegration) / 7 * 5 + min(self.daydiffIntegration,5) - (max(self.integration2.weekday() - 4, 0) % 5) + 1
-
-			# self.strdays = str(self.days).split('.')[0]
-
-			self.qa_total_day = self.qa_total_day - self.programmer_total_day - self.daysIntegration
-
-			if self.qa_total_day < 0 :
-				self.qa_total_day = 0
 
 			if self.daysIntegration < 0:
 				self.total_day_integration = 0
 			else:
 				self.total_day_integration = self.daysIntegration
+
+
+	def validate_duration_qa(self):
+		if self.qa_total_day is None:
+			self.qa_total_day = 0
+
+		if self.review_date is not None and self.qa_open_date is not None and self.qa_testing_date is not None and self.exp_start_date is not None and self.completed_on is not None:
+			self.start_date = str(self.exp_start_date)
+			self.end_date = str(self.completed_on)
+
+			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
+
+			self.qa_total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			self.qa_start_date = str(self.qa_open_date)
+			self.qa_end_date = str(self.qa_testing_date)
+
+			self.qa_start = datetime.strptime(self.qa_start_date, "%Y-%m-%d")
+			self.qa_end = datetime.strptime(self.qa_end_date, "%Y-%m-%d")
+
+			self.daydiff = self.qa_end.weekday() - self.qa_start.weekday()
+
+			self.qa_total_idle_day = ((self.qa_end-self.qa_start).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.qa_end.weekday() - 4, 0) % 5) + 1
+
+			# self.qa_total_day = self.qa_total_day - self.programmer_total_day - self.daysIntegration
+			print(self.qa_total_day)
+			print(self.programmer_total_day)
+			print(self.qa_total_idle_day)
+			self.qa_total_day = self.qa_total_day - self.programmer_total_day - self.qa_total_idle_day
+
+			if self.qa_total_day < 0 :
+				self.qa_total_day = 0
 
 	def validate_duration_programmer(self):
 
@@ -323,6 +343,9 @@ class Task(NestedSet):
 			self.daydiff = self.d2.weekday() - self.d1.weekday()
 
 			self.programmer_total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+
+			if self.programmer_total_day < 0:
+				self.programmer_total_day = 0
 
 			# self.strdays = str(self.days).split('.')[0]
 
@@ -410,7 +433,8 @@ class Task(NestedSet):
 				if self.review_date is None:
 					self.review_date = getdate(today())
 
-				# self.qa_start_working_date = None
+				if self.qa_open_date is None:
+					self.qa_open_date = getdate(today())
 
 
 		if self.status == "QA Testing":
@@ -421,8 +445,8 @@ class Task(NestedSet):
 			else:
 				self.progress = 60
 
-				# if self.qa_start_working_date is None:
-				# 	self.qa_start_working_date = getdate(today())
+				if self.qa_testing_date is None:
+					self.qa_testing_date = getdate(today()) + timedelta(days=10)
 
 		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:
@@ -693,7 +717,7 @@ class Task(NestedSet):
 		self.update_project()
 
 	def update_status(self):
-		if self.status not in ("Cancelled", "Completed") and self.exp_end_date:
+		if self.status not in ("Cancelled", "Completed", "QA Open", "QA Integration") and self.exp_end_date:
 			from datetime import datetime
 
 			if self.exp_end_date + timedelta(days=3) < datetime.now().date():
@@ -797,7 +821,7 @@ def set_multiple_status(names, status):
 def set_tasks_as_overdue():
 	tasks = frappe.get_all(
 		"Task",
-		filters={"status": ["not in", ["Cancelled", "Completed"]]},
+		filters={"status": ["not in", ["Cancelled", "Completed", "QA Open", "QA Integration"]]},
 		fields=["name", "status", "review_date"],
 	)
 	for task in tasks:

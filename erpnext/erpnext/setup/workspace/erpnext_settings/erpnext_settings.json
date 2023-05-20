@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts\\n\\t\\t\\t\\n\\t\\t\\n\\t\\t\\t\\n\\t\\t\\n\\t\\t\\t\\n\\t\\t</b></span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Projects Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accounts Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Selling Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buying Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Portal Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Domain Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CRM Settings\",\"col\":3}}]",
+ "content": "[{\"id\":\"uxzhm8lvyd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts\\n\\t\\t\\t\\n\\t\\t\\n\\t\\t\\t\\n\\t\\t\\n\\t\\t\\t\\n\\t\\t</b></span>\",\"col\":12}},{\"id\":\"vkEdNTwhVX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Projects Settings\",\"col\":3}},{\"id\":\"FIc9P2G5BX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accounts Settings\",\"col\":3}},{\"id\":\"p1h1EnoRS2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Settings\",\"col\":3}},{\"id\":\"Z4iV4-rO-A\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Selling Settings\",\"col\":3}},{\"id\":\"jW6FcQs5GY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buying Settings\",\"col\":3}},{\"id\":\"NjRMx82wOW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Settings\",\"col\":3}},{\"id\":\"IPdcEWXGG-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Portal Settings\",\"col\":3}},{\"id\":\"0n7r8NgmWy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Domain Settings\",\"col\":3}},{\"id\":\"O9LMKwYj5G\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CRM Settings\",\"col\":3}}]",
  "creation": "2022-01-27 13:14:47.349433",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -11,7 +11,7 @@
  "is_hidden": 1,
  "label": "ERPNext Settings",
  "links": [],
- "modified": "2023-01-31 15:58:40.906666",
+ "modified": "2023-05-20 17:51:59.461140",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "ERPNext Settings",

@@ -20,6 +20,7 @@ frappe.listview_settings['Task'] = {
 			"Backlog": "gray",
 			"Overdue": "red",
 			"Pending Review": "orange",
+			"QA Open": "blue",
 			"QA Testing": "yellow",
 			"Integration": "cyan",
 			"QA Integration Testing": "pink",

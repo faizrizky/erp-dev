@@ -1,4 +1,4 @@
-frappe.listview_settings['Asset'] = {
+frappe.listview_settings['SD Assets'] = {
 	add_fields: ['status'],
 	get_indicator: function (doc) {
 		if (doc.status === "Fully Depreciated") {
@@ -32,7 +32,7 @@ frappe.listview_settings['Asset'] = {
 			return [__("Submitted"), "blue", "status,=,Submitted"];
 
 		} else if (doc.status === "Draft") {
-			return [__("Draft"), "blue", "status,=,Draft"];
+			return [__("Draft"), "red", "status,=,Draft"];
 		}
 	},
 	onload: function (me) {

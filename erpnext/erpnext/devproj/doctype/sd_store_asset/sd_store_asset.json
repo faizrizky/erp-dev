@@ -1,0 +1,114 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:asset_name",
+ "creation": "2023-05-20 15:44:49.118173",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "asset_name",
+  "custodian",
+  "column_break0",
+  "asset_location",
+  "sb_details",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Link",
+   "label": "Asset Name",
+   "options": "SD Asset",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "custodian",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Custodian",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "column_break0",
+   "fieldtype": "Column Break",
+   "oldfieldtype": "Column Break",
+   "print_width": "50%",
+   "width": "50%"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Details",
+   "oldfieldtype": "Section Break"
+  },
+  {
+   "fieldname": "asset_location",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Store Asset To",
+   "options": "\nNakas 1 ( SD 2 Sebelah Meja HOD)\nNakas 2 ( Ruang Meeting SD 2 )\nGudang ( SD 1 )",
+   "reqd": 1,
+   "width": "100"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "SD Store Asset",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-check",
+ "links": [],
+ "max_attachments": 5,
+ "modified": "2023-05-20 18:05:19.666910",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "SD Store Asset",
+ "name_case": "Title Case",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Software Developer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Leader Software Developer",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_name_in_global_search": 1,
+ "show_preview_popup": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "translated_doctype": 1
+}

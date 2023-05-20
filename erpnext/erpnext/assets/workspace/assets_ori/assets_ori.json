@@ -13,8 +13,8 @@
  "hide_custom": 0,
  "icon": "assets",
  "idx": 0,
- "is_hidden": 0,
- "label": "Assets",
+ "is_hidden": 1,
+ "label": "Assets Ori",
  "links": [
   {
    "hidden": 0,
@@ -184,10 +184,10 @@
    "type": "Link"
   }
  ],
- "modified": "2023-01-31 15:57:40.007051",
+ "modified": "2023-05-17 12:08:03.470792",
  "modified_by": "Administrator",
  "module": "Assets",
- "name": "Assets",
+ "name": "Assets Ori",
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -217,5 +217,5 @@
    "type": "Dashboard"
   }
  ],
- "title": "Assets"
+ "title": "Assets Ori"
 }

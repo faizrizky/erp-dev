@@ -3,7 +3,7 @@
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "field:employee_name",
  "creation": "2022-02-21 11:54:09.632218",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -178,7 +178,8 @@
    "label": "Full Name",
    "oldfieldname": "employee_name",
    "oldfieldtype": "Data",
-   "read_only": 1
+   "read_only": 1,
+   "unique": 1
   },
   {
    "fetch_from": "user_id.user_image",
@@ -818,12 +819,12 @@
  "idx": 24,
  "image_field": "image",
  "links": [],
- "modified": "2023-03-27 11:05:45.677056",
+ "modified": "2023-05-19 17:10:48.251006",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",
  "name_case": "Title Case",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -863,6 +864,7 @@
  ],
  "search_fields": "employee_name",
  "show_name_in_global_search": 1,
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

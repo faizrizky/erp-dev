@@ -382,7 +382,7 @@ scheduler_events = {
 		"45 0 * * *": [
 			"erpnext.stock.reorder_item.reorder_item",
 		],
-        
+
 		"* * * * * *": [
 			"erpnext.projects.doctype.task.task.validate_sprint"
 		],
@@ -430,6 +430,9 @@ scheduler_events = {
 		"erpnext.selling.doctype.quotation.quotation.set_expired_status",
 		"erpnext.buying.doctype.supplier_quotation.supplier_quotation.set_expired_status",
 		"erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.send_auto_email",
+	],
+	"weekly": [
+		"erpnext.projects.doctype.task.task.validate_sprint",
 	],
 	"daily_long": [
 		"erpnext.setup.doctype.email_digest.email_digest.send",

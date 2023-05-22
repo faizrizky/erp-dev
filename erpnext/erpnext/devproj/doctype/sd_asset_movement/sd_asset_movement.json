@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "format:SD-ACC-{YYYY}-{#####}",
+ "autoname": "format:SD-ASSET-{YYYY}-{#####}",
  "creation": "2023-05-17 11:54:36.240317",
  "default_view": "List",
  "doctype": "DocType",
@@ -113,7 +113,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-05-20 14:36:12.360893",
+ "modified": "2023-05-22 11:48:17.732889",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Asset Movement",

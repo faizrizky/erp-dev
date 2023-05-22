@@ -31,3 +31,5 @@ class SDStoreAsset(Document):
 		else:
 			frappe.db.set_value('SD Asset', self.asset_name, 'custodian', None)
 			frappe.db.set_value('SD Asset', self.asset_name, 'status', 'Stored')
+			frappe.db.set_value('SD Asset',self.asset_name, 'asset_location', self.asset_location)
+

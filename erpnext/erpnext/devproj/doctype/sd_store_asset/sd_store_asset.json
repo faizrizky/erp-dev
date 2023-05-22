@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "field:asset_name",
+ "autoname": "format:SD-ASSET-{asset_name}-{####}",
  "creation": "2023-05-20 15:44:49.118173",
  "default_view": "List",
  "doctype": "DocType",
@@ -22,8 +22,7 @@
    "fieldtype": "Link",
    "label": "Asset Name",
    "options": "SD Asset",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "custodian",
@@ -70,12 +69,12 @@
  "icon": "fa fa-check",
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-20 18:05:19.666910",
+ "modified": "2023-05-22 11:27:49.059005",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Store Asset",
  "name_case": "Title Case",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "nsm_parent_field": "parent_task",
  "owner": "Administrator",
  "permissions": [

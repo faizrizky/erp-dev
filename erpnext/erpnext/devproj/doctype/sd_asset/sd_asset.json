@@ -12,7 +12,7 @@
   "asset_name",
   "custodian",
   "asset_owner",
-  "task_name",
+  "asset_location",
   "column_break0",
   "status",
   "asset_owner_company",
@@ -23,12 +23,6 @@
   "image"
  ],
  "fields": [
-  {
-   "fieldname": "task_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Task Name"
-  },
   {
    "fieldname": "column_break0",
    "fieldtype": "Column Break",
@@ -120,13 +114,19 @@
    "label": "Custodian",
    "options": "Employee",
    "read_only": 1
+  },
+  {
+   "fieldname": "asset_location",
+   "fieldtype": "Select",
+   "label": "Asset Location",
+   "options": "\nNakas 1 ( SD 2 Sebelah Meja HOD)\nNakas 2 ( Ruang Meeting SD 2 )\nGudang ( SD 1 )"
   }
  ],
  "icon": "fa fa-check",
  "image_field": "image",
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-20 15:01:26.502820",
+ "modified": "2023-05-22 10:51:18.307890",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Asset",

@@ -8,7 +8,7 @@
  "hide_custom": 0,
  "icon": "assets",
  "idx": 0,
- "is_hidden": 1,
+ "is_hidden": 0,
  "label": "Assets",
  "links": [
   {
@@ -115,7 +115,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-05-20 20:09:11.471477",
+ "modified": "2023-05-22 10:37:04.439982",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Assets",

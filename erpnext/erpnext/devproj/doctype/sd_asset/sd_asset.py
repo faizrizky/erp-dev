@@ -26,10 +26,10 @@ class SDAsset(Document):
 	def get_status(self):
 		"""Returns status based on whether it is draft, submitted, scrapped or depreciated"""
 
-		if self.custodian == "":
+		if self.custodian == None:
 			status = "Stored"
 
-		elif self.custodian != "":
+		elif self.custodian != None:
 			status = "Borrowed"
 
 		elif self.maintenance_required == 1:

@@ -100,7 +100,7 @@ class SDAssetMovement(Document):
 				current_custodian = frappe.db.get_value("SD Asset", d.asset, "custodian")
 				current_employee = frappe.db.get_value("Employee", current_custodian, "employee_name")
 				print(current_employee)
-				if current_custodian != "" and current_custodian != d.to_employee:
+				if current_custodian != None and current_custodian != d.to_employee:
 					frappe.throw(_("The asset : {0} has been borrowed by the custodian : {1}. Please change in Purpose field to {2} if you want to borrow from another custodian").format(frappe.bold(d.asset),frappe.bold(current_employee),frappe.bold("Transfer")))
 
 				else:
@@ -114,7 +114,7 @@ class SDAssetMovement(Document):
 				current_employee = frappe.db.get_value("Employee", d.from_employee, "employee_name")
 				belongs_to_employee = frappe.db.get_value("Employee", current_custodian, "employee_name")
 
-				if current_custodian != "" and current_custodian != d.from_employee:
+				if current_custodian != None and current_custodian != d.from_employee:
 					frappe.throw(_("The asset : {0} does not belong to the custodian : {1}, it belongs to {2}").format(frappe.bold(d.asset),frappe.bold(current_employee),frappe.bold(belongs_to_employee)))
 
 				else:

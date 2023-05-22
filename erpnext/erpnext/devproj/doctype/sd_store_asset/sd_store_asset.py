@@ -29,5 +29,5 @@ class SDStoreAsset(Document):
 			frappe.throw(_("The asset : {0} does not belong to the custodian : {1}, it belongs to {2}").format(frappe.bold(self.asset_name),frappe.bold(current_employee),frappe.bold(belongs_to_employee)))
 
 		else:
-			frappe.db.set_value('SD Asset', self.asset_name, 'custodian', "")
+			frappe.db.set_value('SD Asset', self.asset_name, 'custodian', None)
 			frappe.db.set_value('SD Asset', self.asset_name, 'status', 'Stored')

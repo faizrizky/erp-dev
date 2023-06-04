@@ -1,0 +1,107 @@
+{
+ "charts": [
+  {
+   "chart_name": "Project Department Report",
+   "label": "Project Department Report"
+  },
+  {
+   "chart_name": "Employee Report Project Chart",
+   "label": "Employee Report Project Chart"
+  },
+  {
+   "chart_name": "Project Summary",
+   "label": "Project Summary"
+  }
+ ],
+ "content": "[{\"id\":\"B6i5MEvYhX\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home</span>\",\"col\":12}},{\"id\":\"b8DB8ZqJty\",\"type\":\"card\",\"data\":{\"card_name\":\"Report\",\"col\":3}},{\"id\":\"nnq5Fwc81h\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Project\",\"col\":4}},{\"id\":\"1UStLCKieY\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"SD Timesheets\",\"col\":5}},{\"id\":\"wfKsBIW6xa\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Department Report\",\"col\":12}},{\"id\":\"o5C4ffZ30B\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Summary\",\"col\":12}},{\"id\":\"sbBrXdjXnG\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Employee Report Project Chart\",\"col\":12}}]",
+ "creation": "2023-01-16 11:09:52.024528",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "image-view",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Home",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report",
+   "link_count": 5,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Department Report",
+   "link_count": 0,
+   "link_to": "Project Department Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Project Report",
+   "link_count": 0,
+   "link_to": "Employee Report Project",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SD Timesheet Report",
+   "link_count": 0,
+   "link_to": "SD Timesheets Format",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Delayed Task Report",
+   "link_count": 0,
+   "link_to": "Delayed Tasks Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Gantt Chart",
+   "link_count": 0,
+   "link_to": "project_gantt",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-06-04 12:57:18.639859",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "Home",
+ "owner": "ikblmul@gmail.com",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Project",
+   "label": "Project"
+  },
+  {
+   "document_type": "SD Timesheets",
+   "label": "SD Timesheets"
+  }
+ ],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [],
+ "title": "Home"
+}

@@ -12,7 +12,7 @@ def execute(filters=None):
 	chart_data = get_chart_data(data)
 	report_summary = get_report_summary(data)
 
-	return columns, data, [chart_data], report_summary
+	return columns, data
 
 
 def get_column():

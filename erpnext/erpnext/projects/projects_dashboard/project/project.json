@@ -4,6 +4,14 @@
   {
    "chart": "Project Summary",
    "width": "Full"
+  },
+  {
+   "chart": "Employee Report Project Chart",
+   "width": "Full"
+  },
+  {
+   "chart": "Project Department Report",
+   "width": "Full"
   }
  ],
  "creation": "2020-07-20 20:17:16.397373",
@@ -13,7 +21,7 @@
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2023-03-27 11:16:35.920716",
+ "modified": "2023-06-04 11:23:37.902032",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Project",

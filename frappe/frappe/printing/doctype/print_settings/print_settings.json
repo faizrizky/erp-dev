@@ -176,7 +176,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-09-17 12:59:14.783694",
+ "modified": "2023-06-04 12:25:39.582335",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Settings",
@@ -193,5 +193,6 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }

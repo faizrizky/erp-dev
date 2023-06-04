@@ -13,6 +13,7 @@ from frappe.utils.nestedset import NestedSet
 from datetime import datetime
 from datetime import timedelta
 from frappe.utils import nowdate
+from frappe import db
 
 
 
@@ -53,6 +54,109 @@ class Task(NestedSet):
 		self.validate_dependencies_for_template_task()
 		self.validate_duration_programmer()
 		self.validate_duration_qa()
+		self.validate_weight()
+
+
+	def validate_weight(self):
+		status_before = frappe.db.get_value("Task", self.name, "status")
+		if len(self.sub_task) > 0 :
+
+			for d in self.sub_task:
+				employee_name = frappe.db.get_value("Employee", d.employee_name, "employee_name")
+				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
+				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
+				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
+
+				# print("BRANCH : ",branch)
+				# print("COMPLETION : ",d.completion)
+				print("status before : ", status_before)
+				print("status : ", self.status)
+				print(employee_name," ",branch)
+
+
+
+				if d.completion == 1 and self.status == "Completed":
+					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status)
+
+					update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status)
+					# update_employee_weight(checker_name,self.project,d.qa_weight,branch,self.qa_total_day,d.subject)
+
+
+				if status_before == "Completed" and self.status != "Completed":
+					update_employee_weight(employee_name,self.project,-d.weight,branch, -int(self.programmer_total_day),d.subject,self.name,len(self.sub_task),self.status)
+					update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, -int(self.qa_total_day),d.subject,self.name,len(self.sub_task),self.status)		
+
+		else:
+			subject = frappe.db.get_value('Task', self.name, '_assign')
+
+
+			result = json.loads(subject)
+			for emp in result:
+				emp_name = frappe.db.get_value('User', emp, 'full_name')
+				branch = frappe.db.get_value("User", emp, "role")
+				print(emp_name," ",branch)
+
+				if self.status == "Completed":
+
+					if branch == "Quality Assurance":
+						update_employee_weight(emp_name,self.project,self.task_weight,branch_checker, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status)
+					else:
+						update_employee_weight(emp_name,self.project,self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status)
+
+				if status_before == "Completed" and self.status != "Completed":
+
+					if branch == "Quality Assurance":
+						update_employee_weight(emp_name,self.project,-self.task_weight,branch_checker, -int(self.qa_total_day),self.name,self.name,len(self.sub_task),self.status)
+					else:
+						update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.programmer_total_day),self.name,self.name,len(self.sub_task),self.status)
+
+
+
+
+
+					# update_employee_weight(emp_name,self.project,-self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status)
+					# update_employee_weight(emp_name,self.project,-self.task_weight,branch, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status)
+
+
+			# query = """
+			# 		SELECT _assign FROM `tabTask` WHERE tabTask.name = %(task_name)s
+			# 		"""
+
+			# # Execute the query with parameters
+			# task_name = self.name
+			# results = []
+			# # frappe.db.sql(query, {"task_name": task_name}, as_dict=True, callback=lambda row: results.append(row))
+			# query_results = frappe.db.sql(query, {"task_name": task_name}, as_dict=True)
+
+			# for row in query_results:
+			# 	print(row)
+			# 	results.append(row)
+			# # print(results)
+
+			# # Process the results
+			# if results:
+			# 	first_row = results[0]
+			# 	print(first_row)
+			# 	# if assign_array:
+
+       			# 	 print(", ".join(str(element) for element in assign_array))
+
+		# employee_name_query = """
+		# 	SELECT employee_name FROM `tabEmployee` WHERE tabEmployee.user_id = %(employee_name)s
+		# 	"""
+		# employee_name = row._assign
+		# results = frappe.db.sql(employee_name_query, {"employee_name": employee_name}, as_dict=True)
+		# print(results)
+		# employee_name = frappe.db.get_value("Employee", d.employee_name, "employee_name")
+		# print(employee_name)
+		# checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
+		# branch = frappe.db.get_value("Employee", d.employee_name, "branch")
+		# if self.status == "Completed":
+		# 	update_employee_weight(employee_name,self.project,self.task_weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task))
+
+		# 	update_employee_weight(checker_name,self.project,d.qa_weight,branch, self.qa_total_day,d.subject,self.name,len(self.sub_task))
+
+
 
 	def validate_dates(self):
 		if (
@@ -583,7 +687,7 @@ class Task(NestedSet):
 		self.check_recursion()
 		self.reschedule_dependent_tasks()
 		self.update_project()
-		self.unassign_todo()
+		# self.unassign_todo()
 		self.populate_depends_on()
 
 	def unassign_todo(self):
@@ -668,6 +772,7 @@ class Task(NestedSet):
 			return True
 
 	def populate_depends_on(self):
+
 		if self.parent_task:
 			parent = frappe.get_doc("Task", self.parent_task)
 			if self.name not in [row.task for row in parent.depends_on]:
@@ -690,7 +795,6 @@ class Task(NestedSet):
 					)
 					parent.save()
 
-
 		# if self.ongoing_sprint:
 		# 	# frappe.db.set_value("DocType", docname, "fieldname", value_to_set)
 		# 	# parent = frappe.db.get_value("Event", {"ongoing_sprint": parent})
@@ -698,12 +802,12 @@ class Task(NestedSet):
 		# 	print(parent)
 		# parent.append(
 		# 		"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
-            #             )
+                #             )
 		# parent.save()
 		# if self.name not in [row.sprint_id for row in multi_issue_value.multi_sprint]:
 		# self.ongoing_sprint.append(
 		# 		"multi_sprint", {"doctype": "Assignment Sprint", "sprint_id": self.name}
-            #             )
+                #             )
 		# self.ongoing_sprint.save()
 
 
@@ -926,3 +1030,195 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 			_("Task's {0} End Date cannot be after Project's End Date.").format(actual_or_expected_date)
 		)
 
+def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status):
+	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch)
+	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
+
+	if not frappe.db.exists({"doctype": "SD Data Report", "employee_name": employee_name, "project_name": project}):
+		print("blm ada")
+		user.db_insert()
+
+	print("udah ada")
+	weights, name, tot= frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name','total_days'])
+	user.name = name
+	user.branch = branch
+	# print("NAME : ",user.employee_name)
+	# print("POSITION : ",user.branch)
+	# user.total_days = total_day
+
+	parent = frappe.get_doc("SD Data Report", user.name)
+	if int(has_sub_task) > 0:
+		if status == "Completed" :
+			user.weight = weights + weight
+			user.total_days = tot + int(total_day)
+			if task_item.task_name not in [row.task_name for row in parent.task]:
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_item.task_name,"task_weight":weight,"days":total_day}
+														)
+				parent.save()
+				user.db_update()
+
+		elif status != "Completed":
+			user.weight = weights + weight
+			user.total_days = tot + int(total_day)
+			item_to_remove = task_item.task_name
+
+			if any(row.task_name == item_to_remove for row in parent.task):
+				parent.task = [row for row in parent.task if row.task_name != item_to_remove]
+				parent.save()
+
+			parent.save()
+
+			user.db_update()
+	else:
+		if status == "Completed" :
+			user.weight = weights + weight
+			user.total_days = tot + int(total_day)
+			if task_name not in [row.task_name for row in parent.task]:
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day}
+														)
+				parent.save()
+				user.db_update()
+
+		elif status != "Completed":
+			user.weight = weights + weight
+			user.total_days = tot + int(total_day)
+			item_to_remove = task_item.task_name
+			print("ITEM TO REMOVE : ",item_to_remove)
+
+			if any(row.task_name == item_to_remove for row in parent.task):
+				parent.task = [row for row in parent.task if row.task_name != item_to_remove]
+				parent.save()
+
+			parent.save()
+
+			user.db_update()
+		# user.save()
+	# else:
+	# 	print("blm ada")
+
+	# 	print(user.name)
+	# 	user.db_insert()
+
+
+	# 	weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
+	# 	# print(user.weight)
+
+	# 	user.name = name
+	# 	user.branch = branch
+	# 	user.total_days = total_day
+	# 	user.weight = weight
+	# 	parent = frappe.get_doc("SD Data Report", user.name)
+
+	# 	if int(has_sub_task) > 0:
+	# 		if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
+	# 			# user.weight = weights + weight
+	# 			parent.append(
+	# 									"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
+	# 													)
+	# 			parent.save()
+	# 			user.db_update()
+	# 	else:
+	# 		if task_item.task_name not in [row.task_name for row in parent.task]:
+	# 			# user.weight = weights + weight
+	# 			parent.append(
+	# 									"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
+	# 													)
+	# 			parent.save()
+
+
+	# 			user.db_update()
+
+
+def update_employee_weight2(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status):
+	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch, total_days=total_day)
+	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
+
+	print("PROJECT NAME : ", user.project_name)
+	# print(task_item)
+	# project = frappe.get_doc({"doctype":"SD Data Report", "employee_name":employee_name, "project":project})
+	if frappe.db.exists({"doctype": "SD Data Report", "employee_name": employee_name, "project_name": project}):
+		print("udah ada")
+		weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
+		user.name = name
+		user.branch = branch
+		user.total_days = total_day
+
+		parent = frappe.get_doc("SD Data Report", user.name)
+		if int(has_sub_task) > 0:
+			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
+				user.weight = weights + weight
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
+														)
+				parent.save()
+				user.db_update()
+
+			elif status != "Completed":
+				user.weight = weights + weight
+				item_to_remove = task_name + " - " + task_item.task_name
+
+				if any(row.task_name == item_to_remove for row in parent.task):
+					parent.task = [row for row in parent.task if row.task_name != item_to_remove]
+					parent.save()
+
+				parent.save()
+
+				user.db_update()
+		else:
+			if task_name not in [row.task_name for row in parent.task]:
+				user.weight = weights + weight
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
+														)
+				parent.save()
+				user.db_update()
+
+			elif status != "Completed":
+				user.weight = weights + weight
+				item_to_remove = task_item.task_name
+				print("ITEM TO REMOVE : ",item_to_remove)
+
+				if any(row.task_name == item_to_remove for row in parent.task):
+					parent.task = [row for row in parent.task if row.task_name != item_to_remove]
+					parent.save()
+
+				parent.save()
+
+				user.db_update()
+		# user.save()
+	else:
+		print("blm ada")
+
+		print(user.name)
+		user.db_insert()
+
+
+		weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
+		# print(user.weight)
+
+		user.name = name
+		user.branch = branch
+		user.total_days = total_day
+		user.weight = weight
+		parent = frappe.get_doc("SD Data Report", user.name)
+
+		if int(has_sub_task) > 0:
+			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
+				# user.weight = weights + weight
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
+														)
+				parent.save()
+				user.db_update()
+		else:
+			if task_item.task_name not in [row.task_name for row in parent.task]:
+				# user.weight = weights + weight
+				parent.append(
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
+														)
+				parent.save()
+
+
+				user.db_update()

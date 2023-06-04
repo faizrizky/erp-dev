@@ -13,7 +13,7 @@ frappe.query_reports["Employee Report Project"] = {
 			reqd: 0
 		},
 		{
-			fieldname: "team",
+			fieldname: "branch",
 			label: __("Position"),
 			fieldtype: "Link",
 			options: "Branch",

@@ -11,6 +11,7 @@ frappe.ui.get_print_settings = function (pdf, callback, letter_head, pick_column
 			fieldtype: "Check",
 			fieldname: "with_letter_head",
 			label: __("With Letter head"),
+			default: 1,
 		},
 		{
 			fieldtype: "Select",

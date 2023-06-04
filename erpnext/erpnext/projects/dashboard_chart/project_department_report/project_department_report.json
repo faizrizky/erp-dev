@@ -1,0 +1,34 @@
+{
+ "chart_name": "Project Department Report",
+ "chart_type": "Report",
+ "creation": "2023-06-04 11:23:25.961008",
+ "custom_options": "{\"type\": \"bar\", \"colors\": [\"#e24c4c\", \"#8ccf54\", \"#1673c5\"], \"barOptions\": {\"stacked\": true}, \"axisOptions\": {\"shortenYAxisNumbers\": 1}, \"height\": 280}",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "filters_json": "{}",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 0,
+ "is_standard": 1,
+ "modified": "2023-06-04 11:33:01.524055",
+ "modified_by": "Administrator",
+ "module": "Projects",
+ "name": "Project Department Report",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "Project Department Report",
+ "roles": [
+  {
+   "role": "Chief Technology Officer"
+  },
+  {
+   "role": "Leader Software Developer"
+  }
+ ],
+ "time_interval": "Yearly",
+ "timeseries": 0,
+ "timespan": "Last Year",
+ "type": "Bar",
+ "use_report_chart": 1,
+ "y_axis": []
+}

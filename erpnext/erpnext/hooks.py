@@ -383,16 +383,6 @@ scheduler_events = {
 			"erpnext.stock.reorder_item.reorder_item",
 		],
 
-		"* * * * * *": [
-			"erpnext.projects.doctype.task.task.validate_sprint"
-		],
-
-		"0 1 * * 1":[
-			"erpnext.projects.doctype.task.task.validate_sprint"
-		],
-		"0 18 * * *":[
-			"erpnext.projects.doctype.task.task.validate_sprint"
-		]
 	},
 	"all": [
 		"erpnext.projects.doctype.project.project.project_status_update_reminder",
@@ -431,15 +421,15 @@ scheduler_events = {
 		"erpnext.buying.doctype.supplier_quotation.supplier_quotation.set_expired_status",
 		"erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.send_auto_email",
 	],
-	"weekly": [
-		"erpnext.projects.doctype.task.task.validate_sprint",
-	],
 	"daily_long": [
 		"erpnext.setup.doctype.email_digest.email_digest.send",
 		"erpnext.manufacturing.doctype.bom_update_tool.bom_update_tool.auto_update_latest_price_in_all_boms",
 		"erpnext.loan_management.doctype.process_loan_security_shortfall.process_loan_security_shortfall.create_process_loan_security_shortfall",
 		"erpnext.loan_management.doctype.process_loan_interest_accrual.process_loan_interest_accrual.process_loan_interest_accrual_for_term_loans",
 		"erpnext.crm.utils.open_leads_opportunities_based_on_todays_event",
+	],
+	"weekly_long": [
+		"erpnext.projects.doctype.task.task.validate_sprint",
 	],
 	"monthly_long": [
 		"erpnext.accounts.deferred_revenue.process_deferred_accounting",

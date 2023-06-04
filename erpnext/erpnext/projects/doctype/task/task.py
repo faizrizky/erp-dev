@@ -75,7 +75,7 @@ class Task(NestedSet):
 
 
 
-				if d.completion == 1 and self.status == "Completed":
+				if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
 					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status)
 
 					update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status)
@@ -215,6 +215,7 @@ class Task(NestedSet):
 
 	def validate_sub_task(self):
 		arr = []
+		arr_qa = []
 		check_val = dict([])
 		has_error = []
 
@@ -230,22 +231,35 @@ class Task(NestedSet):
 
 					jumlah_total_elemen = len(self.sub_task)
 
-					jumlah_elemen_memenuhi_kondisi = sum(1 for x in self.sub_task if d.completion == True)
-					sub_task_percentage = (jumlah_elemen_memenuhi_kondisi / jumlah_total_elemen) * 100
+					programmer_condition = sum(1 for x in self.sub_task if d.completion == True)
+					sub_task_percentage_programmer = (programmer_condition / jumlah_total_elemen) * 100
 
-					if sub_task_percentage == 100:
-						arr.append(sub_task_percentage)
+					qa_condition = sum(1 for x in self.sub_task if d.qa_completion == True)
+					sub_task_percentage_qa = (qa_condition / jumlah_total_elemen) * 100
 
-					print(sub_task_percentage)
-					count_true = len(arr)
+					if sub_task_percentage_programmer == 100:
+						arr.append(sub_task_percentage_programmer)
+
+					if sub_task_percentage_qa == 100:
+						arr_qa.append(sub_task_percentage_qa)
+
+					# print(sub_task_percentage)
+					count_true_programmer = len(arr)
+					count_true_qa = len(arr_qa)
 				else:
 					has_error.append(d.subject)
 
 			if len(has_error) > 0 : 
 				frappe.throw(_("{0} name in {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
-			percentage = (count_true / len(self.sub_task)) * 100
-			self.individual_progress = percentage
-			print("Total Percentage : "+ str(percentage))
+
+			percentage_programmer = (count_true_programmer / len(self.sub_task)) * 100
+			percentage_qa = (count_true_qa / len(self.sub_task)) * 100
+
+			self.individual_progress = percentage_programmer
+			self.qa_progress = percentage_qa
+
+			# print("Total Percentage : "+ str(percentage))
+
 		else:
 			print("Manual Percentage")
 
@@ -488,10 +502,15 @@ class Task(NestedSet):
 		if flt(self.progress or 0) > 100:
 			frappe.throw(_("Progress % for a task cannot be more than 100."))
 
-		if flt(self.individual_progress or 0) > 100:
+		if flt(self.individual_progress or 0) > 100 or flt(self.individual_progress) < 0:
 			# frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
-			frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{1}'")
-				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%")))
+			frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{2}' or less than "+ "'{3}'")
+				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%"),frappe.bold("0%")))
+
+		if flt(self.qa_progress or 0) > 100 or flt(self.qa_progress) < 0:
+			# frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+			frappe.throw(_("Your QA Task Progress is {0}. QA Task Progress {1} for a task cannot be more than "+ "'{2}' or less than "+ "'{3}'")
+				.format(frappe.bold(f'{self.qa_progress} %'),frappe.bold("%"),frappe.bold("100%"),frappe.bold("0%")))
 
 		if self.status == "Open":
 
@@ -502,8 +521,12 @@ class Task(NestedSet):
 
 		if self.status == "Completed":
 			if flt(self.individual_progress or 0) < 100:			
-				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+
+			elif flt(self.qa_progress or 0) < 100:			
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
 				if self.is_group != True:
 					self.progress = 100
@@ -521,7 +544,7 @@ class Task(NestedSet):
 		if self.status == "Pending Review":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
 				self.progress = 50
@@ -529,7 +552,7 @@ class Task(NestedSet):
 		if self.status == "QA Open":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
 				self.progress = 50
@@ -544,7 +567,7 @@ class Task(NestedSet):
 		if self.status == "QA Testing":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
 			else:
 				self.progress = 60
@@ -555,8 +578,11 @@ class Task(NestedSet):
 		if self.status == "Integration":
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
-				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			elif flt(self.qa_progress or 0) < 100:			
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
 				self.progress = 80
 
@@ -569,6 +595,9 @@ class Task(NestedSet):
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
 				frappe.throw(_("Your {0} is {1}. Please check your Individual Progress field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
+			elif flt(self.qa_progress or 0) < 100:			
+				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
+				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
 				if self.is_group != True:
 					self.progress = 90

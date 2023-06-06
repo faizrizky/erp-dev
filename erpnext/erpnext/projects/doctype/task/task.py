@@ -58,14 +58,25 @@ class Task(NestedSet):
 
 
 	def validate_weight(self):
+
 		status_before = frappe.db.get_value("Task", self.name, "status")
 		if len(self.sub_task) > 0 :
 
 			for d in self.sub_task:
+
+				print("CHECKER NAME iS : ", d.checker_name)
+
+				if flt(d.weight) > 4 or flt(d.weight) < 1:
+					frappe.throw(_("Please set {0} value between {1}")
+							.format(frappe.bold("Sub Task Weight"), frappe.bold("1 to 4")))
+
+
 				employee_name = frappe.db.get_value("Employee", d.employee_name, "employee_name")
 				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
 				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
+
+				# print("INI BRANCH CHECKER : ",branch_checker)
 
 				# print("BRANCH : ",branch)
 				# print("COMPLETION : ",d.completion)
@@ -75,40 +86,58 @@ class Task(NestedSet):
 
 
 
-				if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
-					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status)
+				# if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
+				if d.completion == 1 and self.status == "Completed":
+					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
-					update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status)
+					if d.checker_name is not None :
+						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+							frappe.throw(_("Please set {0} value between {1}")
+										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+
+						update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
 					# update_employee_weight(checker_name,self.project,d.qa_weight,branch,self.qa_total_day,d.subject)
 
 
 				if status_before == "Completed" and self.status != "Completed":
-					update_employee_weight(employee_name,self.project,-d.weight,branch, -int(self.programmer_total_day),d.subject,self.name,len(self.sub_task),self.status)
-					update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, -int(self.qa_total_day),d.subject,self.name,len(self.sub_task),self.status)		
+					update_employee_weight(employee_name,self.project,-d.weight,branch, -int(self.programmer_total_day),d.subject,self.name,len(self.sub_task),self.status,self.is_group)
+
+					if d.checker_name is not None :
+						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+							frappe.throw(_("Please set {0} value between {1}")
+										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+
+						update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, -int(self.qa_total_day),d.subject,self.name,len(self.sub_task),self.status,self.is_group)		
 
 		else:
+
+			if flt(self.task_weight) > 4 or flt(self.task_weight) < 1:
+				frappe.throw(_("Please set {0} value between {1}")
+					.format(frappe.bold("Task Weight"), frappe.bold("1 to 4")))
+
 			subject = frappe.db.get_value('Task', self.name, '_assign')
+			if subject is not None:
+				result = json.loads(subject)
+				for emp in result:
+					emp_name = frappe.db.get_value('User', emp, 'full_name')
+					branch = frappe.db.get_value("User", emp, "role")
+					# print("INI BRANCH : ", branch)
 
+					print(emp_name," ",branch)
 
-			result = json.loads(subject)
-			for emp in result:
-				emp_name = frappe.db.get_value('User', emp, 'full_name')
-				branch = frappe.db.get_value("User", emp, "role")
-				print(emp_name," ",branch)
+					if self.status == "Completed":
 
-				if self.status == "Completed":
+						if branch == "Quality Assurance":
+							update_employee_weight(emp_name,self.project,self.task_weight,branch, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status,self.is_group)
+						else:
+							update_employee_weight(emp_name,self.project,self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
-					if branch == "Quality Assurance":
-						update_employee_weight(emp_name,self.project,self.task_weight,branch_checker, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status)
-					else:
-						update_employee_weight(emp_name,self.project,self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status)
+					if status_before == "Completed" and self.status != "Completed":
 
-				if status_before == "Completed" and self.status != "Completed":
-
-					if branch == "Quality Assurance":
-						update_employee_weight(emp_name,self.project,-self.task_weight,branch_checker, -int(self.qa_total_day),self.name,self.name,len(self.sub_task),self.status)
-					else:
-						update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.programmer_total_day),self.name,self.name,len(self.sub_task),self.status)
+						if branch == "Quality Assurance":
+							update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.qa_total_day),self.name,self.name,len(self.sub_task),self.status,self.is_group)
+						else:
+							update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.programmer_total_day),self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
 
 
@@ -214,6 +243,10 @@ class Task(NestedSet):
 	# 		doc.read_only = 1
 
 	def validate_sub_task(self):
+
+		if self.is_group == 1 and len(self.sub_task) > 0 :
+			frappe.throw(_("{0} cannot have {1}")
+							.format(frappe.bold("Parent Task"), frappe.bold("Sub Task")))
 		arr = []
 		arr_qa = []
 		check_val = dict([])
@@ -576,11 +609,14 @@ class Task(NestedSet):
 					self.qa_testing_date = getdate(today()) + timedelta(days=10)
 
 		if self.status == "Integration":
+			checker_name_list = [x for x in self.sub_task if x.checker_name is not ""]
+			jumlah_total_elemen_checker_name = len(checker_name_list)	
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
-			elif flt(self.qa_progress or 0) < 100:			
+
+			elif flt(self.qa_progress or 0) < 100 and len(self.sub_task) > 0 and jumlah_total_elemen_checker_name > 0:		
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
@@ -617,9 +653,7 @@ class Task(NestedSet):
 
 		self.progress = str(self.progress).split('.')[0]
 
-		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-			frappe.throw(_("Please set {0} value between {1}")
-					.format(frappe.bold("Weight"), frappe.bold("1 to 10")))
+
 
 		# if (self.is_group != True and self.status != "Open"):
 		# 	if self.priority == "Low":
@@ -1059,8 +1093,9 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 			_("Task's {0} End Date cannot be after Project's End Date.").format(actual_or_expected_date)
 		)
 
-def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status):
-	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch)
+def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status,is_parent):
+	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch,is_parent = is_parent)
+
 	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
 
 	if not frappe.db.exists({"doctype": "SD Data Report", "employee_name": employee_name, "project_name": project}):
@@ -1080,9 +1115,9 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 		if status == "Completed" :
 			user.weight = weights + weight
 			user.total_days = tot + int(total_day)
-			if task_item.task_name not in [row.task_name for row in parent.task]:
+			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_item.task_name,"task_weight":weight,"days":total_day}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent}
 														)
 				parent.save()
 				user.db_update()
@@ -1090,11 +1125,17 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 		elif status != "Completed":
 			user.weight = weights + weight
 			user.total_days = tot + int(total_day)
-			item_to_remove = task_item.task_name
+			item_to_remove = task_name + " - " + task_item.task_name
+			item_to_remove_parent = task_name
+
+			print("PARENT TASK NAME : ", item_to_remove_parent)
 
 			if any(row.task_name == item_to_remove for row in parent.task):
-				parent.task = [row for row in parent.task if row.task_name != item_to_remove]
+				parent.task = [row for row in parent.task if row.task_name != item_to_remove and row.task_name != item_to_remove_parent]
 				parent.save()
+
+			# if any(row.task_name+ " - " +task_item.task_name == item_to_remove_parent for row in parent.task):
+			# 	parent.save()
 
 			parent.save()
 
@@ -1105,7 +1146,7 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 			user.total_days = tot + int(total_day)
 			if task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent}
 														)
 				parent.save()
 				user.db_update()

@@ -609,7 +609,7 @@ class Task(NestedSet):
 					self.qa_testing_date = getdate(today()) + timedelta(days=10)
 
 		if self.status == "Integration":
-			checker_name_list = [x for x in self.sub_task if x.checker_name is not ""]
+			checker_name_list = [x for x in self.sub_task if x.checker_name != ""]
 			jumlah_total_elemen_checker_name = len(checker_name_list)	
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))

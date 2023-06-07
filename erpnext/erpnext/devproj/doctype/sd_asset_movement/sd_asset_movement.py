@@ -7,10 +7,12 @@ from frappe import _
 from frappe.model.document import Document
 
 class SDAssetMovement(Document):
+	def before_submit(self) : 
+		self.validate_employee()
+
 	def validate(self):
 		self.validate_asset()
 		# self.validate_location()
-		self.validate_employee()
 
 	def validate_asset(self):
 		has_missing = []

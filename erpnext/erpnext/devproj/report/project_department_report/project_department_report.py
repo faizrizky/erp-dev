@@ -252,7 +252,7 @@ def get_chart_data(data):
         "data": {
             "labels": labels[:30],
             "datasets": [
-                {"name": "Overdue", "values": overdue[:30]},
+                {"name": "Uncompleted", "values": overdue[:30]},
                 {"name": "Completed", "values": completed[:30]},
                 {"name": "Total Tasks", "values": total[:30]},
             ],
@@ -301,7 +301,7 @@ def get_report_summary(data, sum_task_completion):
         {
             "value": total_overdue,
             "indicator": "Green" if total_overdue == 0 else "Red",
-            "label": _("Overdue Tasks"),
+            "label": _("Uncompleted Tasks"),
             "datatype": "Int",
         },
     ]

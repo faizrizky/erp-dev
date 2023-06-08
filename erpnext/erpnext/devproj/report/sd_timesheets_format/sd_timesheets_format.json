@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{}",
  "letter_head": "Falah Letter Head",
- "modified": "2023-05-12 17:21:57.698681",
+ "modified": "2023-06-08 16:39:48.632633",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets Format",
@@ -21,21 +21,6 @@
  "report_name": "SD Timesheets Format",
  "report_type": "Script Report",
  "roles": [
-  {
-   "role": "Accounts User"
-  },
-  {
-   "role": "Projects User"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "Manufacturing User"
-  },
-  {
-   "role": "Technical Architect Software Developer"
-  },
   {
    "role": "Leader Software Developer"
   },

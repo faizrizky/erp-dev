@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.desk.reportview import build_match_conditions
+import json
 
 
 def execute(filters=None):
@@ -11,14 +12,15 @@ def execute(filters=None):
 	data = get_data(filters)
 	chart_data = get_chart_data(data)
 	report_summary = get_report_summary(data)
+	# print(json.dumps(chart_data,  sort_keys=True, indent=4))
 
-	return columns, data
+	return columns, data, None, chart_data,report_summary
 
 
 def get_column():
 	return [
 		{"fieldname": "employee_name", "fieldtype": "", "label": _("User"),"height":150, "width": 200},
-		{"fieldname": "branch", "fieldtype": "", "label": _("Team"),"height":150, "width": 150,"align": "left"},
+		{"fieldname": "branch", "fieldtype": "", "label": _("Team"),"height":150, "width": 320,"align": "left"},
 		{"fieldname": "task_name", "fieldtype": "", "label": _("Task (Days)"),"height":500, "width": 350},
 		{"fieldname": "task_taken", "fieldtype": "", "label": _("Task Taken")},
 		{"fieldname": "total_weight", "fieldtype": "", "label": _("Total Weight"), "width": 120,"height":150},
@@ -53,7 +55,10 @@ def get_data(filters):
 				task_days = str(child.days)
 				total_days += child.days
 				total_weight += child.task_weight
-				concatenated_str += "<li>" + task_name + " ( " + task_days + " Days ) " + "<br />"
+				if child.is_parent == 0:
+					concatenated_str += "<li>" + task_name + " ( " + task_days + " Days ) " + "<br />"
+				else:
+					concatenated_str += "<li>" + task_name + " - Integration" +" ( " + task_days + " Days ) " + "<br />"
 
 			data.append({
 				"total_weight": row.total_weight,
@@ -72,47 +77,56 @@ def get_data(filters):
 
 def get_chart_data(data):
 	labels = []
-	total_tasks = []
-	completed_tasks = []
-	overdue_tasks = []
+	task_taken = []
+	total_weight = []
+	total_days = []
+	# overdue_tasks = []
 
 	for project in data:
 		labels.append(project["branch"])
-		total_tasks.append(project["task_taken"])
-		completed_tasks.append(project["total_days"])
-		overdue_tasks.append(project["task_taken"] - project["total_days"])
+		task_taken.append(project["task_taken"])
+		total_weight.append(project["total_weight"])
+		total_days.append(project["total_days"])
+		# overdue_tasks.append(project["task_taken"] - project["total_days"])
 
 	return {
 		"data": {
 			"labels": labels[:30],
 			"datasets": [
-				{"name": "Overdue", "values": overdue_tasks[:30]},
-				{"name": "Completed", "values": completed_tasks[:30]},
-				{"name": "Total Tasks", "values": total_tasks[:30]},
+				{"name": "Task Taken", "values": task_taken[:30]},
+				{"name": "Total Weight", "values": total_weight[:30]},
+				{"name": "Total Days", "values": total_days[:30]},
 			],
 		},
 		"type": "bar",
-		"colors": ["#e24c4c", "#8ccf54", "#1673c5"],
-		"barOptions": {"stacked": True},
+		"colors": ["#8ccf54", "#1673c5","#78d6ff"],
+		"barOptions": {"stacked": False},
 	}
 
 
 def get_report_summary(data):
 	if not data:
 		return None
+	total_task_taken = sum(row["task_taken"] for row in data)
 	total_weight = sum(row["total_weight"] for row in data)
 	total_days = sum(row["total_days"] for row in data)
 	return [
 		{
-			"value": total_weight,
+			"value": total_task_taken,
 			"indicator": "Green",
-			"label": _("Completed Tasks"),
+			"label": _("Total Task Taken"),
+			"datatype": "Int",
+		},
+		{
+			"value": total_weight,
+			"indicator": "Blue",
+			"label": _("Total Weight"),
 			"datatype": "Int",
 		},
 		{
 			"value": total_days,
-			"indicator": "Green" if total_days == 0 else "Red",
-			"label": _("Overdue Tasks"),
+			"indicator": "Blue",
+			"label": _("Total Days"),
 			"datatype": "Int",
 		},
 	]

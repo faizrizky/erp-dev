@@ -145,6 +145,9 @@ def execute(filters=None):
     print(chart)
     report_summary = get_report_summary(filtered_data,sum_task_completion)
 
+    print(json.dumps(chart,  sort_keys=True, indent=4))
+
+
 
     return columns, filtered_data, task_count_by_branch,chart, report_summary
 
@@ -259,7 +262,7 @@ def get_chart_data(data):
         },
         "type": "bar",
         "colors": ["#e24c4c", "#8ccf54", "#1673c5"],
-        "barOptions": {"stacked": True},
+        "barOptions": {"stacked": False},
     }
 
 

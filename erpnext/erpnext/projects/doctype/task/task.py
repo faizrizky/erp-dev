@@ -606,7 +606,7 @@ class Task(NestedSet):
 				self.progress = 60
 
 				if self.qa_testing_date is None:
-					self.qa_testing_date = getdate(today()) + timedelta(days=10)
+					self.qa_testing_date = getdate(today())
 
 		if self.status == "Integration":
 			checker_name_list = [x for x in self.sub_task if x.checker_name != ""]

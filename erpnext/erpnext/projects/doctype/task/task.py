@@ -884,7 +884,7 @@ class Task(NestedSet):
 		self.update_project()
 
 	def update_status(self):
-		if self.status not in ("Cancelled", "Completed", "QA Open", "QA Integration") and self.exp_end_date:
+		if self.status not in ("Cancelled", "Completed", "QA Open", "Integration", "Parent Task", "Backlog") and self.exp_end_date:
 			from datetime import datetime
 
 			if self.exp_end_date + timedelta(days=3) < datetime.now().date():

@@ -31,6 +31,7 @@ class SDIssue(Document):
 
 	def on_update(self):
 		# Add a communication in the issue timeline
+		self.validate_status_taken()
 		self.populate_depends_on()
 		if self.flags.create_communication and self.via_customer_portal:
 			self.create_communication()
@@ -53,7 +54,33 @@ class SDIssue(Document):
 				if row.issue_id == self.name:
 					row.delete()
 
+	def validate_status_taken(self):
+		# subject = frappe.db.get_value('SD Issue', self.name, '_assign')
+		subject = frappe.db.get_value('Task', self.task_issue, '_assign')
+		print("ASSIGNED TASK PERSONEL :", subject)
+		personel = []
+		if subject is not None:
+			result = json.loads(subject)
+			for emp in result:
+				# emp_name = frappe.db.get_value('User', emp, 'full_name')
+				branch = frappe.db.get_value("User", emp, "role")
+				# print(emp)
+				personel.append(emp)
 
+			if frappe.session.user in personel:
+				print("INI SAYA", branch)
+				print("STATUS : ",self.status)
+				if self.status == "Open" or self.status == "Closed":
+					frappe.throw(_("This is You"))
+				else:
+					frappe.throw(_("You are QA"))
+
+			else:
+				frappe.throw(_("You are not able to edit this document because you are not assigned to this issue"))
+
+				# .format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+				# print("Employee Name : ",emp_name)
+				# print("Branch Name : ",branch)
 
 	def set_lead_contact(self, email_id):
 		import email.utils

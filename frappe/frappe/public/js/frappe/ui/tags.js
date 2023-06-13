@@ -45,10 +45,16 @@ frappe.ui.Tags = class {
 			this.deactivate();
 		});
 
-		this.$placeholder.on("click", () => {
-			this.activate();
-			this.$input.focus(); // focus only when clicked
-		});
+
+
+		if (frappe.user.has_role('Software Developer') != 1)
+			this.$placeholder.on("click", () => {
+				this.activate();
+				this.$input.focus(); // focus only when clicked
+			});
+
+		else this.$placeholder.html("")
+
 	}
 
 	boot() {
@@ -103,6 +109,10 @@ frappe.ui.Tags = class {
 			this.removeTag(target);
 			pill_wrapper.closest(".form-tag-row").remove();
 		});
+
+		if (frappe.user.has_role('Software Developer') == 1)
+			$tag.find('.remove-btn').remove();
+
 
 		if (this.onTagClick) {
 			$tag.on("click", ".pill-label", () => {

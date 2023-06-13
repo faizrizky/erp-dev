@@ -11,8 +11,15 @@ frappe.ui.form.Attachments = class Attachments {
 		this.parent.find(".add-attachment-btn").click(function () {
 			me.new_attachment();
 		});
+
 		this.add_attachment_wrapper = this.parent.find(".add-attachment-btn");
 		this.attachments_label = this.parent.find(".attachments-label");
+
+		if (frappe.user.has_role('Software Developer') == 1) {
+			this.parent.remove();
+			this.attachments_label.remove();
+		}
+
 	}
 	max_reached(raise_exception = false) {
 		const attachment_count = Object.keys(this.get_attachments()).length;

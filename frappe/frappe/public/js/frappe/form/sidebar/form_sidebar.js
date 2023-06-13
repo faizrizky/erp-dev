@@ -251,7 +251,7 @@ frappe.ui.form.Sidebar = class {
 		this.comments.find(".comments-count").html(count);
 	}
 
-	refresh_image() {}
+	refresh_image() { }
 
 	make_review() {
 		const review_wrapper = this.sidebar.find(".form-reviews");

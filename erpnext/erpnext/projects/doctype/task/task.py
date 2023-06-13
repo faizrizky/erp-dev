@@ -893,7 +893,7 @@ class Task(NestedSet):
 
 
 
-@frappe.whitelist()
+# @frappe.whitelist()
 def validate_sprint():
 
 	event = frappe.db.get_list('Event', pluck='name',

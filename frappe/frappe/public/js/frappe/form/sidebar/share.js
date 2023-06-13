@@ -5,6 +5,8 @@ frappe.ui.form.Share = class Share {
 	constructor(opts) {
 		$.extend(this, opts);
 		this.shares = this.parent.find(".shares");
+		if (frappe.user.has_role('Software Developer') == 1)
+			this.parent.remove();
 	}
 	refresh() {
 		this.render_sidebar();

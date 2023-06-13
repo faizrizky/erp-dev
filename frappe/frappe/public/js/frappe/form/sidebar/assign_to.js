@@ -6,8 +6,13 @@ var arrUser = []
 frappe.ui.form.AssignTo = class AssignTo {
 	constructor(opts) {
 		$.extend(this, opts);
+
 		this.btn = this.parent.find(".add-assignment-btn").on("click", () => this.add());
 		this.btn_wrapper = this.btn.parent();
+
+		if (frappe.user.has_role('Software Developer') == 1)
+			this.parent.find(".add-assignment-btn").remove();
+
 
 		this.refresh();
 	}
@@ -48,6 +53,8 @@ frappe.ui.form.AssignTo = class AssignTo {
 	}
 	add() {
 		var me = this;
+
+		// frappe.throw("you not allowed");
 
 		if (this.frm.is_new()) {
 			frappe.throw(__("Please save the document before assignment"));
@@ -1020,11 +1027,13 @@ frappe.ui.form.AssignmentDialog = class {
 	}
 
 	make() {
-		this.dialog = new frappe.ui.Dialog({
-			title: __("Assignments"),
-			size: "small",
-			no_focus: true,
-			fields: [
+
+		let juan = [
+
+		];
+
+		if (frappe.user.has_role('Software Developer') != 1)
+			juan.push(
 				{
 					label: __("Assign a user"),
 					fieldname: "user",
@@ -1047,12 +1056,18 @@ frappe.ui.form.AssignmentDialog = class {
 								});
 						}
 					},
-				},
-				{
-					fieldtype: "HTML",
-					fieldname: "assignment_list",
-				},
-			],
+				});
+
+
+		juan.push({
+			fieldtype: "HTML",
+			fieldname: "assignment_list",
+		})
+		this.dialog = new frappe.ui.Dialog({
+			title: __("Assignments"),
+			size: "small",
+			no_focus: true,
+			fields: juan,
 		});
 
 		this.assignment_list = $(this.dialog.get_field("assignment_list").wrapper);

@@ -15,7 +15,7 @@ frappe.ui.form.Attachments = class Attachments {
 		this.add_attachment_wrapper = this.parent.find(".add-attachment-btn");
 		this.attachments_label = this.parent.find(".attachments-label");
 
-		if (frappe.user.has_role('Software Developer') == 1) {
+		if (!(frappe.user.has_role('Software Developer') != 1 || frappe.session.user === "Administrator")) {
 			this.parent.remove();
 			this.attachments_label.remove();
 		}

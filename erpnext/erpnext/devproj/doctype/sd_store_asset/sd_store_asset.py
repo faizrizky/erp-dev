@@ -26,7 +26,12 @@ class SDStoreAsset(Document):
 
 		current_custodian = frappe.db.get_value("SD Asset", self.asset_name, "custodian")
 		current_employee = frappe.db.get_value("Employee", self.custodian, "employee_name")
+		current_userid = frappe.db.get_value("Employee", current_custodian, "user_id")
 		belongs_to_employee = frappe.db.get_value("Employee", current_custodian, "employee_name")
+		print(current_userid)
+		print(frappe.session.user)
+		if frappe.session.user != current_userid:
+			frappe.throw(_("You are not permitted to return item : ( {0} ) that have been borrowed by someone else. The actual Custodian is {1}").format(frappe.bold(self.asset_name),frappe.bold(belongs_to_employee)))
 
 		if current_custodian != self.custodian:
 			frappe.throw(_("The asset : {0} does not belong to the custodian : {1}, it belongs to {2}").format(frappe.bold(self.asset_name),frappe.bold(current_employee),frappe.bold(belongs_to_employee)))

@@ -63,17 +63,23 @@ class SDIssue(Document):
 			result = json.loads(subject)
 			for emp in result:
 				# emp_name = frappe.db.get_value('User', emp, 'full_name')
-				branch = frappe.db.get_value("User", emp, "role")
 				# print(emp)
 				personel.append(emp)
 
+			branch = frappe.db.get_value("User", frappe.session.user, "role")
 			if frappe.session.user in personel:
 				print("INI SAYA", branch)
-				print("STATUS : ",self.status)
-				if self.status == "Open" or self.status == "Closed":
-					frappe.throw(_("This is You"))
+				if branch == "Quality Assurance":
+					if self.status != "Open" and self.status != "Closed":
+						print("STATUS : ",self.status)
+						frappe.throw(_("{0} can only edit when the status is not {1}, {2}, {3}")
+							.format(frappe.bold("Quality Assurance"), frappe.bold("Replied"), frappe.bold("On Hold"), frappe.bold("Resolved")))
+					# else:
+					# 	frappe.throw(_("Not QA"))
 				else:
-					frappe.throw(_("You are QA"))
+					if self.status == "Closed":
+						frappe.throw(_("Only {0} can {1} this issue")
+							.format(frappe.bold("Quality Assurance"), frappe.bold(self.status)))
 
 			else:
 				frappe.throw(_("You are not able to edit this document because you are not assigned to this issue"))

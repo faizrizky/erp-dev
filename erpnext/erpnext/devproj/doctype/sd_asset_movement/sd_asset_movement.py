@@ -101,7 +101,11 @@ class SDAssetMovement(Document):
 			if d.to_employee:
 				current_custodian = frappe.db.get_value("SD Asset", d.asset, "custodian")
 				current_employee = frappe.db.get_value("Employee", current_custodian, "employee_name")
-				print(current_employee)
+				current_userid = frappe.db.get_value("Employee", d.to_employee, "user_id")
+
+				if frappe.session.user != current_userid:
+					frappe.throw(_("You do not allowed to borrow the asset {0}. Please select your name in 'To Employee Field'").format(frappe.bold(d.asset)))
+
 				if current_custodian != None and current_custodian != d.to_employee:
 					frappe.throw(_("The asset : {0} has been borrowed by the custodian : {1}. Please change in Purpose field to {2} if you want to borrow from another custodian").format(frappe.bold(d.asset),frappe.bold(current_employee),frappe.bold("Transfer")))
 

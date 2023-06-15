@@ -10,8 +10,10 @@ frappe.ui.form.AssignTo = class AssignTo {
 		this.btn = this.parent.find(".add-assignment-btn").on("click", () => this.add());
 		this.btn_wrapper = this.btn.parent();
 
-		if (frappe.user.has_role('Software Developer') == 1)
+		if (!(frappe.user.has_role('Software Developer') != 1 || frappe.session.user === "Administrator")) {
+
 			this.parent.find(".add-assignment-btn").remove();
+		}
 
 
 		this.refresh();
@@ -1031,8 +1033,7 @@ frappe.ui.form.AssignmentDialog = class {
 		let juan = [
 
 		];
-
-		if (frappe.user.has_role('Software Developer') != 1)
+		if (frappe.user.has_role('Software Developer') != 1 || frappe.session.user === "Administrator")
 			juan.push(
 				{
 					label: __("Assign a user"),

@@ -47,12 +47,12 @@ frappe.ui.Tags = class {
 
 
 
-		if (frappe.user.has_role('Software Developer') != 1)
+		if (!(frappe.user.has_role('Software Developer') != 1 || frappe.session.user !== "Administrator")) {
 			this.$placeholder.on("click", () => {
 				this.activate();
 				this.$input.focus(); // focus only when clicked
 			});
-
+		}
 		else this.$placeholder.html("")
 
 	}
@@ -110,7 +110,7 @@ frappe.ui.Tags = class {
 			pill_wrapper.closest(".form-tag-row").remove();
 		});
 
-		if (frappe.user.has_role('Software Developer') == 1)
+		if (!(frappe.user.has_role('Software Developer') != 1 || frappe.session.user === "Administrator"))
 			$tag.find('.remove-btn').remove();
 
 

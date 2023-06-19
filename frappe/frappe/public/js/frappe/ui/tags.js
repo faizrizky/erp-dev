@@ -47,7 +47,7 @@ frappe.ui.Tags = class {
 
 
 
-		if (!(frappe.user.has_role('Software Developer') != 1 || frappe.session.user !== "Administrator")) {
+		if (!(frappe.user.has_role('Software Developer')) || frappe.session.user === "Administrator") {
 			this.$placeholder.on("click", () => {
 				this.activate();
 				this.$input.focus(); // focus only when clicked

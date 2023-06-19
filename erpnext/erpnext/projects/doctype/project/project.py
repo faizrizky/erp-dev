@@ -163,8 +163,11 @@ class Project(Document):
 			return
 
 		total = frappe.db.count("Task", dict(project=self.name))
+		total_progress = frappe.db.count("Task", {"project": self.name, "status": ("!=", "Cancelled")})
 
 		if not total:
+			self.percent_complete = 0
+		if not total_progress:
 			self.percent_complete = 0
 		else:
 			if (self.percent_complete_method == "Task Completion" and total > 0) or (
@@ -177,15 +180,15 @@ class Project(Document):
 				)[0][0]
 				self.percent_complete = flt(flt(completed) / total * 100, 2)
 
-			if self.percent_complete_method == "Task Progress" and total > 0:
+			if self.percent_complete_method == "Task Progress" and total_progress > 0:
 				progress = frappe.db.sql(
 					"""select sum(progress) from tabTask where
 					project=%s""",
 					self.name,
 				)[0][0]
-				self.percent_complete = flt(flt(progress) / total, 2)
+				self.percent_complete = flt(flt(progress) / total_progress, 2)
 
-			if self.percent_complete_method == "Task Weight" and total > 0:
+			if self.percent_complete_method == "Task Weight" and total_progress > 0:
 				weight_sum = frappe.db.sql(
 					"""select sum(task_weight) from tabTask where
 					project=%s""",

@@ -36,6 +36,7 @@
   "first_response_time",
   "first_responded_on",
   "column_break_26",
+  "resolved_time",
   "avg_response_time",
   "section_break_19",
   "resolution_details",
@@ -44,6 +45,7 @@
   "opening_time",
   "resolution_date",
   "resolution_time",
+  "estimated_rectification_date",
   "user_resolution_time",
   "additional_info",
   "lead",
@@ -169,7 +171,6 @@
    "oldfieldtype": "Text"
   },
   {
-   "collapsible": 1,
    "fieldname": "service_level_section",
    "fieldtype": "Section Break",
    "label": "Service Level Agreement Details"
@@ -237,8 +238,7 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
-   "description": "Kapan kamu menemukan issue ini. Masukkan tanggal \"Now\" jika menemukannya hari ini",
+   "description": "Kapan kamu me \"Reply\" issue ini. Masukkan tanggal \"Now\" jika menemukannya hari ini",
    "fieldname": "response",
    "fieldtype": "Section Break",
    "label": "Response Details"
@@ -267,7 +267,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
    "description": "Apa yang sudah kamu lakukan untuk memperbaiki issue ini",
    "fieldname": "section_break_19",
    "fieldtype": "Section Break",
@@ -331,7 +330,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
    "fieldname": "additional_info",
    "fieldtype": "Section Break",
    "label": "Reference",
@@ -380,6 +378,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "task_issue.project",
    "fieldname": "project",
    "fieldtype": "Link",
    "label": "Project",
@@ -410,11 +409,21 @@
    "label": "Task",
    "options": "Task",
    "reqd": 1
+  },
+  {
+   "fieldname": "estimated_rectification_date",
+   "fieldtype": "Datetime",
+   "label": "Estimated Date of Rectification Completion"
+  },
+  {
+   "fieldname": "resolved_time",
+   "fieldtype": "Datetime",
+   "label": "Resolved Date"
   }
  ],
  "icon": "fa fa-ticket",
  "links": [],
- "modified": "2023-03-23 13:43:23.447149",
+ "modified": "2023-06-20 10:24:07.298906",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Issue",

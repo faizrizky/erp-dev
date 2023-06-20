@@ -3,7 +3,7 @@
 
 # import frappe
 import json
-from datetime import timedelta
+from datetime import timedelta,datetime
 
 import frappe
 from frappe import _
@@ -29,6 +29,12 @@ class SDIssue(Document):
 
 		self.set_lead_contact(self.raised_by)
 
+		self.set_responded_on()
+
+		self.set_contact_responded()
+
+		self.set_resolved_on()
+
 	def on_update(self):
 		# Add a communication in the issue timeline
 		self.validate_status_taken()
@@ -36,6 +42,28 @@ class SDIssue(Document):
 		if self.flags.create_communication and self.via_customer_portal:
 			self.create_communication()
 			self.flags.communication_created = None
+
+	def set_contact_responded(self):
+		# subject = frappe.db.get_value('Task', self.name, '_assign')
+		# current_employee = frappe.db.get_value("Employee", self.custodian, "employee_name")
+		if self.contact == "" and self.status == "Open":
+			employee_name = frappe.get_value("Employee", filters={"user_id": frappe.session.user}, fieldname="employee_name")
+			print("USER ID : ",employee_name)
+			self.contact = employee_name
+
+	def set_responded_on(self):
+		if self.status == "Replied" and self.first_responded_on != "":
+			self.first_responded_on = datetime.now()
+
+		if self.status == "Open":
+			self.first_responded_on = ""
+
+	def set_resolved_on(self):
+		if self.status == "Resolved":
+			self.resolved_time = datetime.now()
+
+		if self.status == "Open":
+			self.resolved_time = ""
 
 	def populate_depends_on(self):
 
@@ -157,7 +185,7 @@ class SDIssue(Document):
 		communications = frappe.get_all(
 			"Communication",
 			filters={
-				"reference_doctype": "Issue",
+				"reference_doctype": "SD Issue",
 				"reference_name": comm_to_split_from.reference_name,
 				"creation": (">=", comm_to_split_from.creation),
 			},
@@ -172,7 +200,7 @@ class SDIssue(Document):
 			{
 				"doctype": "Comment",
 				"comment_type": "Info",
-				"reference_doctype": "Issue",
+				"reference_doctype": "SD Issue",
 				"reference_name": replicated_issue.name,
 				"content": " - Split the Issue from <a href='/app/Form/Issue/{0}'>{1}</a>".format(
 					self.name, frappe.bold(self.name)
@@ -189,7 +217,7 @@ class SDIssue(Document):
 
 def get_list_context(context=None):
 	return {
-		"title": _("Issues"),
+		"title": _("SD Issues"),
 		"get_list": get_issue_list,
 		"row_template": "templates/includes/issue_row.html",
 		"show_sidebar": True,
@@ -230,12 +258,12 @@ def get_issue_list(doctype, txt, filters, limit_start, limit_page_length=20, ord
 def set_multiple_status(names, status):
 
 	for name in json.loads(names):
-		frappe.db.set_value("Issue", name, "status", status)
+		frappe.db.set_value("SD Issue", name, "status", status)
 
 
 @frappe.whitelist()
 def set_status(name, status):
-	frappe.db.set_value("Issue", name, "status", status)
+	frappe.db.set_value("SD Issue", name, "status", status)
 
 
 def auto_close_tickets():
@@ -254,7 +282,7 @@ def auto_close_tickets():
 	).run(pluck=True)
 
 	for issue in issues:
-		doc = frappe.get_doc("Issue", issue)
+		doc = frappe.get_doc("SD Issue", issue)
 		doc.status = "Closed"
 		doc.flags.ignore_permissions = True
 		doc.flags.ignore_mandatory = True
@@ -286,7 +314,7 @@ def make_issue_from_communication(communication, ignore_communication_links=Fals
 	doc = frappe.get_doc("Communication", communication)
 	issue = frappe.get_doc(
 		{
-			"doctype": "Issue",
+			"doctype": "SD Issue",
 			"subject": doc.subject,
 			"communication_medium": doc.communication_medium,
 			"raised_by": doc.sender or "",
@@ -305,9 +333,8 @@ def get_time_in_timedelta(time):
 	"""
 	return timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
 
-
 def set_first_response_time(communication, method):
-	if communication.get("reference_doctype") == "Issue":
+	if communication.get("reference_doctype") == "SD Issue":
 		issue = get_parent_doc(communication)
 		if is_first_response(issue) and issue.service_level_agreement:
 			first_response_time = calculate_first_response_time(

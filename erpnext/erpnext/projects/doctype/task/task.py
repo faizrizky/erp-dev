@@ -60,6 +60,9 @@ class Task(NestedSet):
 	def validate_weight(self):
 
 		status_before = frappe.db.get_value("Task", self.name, "status")
+
+		checker_name_list = [x for x in self.sub_task if not x.checker_name == "" and not x.checker_name == None]
+		jumlah_total_elemen_checker_name = len(checker_name_list)	
 		if len(self.sub_task) > 0 :
 
 			for d in self.sub_task:
@@ -83,14 +86,14 @@ class Task(NestedSet):
 				print("status before : ", status_before)
 				print("status : ", self.status)
 				print(employee_name," ",branch)
-
+				print("JUMLAH CHECKER NAME : ", jumlah_total_elemen_checker_name)
 
 
 				# if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
 				if d.completion == 1 and self.status == "Completed":
 					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
-					if d.checker_name is not None :
+					if jumlah_total_elemen_checker_name > 0:
 						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
 							frappe.throw(_("Please set {0} value between {1}")
 										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
@@ -102,7 +105,7 @@ class Task(NestedSet):
 				if status_before == "Completed" and self.status != "Completed":
 					update_employee_weight(employee_name,self.project,-d.weight,branch, -int(self.programmer_total_day),d.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
-					if d.checker_name is not None :
+					if jumlah_total_elemen_checker_name > 0:
 						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
 							frappe.throw(_("Please set {0} value between {1}")
 										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
@@ -532,6 +535,10 @@ class Task(NestedSet):
 
 	def validate_progress(self):
 
+		checker_name_list = [x for x in self.sub_task if x.checker_name != "" and x.checker_name != None]
+		print(json.dumps([x.checker_name for x in self.sub_task]))
+		jumlah_total_elemen_checker_name = len(checker_name_list)	
+
 		if flt(self.progress or 0) > 100:
 			frappe.throw(_("Progress % for a task cannot be more than 100."))
 
@@ -553,11 +560,12 @@ class Task(NestedSet):
 			# self.validate_duration()
 
 		if self.status == "Completed":
+
 			if flt(self.individual_progress or 0) < 100:			
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("Individual Progress"),frappe.bold(f'{self.individual_progress}%'),frappe.bold("Pending Review"),frappe.bold("Working"),frappe.bold("100%")))
-
-			elif flt(self.qa_progress or 0) < 100:			
+			elif flt(self.qa_progress or 0) < 100 and len(self.sub_task) > 0 and jumlah_total_elemen_checker_name > 0:		
+				print("jumlah_total_elemen_checker_name : ",jumlah_total_elemen_checker_name)
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
@@ -609,8 +617,7 @@ class Task(NestedSet):
 					self.qa_testing_date = getdate(today())
 
 		if self.status == "Integration":
-			checker_name_list = [x for x in self.sub_task if x.checker_name != ""]
-			jumlah_total_elemen_checker_name = len(checker_name_list)	
+
 			if flt(self.individual_progress or 0) < 100:
 				# frappe.throw(_("Individual Progress % for a task cannot be less than 100. Please make sure your individual progress is 100% finished"))
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")

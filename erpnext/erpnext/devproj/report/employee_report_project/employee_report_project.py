@@ -29,50 +29,58 @@ def get_column():
 
 
 def get_data(filters):
-	result = frappe.db.get_all(
-		"SD Data Report",
-		fields=["name", "total_weight", "employee_name", "branch", "task.task_name"],
-		filters=filters,
-		as_list=False,
-		debug=False,
-		group_by="employee_name",
-		order_by="total_weight desc"
-	)
+    result = frappe.db.get_all(
+        "SD Data Report",
+        fields=["name", "total_weight", "employee_name", "branch", "task.task_name"],
+        filters=filters,
+        as_list=False,
+        debug=False,
+        group_by="employee_name",
+        order_by="total_weight desc"
+    )
 
-	data = []
-	for row in result:
-		parent_doc = frappe.get_doc("SD Data Report", row.name)
-		concatenated_str = ""
-		if hasattr(parent_doc, "task") and parent_doc.task:
-			child_records = parent_doc.get("task")
-			total_days = 0
-			total_weight = 0
-			task_taken = len(child_records)
-			concatenated_str += "<ol style='padding-left: 15px;'>"
+    data = []
+    for row in result:
+        parent_doc = frappe.get_doc("SD Data Report", row.name)
+        concatenated_str = ""
+        if hasattr(parent_doc, "task") and parent_doc.task:
+            child_records = parent_doc.get("task")
+            total_days = 0
+            total_weight = 0
+            task_taken = len(child_records)
+            concatenated_str += "<ol style='padding-left: 15px;'>"
 
-			for child in child_records:
-				task_name = child.task_name
-				task_days = str(child.days)
-				total_days += child.days
-				total_weight += child.task_weight
-				if child.is_parent == 0:
-					concatenated_str += "<li>" + task_name + " ( " + task_days + " Days ) " + "<br />"
-				else:
-					concatenated_str += "<li>" + task_name + " - Integration" +" ( " + task_days + " Days ) " + "<br />"
+            prev_task_name = None  # Variable to store the previous task name
 
-			data.append({
-				"total_weight": row.total_weight,
-				"employee_name": row.employee_name,
-				"branch": row.branch,
-				"task_taken": task_taken,
-				"task_name": concatenated_str,
-				"total_days": total_days,
-				"total_weight": total_weight
-			})
+            for child in child_records:
+                task_name = child.task_name
+                task_days = str(child.days)
+                total_weight += child.task_weight
 
-		concatenated_str += "</ol>"
+                if prev_task_name and prev_task_name.split('-')[0].strip() != task_name.split('-')[0].strip():
+                    total_days += child.days
 
-	return sorted(data, key=lambda d: d['total_weight'], reverse=True)
+                if child.is_parent == 0:
+                    concatenated_str += "<li>" + task_name + " ( " + task_days + " Days ) " + "<br />"
+                else:
+                    concatenated_str += "<li>" + task_name + " - Integration" + " ( " + task_days + " Days ) " + "<br />"
+
+                prev_task_name = task_name
+
+            data.append({
+                "total_weight": row.total_weight,
+                "employee_name": row.employee_name,
+                "branch": row.branch,
+                "task_taken": task_taken,
+                "task_name": concatenated_str,
+                "total_days": total_days,
+                "total_weight": total_weight
+            })
+
+        concatenated_str += "</ol>"
+
+    return sorted(data, key=lambda d: d['total_weight'], reverse=True)
+
 
 
 def get_chart_data(data):

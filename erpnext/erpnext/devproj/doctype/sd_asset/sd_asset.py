@@ -31,9 +31,13 @@ class SDAsset(Document):
 
 		elif self.custodian != None:
 			status = "Borrowed"
+		
+		if self.custodian == None and self.status == "Missing":
+			status = "Missing"
 
-		elif self.maintenance_required == 1:
+		if self.maintenance_required == 1:
 			status = "In Maintenance"
+			self.status == "In Maintenance"
 
 		return status
 

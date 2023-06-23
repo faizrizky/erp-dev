@@ -41,7 +41,7 @@
    "oldfieldname": "status",
    "oldfieldtype": "Select",
    "options": "Stored\nBorrowed\nIn Maintenance\nMissing",
-   "read_only": 1
+   "read_only_depends_on": "eval:doc.status == \"Borrowed\" || frappe.user.has_role('Software Developer') == 1"
   },
   {
    "fieldname": "sb_details",
@@ -67,6 +67,7 @@
    "oldfieldname": "priority",
    "oldfieldtype": "Select",
    "options": "\nCompany\nSupplier\nCustomer\nDepartment",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
    "search_index": 1
   },
   {
@@ -74,7 +75,8 @@
    "fieldname": "asset_owner_company",
    "fieldtype": "Link",
    "label": "Asset Owner Company",
-   "options": "Company"
+   "options": "Company",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "default": "0",
@@ -119,14 +121,15 @@
    "fieldname": "asset_location",
    "fieldtype": "Select",
    "label": "Asset Location",
-   "options": "\nNakas 1 ( SD 2 Sebelah Meja HOD)\nNakas 2 ( Ruang Meeting SD 2 )\nGudang ( SD 1 )"
+   "options": "\nNakas 1 ( SD 2 Sebelah Meja HOD)\nNakas 2 ( Ruang Meeting SD 2 )\nGudang ( SD 1 )\nCustodian Desk",
+   "read_only_depends_on": "eval:doc.status == \"Borrowed\" || frappe.user.has_role('Software Developer') == 1"
   }
  ],
  "icon": "fa fa-check",
  "image_field": "image",
  "links": [],
  "max_attachments": 5,
- "modified": "2023-05-22 10:51:18.307890",
+ "modified": "2023-06-23 15:59:55.002677",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Asset",

@@ -8,10 +8,10 @@ from frappe.model.document import Document
 
 class SDAssetMovement(Document):
 	def before_submit(self) : 
+		self.validate_asset()
 		self.validate_employee()
 
-	def validate(self):
-		self.validate_asset()
+	# def validate(self):
 		# self.validate_location()
 
 	def validate_asset(self):
@@ -19,8 +19,17 @@ class SDAssetMovement(Document):
 		for d in self.assets:
 			status = frappe.db.get_value("SD Asset", d.asset, ["status"])
 			has_missing.append(d.asset)
-		if self.purpose == "Transfer" and status in ("Missing", "In Maintenance"):
-			frappe.throw(_("{0} is {1}. {2} asset cannot be transferred").format(frappe.bold((" , ").join(has_missing)),frappe.bold(status),frappe.bold(status)))
+			if self.purpose == "Transfer" and status in ("Missing", "In Maintenance"):
+				frappe.throw(_("{0} is {1}. {2} asset cannot be transferred").format(frappe.bold((" , ").join(has_missing)),frappe.bold(status),frappe.bold(status)))
+
+		print(len(self.borrowed_asset))
+		for d in self.borrowed_asset:
+			status = frappe.db.get_value("SD Asset", d.asset, ["status"])
+			has_missing.append(d.asset)
+			print(d.asset, '', status)
+			if self.purpose == "Borrow" and status in ("Missing", "In Maintenance"):
+				frappe.throw(_("{0} is {1}. {2} asset cannot be borrowed").format(frappe.bold((" , ").join(has_missing)),frappe.bold(status),frappe.bold(status)))
+		
 
 			# if company != self.company:
 			# 	frappe.throw(_("Asset {0} does not belong to company {1}").format(d.asset, self.company))
@@ -104,7 +113,7 @@ class SDAssetMovement(Document):
 				current_userid = frappe.db.get_value("Employee", d.to_employee, "user_id")
 
 				if frappe.session.user != current_userid:
-					frappe.throw(_("You do not allowed to borrow the asset {0}. Please select your name in 'To Employee Field'").format(frappe.bold(d.asset)))
+					frappe.throw(_("You do not allowed to borrow the asset {0}. Please select your name in '{1}'").format(frappe.bold(d.asset),frappe.bold("To Employee Field")))
 
 				if current_custodian != None and current_custodian != d.to_employee:
 					frappe.throw(_("The asset : {0} has been borrowed by the custodian : {1}. Please change in Purpose field to {2} if you want to borrow from another custodian").format(frappe.bold(d.asset),frappe.bold(current_employee),frappe.bold("Transfer")))
@@ -113,6 +122,7 @@ class SDAssetMovement(Document):
 					self.assets = ""
 					frappe.db.set_value('SD Asset', d.asset, 'custodian', d.to_employee)
 					frappe.db.set_value('SD Asset', d.asset, 'status', 'Borrowed')
+					frappe.db.set_value('SD Asset', d.asset, 'asset_location', 'Custodian Desk')
 
 		for d in self.assets:
 			if d.from_employee:

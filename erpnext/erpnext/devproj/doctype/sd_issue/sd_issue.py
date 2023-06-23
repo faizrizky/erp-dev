@@ -97,7 +97,7 @@ class SDIssue(Document):
 			branch = frappe.db.get_value("User", frappe.session.user, "role")
 			if frappe.session.user in personel:
 				print("INI SAYA", branch)
-				if branch == "Quality Assurance":
+				if branch == "Quality Assurance" or branch == "Technical Architect Quality Assurance":
 					if self.status != "Open" and self.status != "Closed":
 						print("STATUS : ",self.status)
 						frappe.throw(_("{0} can only edit when the status is not {1}, {2}, {3}")

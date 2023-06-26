@@ -24,11 +24,9 @@ def execute(filters=None):
 		order_by="expected_end_date",
 	)
 
+	filtered_data = []
 	for project in data:
-		# data2 = frappe.get_all('Task',filters={"project": project.name})
-		# print("TOTAL DATA 2 : ", len(data2))
-		project["total_tasks"] = frappe.db.count("Task", filters={"project": project.name,
-            "status": ("!=", "Cancelled")})
+		project["total_tasks"] = frappe.db.count("Task", filters={"project": project.name,"status": ("!=", "Cancelled")})
 		project["completed_tasks"] = frappe.db.count(
 			"Task", filters={"project": project.name, "status": "Completed"}
 		)
@@ -47,9 +45,10 @@ def execute(filters=None):
 		project["qa_integration_testing_tasks"] = frappe.db.count(
 			"Task", filters={"project": project.name, "status": "QA Integration Testing"}
 		)
+		filtered_data.append(project)
 
-	chart = get_chart_data(data)
-	report_summary = get_report_summary(data)
+	chart = get_chart_data(filtered_data)
+	report_summary = get_report_summary(filtered_data)
 
 	return columns, data, None, chart, report_summary
 
@@ -127,8 +126,6 @@ def get_chart_data(data):
 	for project in data:
 		print(project)
 		labels.append(project.name)
-		if project.get("status") != "Cancelled":
-			total.append(project["total_tasks"])
 		total.append(project.total_tasks)
 		completed.append(project.completed_tasks)
 		working.append(project.working_tasks)
@@ -160,8 +157,7 @@ def get_report_summary(data):
 		return None
 
 	avg_completion = sum(project.percent_complete for project in data) / len(data)
-	# total = sum([project.total_tasks for project in data])
-	total = sum(project["total_tasks"] for project in data if project.get("status") != "Cancelled")
+	total = sum([project.total_tasks for project in data])
 	total_overdue = sum([project.overdue_tasks for project in data])
 	completed = sum([project.completed_tasks for project in data])
 

@@ -9,6 +9,12 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     # data = []
+    project_name = filters.get("project")
+
+    tasks = frappe.get_all("Task", filters={"project": project_name, "status": ("!=", "Cancelled")})
+    total_tasks = len(tasks)
+
+    print(f"Total tasks in the selected project: {total_tasks}")
 
     data = frappe.db.get_all(
         "Task",
@@ -64,6 +70,7 @@ def execute(filters=None):
     # total_task_count = sum(len(result["tasks"]) for result in filtered_data)
     # print("Total tasks in filtered data:", filtered_data)
 
+    
     for result in filtered_data:
         tasks = result["tasks"]
         # print("Total tasks in filtered data:",sum(len(tasks)))
@@ -100,20 +107,24 @@ def execute(filters=None):
                 total_filtered_task.append(task_name)
 
     total_unique_tasks = len(total_filtered_task)
-    print("Total unique tasks in filtered data:", total_unique_tasks)
+    print("Total unique tasks in filtered data:", total_filtered_task)
+    print("Total unique tasks in filtered data:", len(total_filtered_task))
 
 
     for result in filtered_data:
         tasks = result["tasks"]
         department_task = len(tasks)
+        # print("department_task: ", department_task)
         completed_tasks = sum(1 for task in tasks if task.get("status") == "Completed")
+        # total_tasks = sum(1 for task in tasks)
         departement_progress = (completed_tasks / department_task) * 100 if department_task > 0 else 0
-        task_completion = (completed_tasks / total_unique_tasks) * 100 if total_unique_tasks > 0 else 0
+        task_completion = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
         result["total_task_completed"] = completed_tasks
         result["department_task"] = department_task
         result["employee_name"] = ""  # Add employee_name field
         result["departement_progress"] = "{:.2f}%".format(departement_progress)
         result["task_completion"] = "{:.2f}%".format(task_completion)
+        print("task_completion: ",task_completion)
 
 
         task_count_by_employee = {}  # Dictionary to store task count for each employee
@@ -140,12 +151,15 @@ def execute(filters=None):
     sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
     print("Sum of Task Completion: {:.2f}%".format(sum_task_completion))
 
+   
+
+    
 
     chart = get_chart_data(filtered_data)
-    print(chart)
-    report_summary = get_report_summary(filtered_data,sum_task_completion)
+    # print(chart)
+    report_summary = get_report_summary(filtered_data,sum_task_completion, total_tasks)
 
-    print(json.dumps(chart,  sort_keys=True, indent=4))
+    # print(json.dumps(chart,  sort_keys=True, indent=4))
 
 
 
@@ -266,13 +280,14 @@ def get_chart_data(data):
     }
 
 
-def get_report_summary(data, sum_task_completion):
+def get_report_summary(data, sum_task_completion, total_task):
     if not data:
         return None
-
+    
     total_progress = sum_task_completion
     avg_completion = round(sum_task_completion / len(data), 2)
-    total = sum([project["department_task"] for project in data])
+    # total = sum([project["department_task"] for project in data])
+    total = total_task
     total_overdue = sum([project["department_task"] - project["total_task_completed"] for project in data])
     completed = sum([project["total_task_completed"] for project in data])
 

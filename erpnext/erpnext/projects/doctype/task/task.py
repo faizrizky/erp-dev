@@ -894,7 +894,7 @@ class Task(NestedSet):
 		if self.status not in ("Cancelled", "Completed", "QA Open", "Integration", "Parent Task", "Backlog") and self.exp_end_date:
 			from datetime import datetime
 
-			if self.exp_end_date + timedelta(days=3) < datetime.now().date():
+			if self.exp_end_date + timedelta(days=2) < datetime.now().date():
 				self.db_set("status", "Overdue", update_modified=False)
 				self.update_project()
 
@@ -995,7 +995,7 @@ def set_multiple_status(names, status):
 def set_tasks_as_overdue():
 	tasks = frappe.get_all(
 		"Task",
-		filters={"status": ["not in", ["Cancelled", "Completed", "QA Open", "QA Integration"]]},
+		filters={"status": ["not in", ["Cancelled", "Completed", "QA Open", "Integration"]]},
 		fields=["name", "status", "review_date"],
 	)
 	for task in tasks:

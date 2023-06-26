@@ -105,11 +105,19 @@ def execute(filters=None):
         for task_name in task_names:
             if task_names.count(task_name) == 1 and task_name not in total_filtered_task:
                 total_filtered_task.append(task_name)
+    #dari total_filtered_task ini cari apakah sudah completed atau tidak
+    # Retrieve the task details and check if they are completed
+    completed_filtered_tasks = []
+    for task_name in total_filtered_task:
+        task = frappe.get_doc("Task", task_name)
+        if task.status == "Completed":
+            completed_filtered_tasks.append(task_name)
 
-    total_unique_tasks = len(total_filtered_task)
-    print("Total unique tasks in filtered data:", total_filtered_task)
-    print("Total unique tasks in filtered data:", len(total_filtered_task))
+    total_unique_completed_tasks = len(completed_filtered_tasks)
 
+    print("Tasks in total_filtered_task where status is Completed:")
+    print(completed_filtered_tasks)
+    print("Total unique completed tasks in filtered data:", total_unique_completed_tasks)
 
     for result in filtered_data:
         tasks = result["tasks"]
@@ -119,6 +127,7 @@ def execute(filters=None):
         # total_tasks = sum(1 for task in tasks)
         departement_progress = (completed_tasks / department_task) * 100 if department_task > 0 else 0
         task_completion = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+        task_completion_unique = (total_unique_completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
         result["total_task_completed"] = completed_tasks
         result["department_task"] = department_task
         result["employee_name"] = ""  # Add employee_name field
@@ -148,7 +157,8 @@ def execute(filters=None):
 
         result["concatenated_str"] = concatenated_str
 
-    sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
+    # sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
+    sum_task_completion = float(task_completion_unique)
     print("Sum of Task Completion: {:.2f}%".format(sum_task_completion))
 
    

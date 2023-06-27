@@ -105,29 +105,43 @@ def execute(filters=None):
         for task_name in task_names:
             if task_names.count(task_name) == 1 and task_name not in total_filtered_task:
                 total_filtered_task.append(task_name)
-    #dari total_filtered_task ini cari apakah sudah completed atau tidak
-    # Retrieve the task details and check if they are completed
-    completed_filtered_tasks = []
-    for task_name in total_filtered_task:
-        task = frappe.get_doc("Task", task_name)
-        if task.status == "Completed":
-            completed_filtered_tasks.append(task_name)
+    
+    #Versi Intersection
+    # completed_filtered_tasks = []
+    # for task_name in total_filtered_task:
+    #     task = frappe.get_doc("Task", task_name)
+    #     if task.status == "Completed":
+    #         completed_filtered_tasks.append(task_name)
 
-    total_unique_completed_tasks = len(completed_filtered_tasks)
+    # total_unique_completed_tasks = len(completed_filtered_tasks)
 
-    print("Tasks in total_filtered_task where status is Completed:")
-    print(completed_filtered_tasks)
-    print("Total unique completed tasks in filtered data:", total_unique_completed_tasks)
+    # print("Tasks in total_filtered_task where status is Completed:")
+    # print(completed_filtered_tasks)
+    # print("Total unique completed tasks in filtered data:", total_unique_completed_tasks)
 
+    # for result in filtered_data:
+    #     tasks = result["tasks"]
+    #     department_task = len(tasks)
+    #     completed_tasks = sum(1 for task in tasks if task.get("status") == "Completed")
+    #     departement_progress = (completed_tasks / department_task) * 100 if department_task > 0 else 0
+    #     task_completion = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+    #     task_completion_unique = (total_unique_completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+    #     result["total_task_completed"] = completed_tasks
+    #     result["department_task"] = department_task
+    #     result["employee_name"] = ""  # Add employee_name field
+    #     result["departement_progress"] = "{:.2f}%".format(departement_progress)
+    #     result["task_completion"] = "{:.2f}%".format(task_completion)
+    #     print("task_completion: ",task_completion)
+    
+    #Versi Non Intersection
     for result in filtered_data:
         tasks = result["tasks"]
         department_task = len(tasks)
-        # print("department_task: ", department_task)
         completed_tasks = sum(1 for task in tasks if task.get("status") == "Completed")
-        # total_tasks = sum(1 for task in tasks)
+        department_total_task = sum(len(result["tasks"]) for result in filtered_data)
+        sum_department_total_tasks = department_total_task
         departement_progress = (completed_tasks / department_task) * 100 if department_task > 0 else 0
-        task_completion = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
-        task_completion_unique = (total_unique_completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+        task_completion = (completed_tasks / sum_department_total_tasks) * 100 if sum_department_total_tasks > 0 else 0
         result["total_task_completed"] = completed_tasks
         result["department_task"] = department_task
         result["employee_name"] = ""  # Add employee_name field
@@ -158,7 +172,7 @@ def execute(filters=None):
         result["concatenated_str"] = concatenated_str
 
     # sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
-    sum_task_completion = float(task_completion_unique)
+    sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
     print("Sum of Task Completion: {:.2f}%".format(sum_task_completion))
 
    

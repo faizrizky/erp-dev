@@ -173,6 +173,7 @@ def execute(filters=None):
 
     # sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
     sum_task_completion = sum(float(result["task_completion"].replace("%", "")) for result in filtered_data)
+    sum_avg_task_completion = sum(float(result["departement_progress"].replace("%", "")) for result in filtered_data)
     print("Sum of Task Completion: {:.2f}%".format(sum_task_completion))
 
    
@@ -181,7 +182,7 @@ def execute(filters=None):
 
     chart = get_chart_data(filtered_data)
     # print(chart)
-    report_summary = get_report_summary(filtered_data,sum_task_completion, total_tasks)
+    report_summary = get_report_summary(filtered_data,sum_task_completion, sum_avg_task_completion, total_tasks)
 
     # print(json.dumps(chart,  sort_keys=True, indent=4))
 
@@ -304,12 +305,12 @@ def get_chart_data(data):
     }
 
 
-def get_report_summary(data, sum_task_completion, total_task):
+def get_report_summary(data, sum_task_completion, sum_avg_task_completion, total_task):
     if not data:
         return None
     
     total_progress = sum_task_completion
-    avg_completion = round(sum_task_completion / len(data), 2)
+    avg_completion = round(sum_avg_task_completion / len(data), 2)
     # total = sum([project["department_task"] for project in data])
     total = total_task
     total_overdue = sum([project["department_task"] - project["total_task_completed"] for project in data])

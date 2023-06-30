@@ -24,6 +24,7 @@
   "user_image",
   "sb1",
   "role",
+  "section_break_sbmeh",
   "role_profile_name",
   "roles_html",
   "roles",
@@ -668,8 +669,12 @@
    "fieldname": "role",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Position",
+   "label": "Team",
    "options": "Branch"
+  },
+  {
+   "fieldname": "section_break_sbmeh",
+   "fieldtype": "Section Break"
   }
  ],
  "icon": "fa fa-user",
@@ -732,7 +737,7 @@
    "link_fieldname": "user"
   }
  ],
- "modified": "2023-03-12 13:58:10.019001",
+ "modified": "2023-06-30 13:11:15.388402",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

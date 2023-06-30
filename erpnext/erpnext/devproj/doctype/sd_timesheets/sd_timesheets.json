@@ -352,7 +352,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Position",
+   "label": "Team",
    "read_only": 1
   },
   {
@@ -361,7 +361,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Team",
+   "label": "Role",
    "read_only": 1
   },
   {
@@ -377,7 +377,7 @@
  "icon": "fa fa-clock-o",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-04-27 15:53:15.251817",
+ "modified": "2023-06-30 13:23:28.716077",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Timesheets",

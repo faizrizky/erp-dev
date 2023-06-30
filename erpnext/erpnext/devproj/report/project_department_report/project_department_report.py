@@ -38,6 +38,7 @@ def execute(filters=None):
             for emp in result:
                 emp_name = frappe.db.get_value('User', emp, 'full_name')
                 branch = frappe.db.get_value("User", emp, "role")
+                branch = frappe.db.get_value("User", emp, "role")
                 if branch not in task_data:
                     task_data[branch] = []
                 task_data[branch].append({

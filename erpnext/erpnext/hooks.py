@@ -382,6 +382,10 @@ scheduler_events = {
 		"45 0 * * *": [
 			"erpnext.stock.reorder_item.reorder_item",
 		],
+        # Daily but at 01.00 AM
+		"0 1 * * *":[
+			"erpnext.projects.doctype.task.task.validate_sprint",
+		],
 
 	},
 	"all": [

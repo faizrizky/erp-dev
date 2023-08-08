@@ -12,7 +12,10 @@ def execute(filters=None):
     project_name = filters.get("project")
 
     tasks = frappe.get_all("Task", filters={"project": project_name, "status": ("!=", "Cancelled")})
+    completed_tasks  = frappe.get_all("Task", filters={"project": project_name, "status": ("=", "Completed")})
     total_tasks = len(tasks)
+    total_completed_tasks = len(completed_tasks)
+    total_uncompleted_tasks = total_tasks - total_completed_tasks
 
     print(f"Total tasks in the selected project: {total_tasks}")
 
@@ -183,7 +186,7 @@ def execute(filters=None):
 
     chart = get_chart_data(filtered_data)
     # print(chart)
-    report_summary = get_report_summary(filtered_data,sum_task_completion, sum_avg_task_completion, total_tasks)
+    report_summary = get_report_summary(filtered_data,sum_task_completion, sum_avg_task_completion, total_tasks,total_completed_tasks,total_uncompleted_tasks)
 
     # print(json.dumps(chart,  sort_keys=True, indent=4))
 
@@ -306,7 +309,7 @@ def get_chart_data(data):
     }
 
 
-def get_report_summary(data, sum_task_completion, sum_avg_task_completion, total_task):
+def get_report_summary(data, sum_task_completion, sum_avg_task_completion, total_task,total_completed_tasks,total_uncompleted_tasks):
     if not data:
         return None
     
@@ -314,8 +317,8 @@ def get_report_summary(data, sum_task_completion, sum_avg_task_completion, total
     avg_completion = round(sum_avg_task_completion / len(data), 2)
     # total = sum([project["department_task"] for project in data])
     total = total_task
-    total_overdue = sum([project["department_task"] - project["total_task_completed"] for project in data])
-    completed = sum([project["total_task_completed"] for project in data])
+    # total_overdue = sum([project["department_task"] - project["total_task_completed"] for project in data])
+    # completed = sum([project["total_task_completed"] for project in data])
 
     return [
         {
@@ -337,14 +340,14 @@ def get_report_summary(data, sum_task_completion, sum_avg_task_completion, total
             "datatype": "Int",
         },
         {
-            "value": completed,
+            "value": total_completed_tasks,
             "indicator": "Green",
             "label": _("Completed Tasks"),
             "datatype": "Int",
         },
         {
-            "value": total_overdue,
-            "indicator": "Green" if total_overdue == 0 else "Red",
+            "value": total_uncompleted_tasks,
+            "indicator": "Green" if total_uncompleted_tasks == 0 else "Red",
             "label": _("Uncompleted Tasks"),
             "datatype": "Int",
         },

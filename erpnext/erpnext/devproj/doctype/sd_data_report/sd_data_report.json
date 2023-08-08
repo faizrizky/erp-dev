@@ -12,10 +12,13 @@
   "project_name",
   "total_days",
   "total_weight",
+  "start_date",
+  "end_date",
   "column_break_cxj3z",
   "branch",
   "weight",
   "task_taken",
+  "qa_idle_total_day",
   "section_break_uzzci",
   "task"
  ],
@@ -55,6 +58,7 @@
    "read_only": 1
   },
   {
+   "default": "1",
    "fieldname": "total_days",
    "fieldtype": "Int",
    "label": "Total Days",
@@ -78,11 +82,26 @@
    "fieldtype": "Int",
    "label": "Total Weight",
    "read_only": 1
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "qa_idle_total_day",
+   "fieldtype": "Int",
+   "label": "QA Total Idle Day"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-05-29 16:59:23.802897",
+ "modified": "2023-07-25 09:26:56.873018",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Data Report",

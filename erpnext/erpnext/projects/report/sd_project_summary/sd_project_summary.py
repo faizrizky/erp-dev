@@ -83,7 +83,7 @@ def execute(filters=None):
                 + overdue_dependent_count
                 + completed_dependent_count
             )
-            progress = "{:.2f}%".format((completed_dependent_count/total_tasks_dependent_count) * 100) if completed_dependent_count != 0 else "N/A"
+            progress = "{:.2f}%".format((completed_dependent_count/total_tasks_dependent_count) * 100) if completed_dependent_count != 0 else "0%"
             # print((task.name,completed_dependent_count/total_tasks_dependent_count,progress) * 100) if completed_dependent_count != 0 else "N/A"
            
 			
@@ -173,7 +173,6 @@ def get_report_summary(filtered_data):
     total_overdue = 0
 
     for task in filtered_data:
-        print("TASK COMPLETED : ", task["completed"])
         total_completed += task["completed"]
         total_total_tasks += task["total_tasks"]
         total_overdue += task["overdue"]

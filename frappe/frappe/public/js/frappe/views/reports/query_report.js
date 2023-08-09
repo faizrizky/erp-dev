@@ -1399,7 +1399,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		return Object.keys(applied_filters)
 			.map((fieldname) => {
 				const label = frappe.query_report.get_filter(fieldname).df.label;
-				const value = applied_filters[fieldname];
+				let value = applied_filters[fieldname];
+				const custom_values_after = frappe.query_report.get_filter(fieldname).df.custom_values_after;
+
+				if (typeof custom_values_after === "function") {
+					value += custom_values_after(applied_filters);
+				}
+
 				return `<h4>${__(label)}: ${value}</h4>`;
 			})
 			.join("");

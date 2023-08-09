@@ -33,7 +33,7 @@ frappe.query_reports["Employee Report Project"] = {
 								actual_end_date = response.message.actual_end_date;
 
 								if (expected_end_date) {
-									concatenated_str += "<br><h6 class='text-secondary'>Expected End Date: " + expected_end_date + "</h6>";
+									concatenated_str += "<br><h6 class='text-secondary'>End Date: " + expected_end_date + "</h6>";
 								}
 
 								if (actual_end_date) {

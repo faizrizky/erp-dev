@@ -423,7 +423,10 @@ class Task(NestedSet):
 					has_error.append(d.subject)
 
 			if len(has_error) > 0 : 
-				frappe.throw(_("{0} name in {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
+				frappe.throw(_("{0} Name in the {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
+			
+			if d.subject.count("-") > 1 : 
+				frappe.throw(_("{0} Name in the {1} has more than 1 '-', with maximum usage of 1").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
 
 			percentage_programmer = (count_true_programmer / len(self.sub_task)) * 100
 			percentage_qa = (count_true_qa / len(self.sub_task)) * 100
@@ -622,28 +625,29 @@ class Task(NestedSet):
 			self.programmer_total_day = 0
 		
 		if self.status == "Pending Review" or self.status == "Completed":
-			if self.review_date is not None:
-				# print("START DATE : ", self.exp_start_date)
-				# print("START DATE : ", self.start_date)
-				# print("END DATE : ", self.end_date)
-				self.date_start = str(start_date)
-				self.end_date = str(end_date)
+			if self.review_date is None:
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold(self.name + " : Review Date")))
+			# print("START DATE : ", self.exp_start_date)
+			# print("START DATE : ", self.start_date)
+			# print("END DATE : ", self.end_date)
+			self.date_start = str(start_date)
+			self.end_date = str(end_date)
 
-				self.d1 = datetime.strptime(self.date_start, "%Y-%m-%d")
-				self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
+			self.d1 = datetime.strptime(self.date_start, "%Y-%m-%d")
+			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 
-				self.daydiff = self.d2.weekday() - self.d1.weekday()
+			self.daydiff = self.d2.weekday() - self.d1.weekday()
 
-				self.total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
+			self.total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-				if self.total_day < 0:
-					self.total_day = 0
+			if self.total_day < 0:
+				self.total_day = 0
 
-				if self.status == "Pending Review":
-					self.programmer_total_day = self.total_day
-					return self.programmer_total_day
-				elif self.status == "Completed":
-					return self.total_day
+			if self.status == "Pending Review":
+				self.programmer_total_day = self.total_day
+				return self.programmer_total_day
+			elif self.status == "Completed":
+				return self.total_day
 					
 				# print("TOTAL HARINYA COY : ",self.programmer_total_day)
 				
@@ -655,8 +659,8 @@ class Task(NestedSet):
 				# self.programmer_total_day = self.duration
 
 				# print("TOTAL DAYS PROGRAMMER: ", self.duration)
-			else:
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Review Date")))
+			# else:
+			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Review Date")))
 
 	def validate_duration(self):
 		if flt(self.exp_start_date == None):

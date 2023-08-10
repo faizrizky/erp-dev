@@ -21,6 +21,7 @@ class SDDataReport(Document):
 		
 			
 	def validate_task_count(self):
+
 		self.task_taken = len(self.task)
 		self.start_date = None
 		self.end_date = None
@@ -30,7 +31,10 @@ class SDDataReport(Document):
 		exp_start_dates = []  # Initialize as empty lists before the loop
 		exp_end_dates = []  # Initialize as empty lists before the loop
 		for item in self.task:
-			task_name = item.task_name.split('-')[0].strip()
+			task_name = item.task_name
+
+			if item.is_subtask :
+				task_name = "-".join(item.task_name.split('-')[:-1]).strip()
 
 			# Get the Task document using the reference field value (task_name)
 			task_doc = frappe.get_doc('Task', task_name)

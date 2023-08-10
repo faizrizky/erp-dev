@@ -64,9 +64,9 @@ def get_data(filters):
 
                 pname = task_name.split('-')[0].strip()
 
-                if prev_task_name and prev_task_name.split('-')[0].strip() != task_name.split('-')[0].strip():
-                    # total_days += child.days
-                    subject,exp_start_date, review_date = frappe.db.get_value('Task', pname, ['subject','exp_start_date', 'review_date'])
+                # if prev_task_name and prev_task_name.split('-')[0].strip() != task_name.split('-')[0].strip():
+                #     # total_days += child.days
+                #     subject,exp_start_date, review_date = frappe.db.get_value('Task', pname, ['subject','exp_start_date', 'review_date'])
                     # print("subject : ", subject, " || ","exp_start_date : ", exp_start_date," || ","review_date : ",review_date)
 
                     # print("NAMA TASK : ", pname)

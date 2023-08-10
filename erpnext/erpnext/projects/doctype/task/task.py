@@ -36,6 +36,9 @@ class Task(NestedSet):
 		if cust:
 			ret = {"customer_name": cust and cust[0][0] or ""}
 			return ret
+		
+
+
 
 	def validate(self):
 		self.validate_completed_on()
@@ -168,7 +171,10 @@ class Task(NestedSet):
 		
 	def handle_completed_task(self):
 
+
 		status_before = frappe.db.get_value("Task", self.name, "status")
+
+		print(self.name);
 
 		checker_name_list = [x for x in self.sub_task if not x.checker_name == "" and not x.checker_name == None]
 		jumlah_total_elemen_checker_name = len(checker_name_list)	
@@ -1250,6 +1256,7 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status,is_parent):
 	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch,is_parent = is_parent, total_days=total_day)
 
+
 	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
 
 	if not frappe.db.exists({"doctype": "SD Data Report", "employee_name": employee_name, "project_name": project}):
@@ -1275,7 +1282,7 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 			# user.total_days = tot + int(total_day)
 			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent, 'is_subtask' : True}
 														)
 				parent.save()
 				# user.db_update()
@@ -1306,8 +1313,9 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 			# user.total_days = tot + int(total_day)
 			if task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent, 'is_subtask' : False}
 														)
+				print(task_name)
 				parent.save()
 				# user.db_update()
 

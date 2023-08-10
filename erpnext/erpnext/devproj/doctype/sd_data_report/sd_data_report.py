@@ -34,7 +34,7 @@ class SDDataReport(Document):
 			task_name = item.task_name
 
 			if item.is_subtask :
-				task_name = "-".join(item.task_name.split('-')[:-1]).strip()
+				task_name = "-".join(item.task_name.split('-')[:-2]).strip()
 
 			# Get the Task document using the reference field value (task_name)
 			task_doc = frappe.get_doc('Task', task_name)

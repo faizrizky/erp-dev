@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 # import frappe
+from frappe import _
 from frappe.model.document import Document
 import json
 import frappe
@@ -32,9 +33,15 @@ class SDDataReport(Document):
 		exp_end_dates = []  # Initialize as empty lists before the loop
 		for item in self.task:
 			task_name = item.task_name
-
+			
 			if item.is_subtask :
-				task_name = "-".join(item.task_name.split('-')[:-2]).strip()
+				if task_name.count("-") > 0:
+					# print("NAMAKU : ",task_name)
+					# frappe.throw(_("Task Name {0}").format(frappe.bold(item.task_name)))
+					task_name = "-".join(item.task_name.split('-')[:-1]).strip()
+			# else:
+			# 		frappe.throw(_("Task Name {0}").format(frappe.bold(item.task_name)))
+
 
 			# Get the Task document using the reference field value (task_name)
 			task_doc = frappe.get_doc('Task', task_name)

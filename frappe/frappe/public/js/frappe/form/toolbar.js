@@ -232,6 +232,9 @@ frappe.ui.form.Toolbar = class Toolbar {
 				d.set_primary_action(__("Rename"), (values) => {
 					d.disable_primary_action();
 					d.hide();
+					
+					if( typeof document.validate_rename === "function") document.validate_rename(values);
+
 					this.rename_document_title(values.name, values.title, values.merge)
 						.then(() => {
 							d.hide();

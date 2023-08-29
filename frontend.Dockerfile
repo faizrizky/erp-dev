@@ -7,7 +7,7 @@ ARG ERPNEXT_VERSION=14
 ARG APP_NAME
 
 # Setup frappe-bench using FRAPPE_VERSION
-RUN bench init  --skip-redis-config-generation --verbose --skip-assets /home/frappe/frappe-bench
+RUN bench init  --skip-redis-config-generation --verbose --skip-assets --frappe-branch v14.24.0 /home/frappe/frappe-bench
 
 WORKDIR /home/frappe/frappe-bench
 

@@ -3,6 +3,17 @@
 
 frappe.provide("erpnext.projects");
 
+document.validate_rename = function(value) { 
+	var regex = /-/g;
+
+	if (value.title.match(regex).length > 1) {
+		// frappe.throw(__("Value cannot contain more than one hyphen (-)"));
+		frappe.throw({message:__("{0} cannot contain a hyphen (-).", ["<b>"+value.title+"</b>"]), title: __("Invalid Name")});
+}
+
+
+}
+
 frappe.ui.form.on("Task", {
 	setup: function (frm) {
 		frm.make_methods = {

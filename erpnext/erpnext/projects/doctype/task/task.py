@@ -14,6 +14,7 @@ from datetime import datetime
 from datetime import timedelta
 from frappe.utils import nowdate
 from frappe import db
+import re
 
 
 
@@ -38,9 +39,11 @@ class Task(NestedSet):
 			return ret
 		
 
-
+	def autoname(self):		
+		self.validate_task_name()
 
 	def validate(self):
+		# self.validate_task_name()
 		self.validate_completed_on()
 		self.validate_on_going_sprint()
 		self.validate_dates()
@@ -59,9 +62,14 @@ class Task(NestedSet):
 		self.validate_duration_qa(self.exp_start_date,self.completed_on,self.qa_open_date,self.qa_testing_date)[0]
 			
 		self.handle_completed_task()
+		
 		# self.calculate_total_day_on_data_report()
 		# self.get_exp_dates_from_sd_data_report()
 
+	def validate_task_name(self):
+		if self.subject.count("-") > 1 : 
+				frappe.throw(_("{0} The name cannot contain more than one hyphen '-', with a maximum usage of one.").format(frappe.bold(self.subject),title=_("Invalid Task Name")))
+				
 	def get_exp_dates_from_sd_data_report(self):
 		subject = frappe.db.get_value('Task', self.name, '_assign')
 
@@ -165,9 +173,7 @@ class Task(NestedSet):
 							frappe.db.set_value('SD Data Report', {'employee_name': emp_name, 'project_name': self.project}, 'end_date', self.exp_end_date)
 
 
-
-					
-					
+	
 		
 	def handle_completed_task(self):
 
@@ -391,6 +397,7 @@ class Task(NestedSet):
 		arr_qa = []
 		check_val = dict([])
 		has_error = []
+		has_hypen= []
 
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
@@ -399,6 +406,9 @@ class Task(NestedSet):
 					check_val[d.subject] = 1
 				else:
 					check_val[d.subject] += 1
+				
+				if d.subject.count("-") > 0:
+					has_hypen.append(d.subject)
 
 				if check_val[d.subject] <= 1:
 
@@ -423,10 +433,10 @@ class Task(NestedSet):
 					has_error.append(d.subject)
 
 			if len(has_error) > 0 : 
-				frappe.throw(_("{0} Name in the {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
+				frappe.throw(_("{0} Name in the {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
 			
-			if d.subject.count("-") > 1 : 
-				frappe.throw(_("{0} Name in the {1} has more than 1 '-', with maximum usage of 1").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")))
+			if len(has_hypen) > 0:
+				frappe.throw(_("{0} Name in the {1} cannot contain a hyphen (-)").format(frappe.bold((" , ").join(has_hypen)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
 
 			percentage_programmer = (count_true_programmer / len(self.sub_task)) * 100
 			percentage_qa = (count_true_qa / len(self.sub_task)) * 100

@@ -51,7 +51,7 @@ def get_data(filters):
             total_days = parent_doc.total_days
             total_weight = 0
             task_taken = len(child_records)
-            concatenated_str += "<ol style='padding-left: 15px;'>"
+            concatenated_str += "<ol style='padding-left: 30px;padding-right:30px;'>"
             # concatenated_days += "<ol style='padding-left: 15px;'>"
 
             prev_task_name = None  # Variable to store the previous task name
@@ -80,15 +80,26 @@ def get_data(filters):
                 #     concatenated_days += task_days  + "<br />" + "<br />"
                 # else:
                 #     concatenated_days += task_days  + "<br />"
-                concatenated_days += task_days  + "<br />" + "<br />"
-                if child.is_parent == 0:
-                    # concatenated_str += "<li>" + task_name + " ( " + task_days + " Days ) " + "<br />"
-                    concatenated_str += "<li>" + task_name + "<br />"
+                concatenated_days += task_days  + "<br />"
+                
                     
+                if child.is_parent == 0:
+                    concatenated_str += "<li style='word-break: break-all;hyphens: auto;'>"
+                    if child.is_subtask == 1 and "-" in task_name:
+                        concatenated_str += task_name.split('-')[1].strip() + "</li>"
+                    elif "-" in task_name:
+                        concatenated_str += "-".join(task_name.split('-')[:-1]).strip() + "</li>"
+                    else:
+                        concatenated_str += task_name + "</li>"
+
                     
                 else:
                     # concatenated_str += "<li>" + task_name + " - Integration" + " ( " + task_days + " Days ) " + "<br />"
-                    concatenated_str += "<li>" + task_name + " - Integration" + "<br />"
+
+                    if child.is_subtask == 1:
+                        concatenated_str += "<li>" + task_name.split('-')[1].strip() + " - Integration" + "</li>"
+                    else:
+                        concatenated_str += "<li>" + task_name + " - Integration" + "</li>"
 
                 prev_task_name = task_name
 

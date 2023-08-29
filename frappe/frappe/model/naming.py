@@ -441,6 +441,9 @@ def get_default_naming_series(doctype: str) -> str | None:
 
 def validate_name(doctype: str, name: int | str, case: str | None = None):
 
+	# if name.count("-") > 1 : 
+	# 	frappe.throw(_("{0} cannot contain '-' ini dari naming").format(frappe.bold((name))))
+		
 	if not name:
 		frappe.throw(_("No Name Specified for {0}").format(doctype))
 

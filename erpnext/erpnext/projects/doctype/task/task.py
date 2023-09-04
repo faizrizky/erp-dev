@@ -39,11 +39,10 @@ class Task(NestedSet):
 			return ret
 		
 
-	def autoname(self):		
+	def before_validate(self):		
 		self.validate_task_name()
 
 	def validate(self):
-		# self.validate_task_name()
 		self.validate_completed_on()
 		self.validate_on_going_sprint()
 		self.validate_dates()
@@ -68,7 +67,7 @@ class Task(NestedSet):
 
 	def validate_task_name(self):
 		if self.subject.count("-") > 1 : 
-				frappe.throw(_("{0} The name cannot contain more than one hyphen '-', with a maximum usage of one.").format(frappe.bold(self.subject),title=_("Invalid Task Name")))
+				frappe.throw(_("{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.").format(frappe.bold(self.subject),title=_("Invalid Task Name")))
 				
 	def get_exp_dates_from_sd_data_report(self):
 		subject = frappe.db.get_value('Task', self.name, '_assign')
@@ -1329,7 +1328,7 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 				parent.append(
 										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent, 'is_subtask' : False}
 														)
-				print(task_name)
+				# print(task_name)
 				parent.save()
 				# user.db_update()
 
@@ -1431,7 +1430,7 @@ def update_employee_weight2(employee_name,project,weight,branch,total_day,subjec
 			elif status != "Completed":
 				user.weight = weights + weight
 				item_to_remove = task_item.task_name
-				print("ITEM TO REMOVE : ",item_to_remove)
+				# print("ITEM TO REMOVE : ",item_to_remove)
 
 				if any(row.task_name == item_to_remove for row in parent.task):
 					parent.task = [row for row in parent.task if row.task_name != item_to_remove]

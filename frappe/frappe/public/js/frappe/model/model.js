@@ -678,7 +678,7 @@ $.extend(frappe.model, {
 			],
 		});
 
-		d.set_primary_action(__("kokokokoko"), function () {
+		d.set_primary_action(__("Rename"), function () {
 			d.hide();
 			var args = d.get_values();
 			if (!args) return;

@@ -5,10 +5,10 @@ frappe.provide("erpnext.projects");
 
 document.validate_rename = function(value) { 
 	var regex = /-/g;
+	
 
-	if (value.title.match(regex).length > 1) {
-		// frappe.throw(__("Value cannot contain more than one hyphen (-)"));
-		frappe.throw({message:__("{0} cannot contain a hyphen (-).", ["<b>"+value.title+"</b>"]), title: __("Invalid Name")});
+	if (value.title.match(regex) !== null && value.title.match(regex).length > 1) {
+		frappe.throw({message:__("{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.", ["<b>"+value.title+"</b>"]), title: __("Invalid Task Name")});
 }
 
 

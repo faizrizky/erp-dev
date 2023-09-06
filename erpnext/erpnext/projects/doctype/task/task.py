@@ -68,7 +68,7 @@ class Task(NestedSet):
 	def validate_task_name(self):
 		if self.subject.count("-") > 1 : 
 				frappe.throw(_("{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.").format(frappe.bold(self.subject),title=_("Invalid Task Name")))
-				
+
 	def get_exp_dates_from_sd_data_report(self):
 		subject = frappe.db.get_value('Task', self.name, '_assign')
 

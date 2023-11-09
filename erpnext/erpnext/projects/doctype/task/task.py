@@ -731,8 +731,7 @@ class Task(NestedSet):
 				frappe.throw(_("Your {0} is {1}. Please check your {0} field. {0} cannot be set in {2} status, please back to {3} status, and set your {0} again. Then set back to {2} and save it. Things to Note is {0} cannot less than {4} in {2} status.")
 				.format(frappe.bold("QA Task Progress"),frappe.bold(f'{self.qa_progress}%'),frappe.bold("Integration"),frappe.bold("QA Testing"),frappe.bold("100%")))
 			else:
-				if self.is_group != True:
-					self.progress = 100
+				self.progress = 100
 
 		if self.status == "Working":
 

@@ -17,7 +17,7 @@
    "label": "Project Summary"
   }
  ],
- "content": "[{\"id\":\"B6i5MEvYhX\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home</span>\",\"col\":12}},{\"id\":\"b8DB8ZqJty\",\"type\":\"card\",\"data\":{\"card_name\":\"Report\",\"col\":3}},{\"id\":\"nnq5Fwc81h\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Project\",\"col\":4}},{\"id\":\"1UStLCKieY\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"SD Timesheets\",\"col\":5}},{\"id\":\"wfKsBIW6xa\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Department Report\",\"col\":12}},{\"id\":\"o5C4ffZ30B\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Summary\",\"col\":12}},{\"id\":\"UJmzeqYTU8\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Delayed Task Summary\",\"col\":12}},{\"id\":\"H4r_1hK5VI\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Employee Report Project Chart\",\"col\":12}}]",
+ "content": "[{\"id\":\"B6i5MEvYhX\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Home</span>\",\"col\":12}},{\"id\":\"y3iepEAyCn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Home Dashboard\",\"col\":12}},{\"id\":\"b8DB8ZqJty\",\"type\":\"card\",\"data\":{\"card_name\":\"Report\",\"col\":3}},{\"id\":\"nnq5Fwc81h\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Project\",\"col\":4}},{\"id\":\"1UStLCKieY\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"SD Timesheets\",\"col\":5}},{\"id\":\"o5C4ffZ30B\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Summary\",\"col\":12}},{\"id\":\"Mx0OrK2jOw\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Department Report\",\"col\":12}},{\"id\":\"H4r_1hK5VI\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Employee Report Project Chart\",\"col\":12}},{\"id\":\"UJmzeqYTU8\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Delayed Task Summary\",\"col\":12}}]",
  "creation": "2023-01-16 11:09:52.024528",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -107,7 +107,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-08-09 13:58:32.270036",
+ "modified": "2023-10-03 17:09:30.146256",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Home",
@@ -126,6 +126,14 @@
  ],
  "roles": [],
  "sequence_id": 1.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Home Dashboard",
+   "link_to": "Project",
+   "type": "Dashboard"
+  }
+ ],
  "title": "Home"
 }

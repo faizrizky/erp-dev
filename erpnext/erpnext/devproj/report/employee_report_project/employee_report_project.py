@@ -131,7 +131,7 @@ def get_chart_data(data):
     # overdue_tasks = []
 
     for project in data:
-        labels.append(project["branch"])
+        labels.append(project["employee_name"])
         task_taken.append(project["task_taken"])
         total_weight.append(project["total_weight"])
         total_days.append(project["total_days"])

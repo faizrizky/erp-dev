@@ -371,29 +371,6 @@ class Task(NestedSet):
 			qa_integration_testing = self.calculate_daydiff(self.end_date_integration, self.completed_on, self.qa_total_day)
 		
 		self.qa_total_day = qa_testing + qa_integration_testing
-		"""
-		if self.review_date is not None and self.qa_open_date is not None and self.qa_testing_date is not None and exp_start_date is not None:
-			
-			self.start_date = str(self.exp_start_date)
-			self.end_date = str(self.completed_on)
-
-			self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
-			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-			self.daydiff = self.d2.weekday() - self.d1.weekday()
-
-			self.qa_total_day = ((self.d2 - self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff, 5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-
-			self.qa_start = datetime.strptime(str(qa_open_date), "%Y-%m-%d")
-			self.qa_end = datetime.strptime(str(qa_testing_date), "%Y-%m-%d")
-			self.daydiff = self.qa_end.weekday() - self.qa_start.weekday()
-
-			qa_total_idle_day = ((self.qa_end - self.qa_start).days - self.daydiff) / 7 * 5 + min(self.daydiff, 5) - (max(self.qa_end.weekday() - 4, 0) % 5) + 1
-
-			self.qa_total_day = self.qa_total_day - int(self.programmer_total_day) - int(qa_total_idle_day)
-			print("QA TOTAL DAY : ", self.qa_total_day)
-			if self.qa_total_day < 0:
-				self.qa_total_day = 0
-			"""
 			
 		return self.qa_total_day
 
@@ -409,6 +386,16 @@ class Task(NestedSet):
 		if self.status == "Pending Review" or self.status == "Completed":
 			if self.review_date is None:
 				frappe.throw(_("{0} Cannot be empty").format(frappe.bold(self.name + " : Review Date"),title=_("Review Date is Empty")))
+		
+		if self.exp_start_date != None and self.review_date != None:
+			working_total_days = self.calculate_daydiff(self.exp_start_date,self.review_date,self.programmer_total_day)
+
+		if self.start_date_integration != None and self.end_date_integration != None:
+			integration_total_days = self.calculate_daydiff(self.start_date_integration, self.end_date_integration, self.programmer_total_day)
+
+		self.programmer_total_day = working_total_days + integration_total_days
+		
+		print("working_total_days : ", working_total_days, " || ", "integration_total_days : ", integration_total_days)
 
 
 	def validate_duration(self):

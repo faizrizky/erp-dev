@@ -14,19 +14,19 @@ document.validate_rename = function (value) {
 			),
 			title: __("Invalid Task Name"),
 		});
+	}
 
-		if (
-			value.title.match(regex) !== null &&
-			value.title.match(regex).length > 1
-		) {
-			frappe.throw({
-				message: __(
-					"{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.",
-					["<b>" + value.title + "</b>"]
-				),
-				title: __("Invalid Task Name"),
-			});
-		}
+	if (
+		value.title.match(regex) !== null &&
+		value.title.match(regex).length > 1
+	) {
+		frappe.throw({
+			message: __(
+				"{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.",
+				["<b>" + value.title + "</b>"]
+			),
+			title: __("Invalid Task Name"),
+		});
 	}
 };
 

@@ -52,89 +52,17 @@ class Task(NestedSet):
 		self.validate_progress()
 		self.validate_status()
 		# self.validate_status_child()
-		# self.validate_sprint()
 		self.validate_sub_task()
 		self.validate_completed_task()
 		self.update_depends_on()
 		self.validate_dependencies_for_template_task()
-		self.validate_duration_programmer(self.exp_start_date,self.review_date)
-		self.validate_duration_qa(self.exp_start_date,self.completed_on,self.qa_open_date,self.qa_testing_date)[0]
-			
+		self.validate_duration_programmer()
+		self.validate_duration_qa()			
 		self.handle_completed_task()
-		
-		# self.calculate_total_day_on_data_report()
-		# self.get_exp_dates_from_sd_data_report()
 
 	def validate_task_name(self):
 		if self.subject.count("-") > 1 : 
 				frappe.throw(_("{0} is using more than one hyphen (-). The maximum allowed hyphen (-) is one.").format(frappe.bold(self.subject),title=_("Invalid Task Name")))
-
-	def get_exp_dates_from_sd_data_report(self):
-		subject = frappe.db.get_value('Task', self.name, '_assign')
-
-		if subject is not None and self.review_date is not None:
-			result = json.loads(subject)
-			exp_start_dates = []  # Initialize as empty lists before the loop
-			exp_end_dates = []  # Initialize as empty lists before the loop
-			
-			for emp in result:
-				emp_name = frappe.db.get_value('User', emp, 'full_name')
-				sd_data_report = frappe.get_doc('SD Data Report', {'employee_name': emp_name, 'project_name': self.project})
-
-				# Access the list of child table rows (SD Data Report Item) from the SD Data Report document
-				sd_data_report_items = sd_data_report.get('task')
-
-				for item in sd_data_report_items:
-					task_name = item.task_name.split('-')[0].strip()
-
-					# Get the Task document using the reference field value (task_name)
-					task_doc = frappe.get_doc('Task', task_name)
-
-					# Get the exp.start_date & exp.end_date value from the Task document
-					exp_start_date = task_doc.exp_start_date
-					exp_end_date = task_doc.exp_end_date
-
-					# Append the exp_start_date and exp_end_date to the respective lists
-					exp_start_dates.append(exp_start_date)
-					exp_end_dates.append(exp_end_date)
-
-			smallest_exp_start_date = min(exp_start_dates) if exp_start_dates else None
-			largest_exp_end_date = max(exp_end_dates) if exp_end_dates else None
-
-			# Handle the case when the smallest_exp_start_date and largest_exp_end_date are 0 or None
-			if smallest_exp_start_date is None or smallest_exp_start_date == 0:
-				smallest_exp_start_date = "No valid start date found."
-			if largest_exp_end_date is None or largest_exp_end_date == 0:
-				largest_exp_end_date = "No valid end date found."
-
-
-			print("Smallest exp_start_date:", smallest_exp_start_date)
-			print("Largest exp_end_date:", largest_exp_end_date)
-
-		return exp_start_dates, exp_end_dates
-
-
-	def calculate_total_day_on_data_report(self):
-		subject = frappe.db.get_value('Task', self.name, '_assign')
-		if self.status == "Completed":
-			if subject is not None and self.review_date is not None:
-				result = json.loads(subject)
-				for emp in result:
-					emp_name = frappe.db.get_value('User', emp, 'full_name')
-
-					# Get the 'SD Data Report' document by name
-					doc = frappe.get_doc('SD Data Report', {'employee_name': emp_name, 'project_name': self.project})
-
-					# Access the value of the 'total_days', 'start_date', and 'end_date' fields directly from the document
-					start_date_value = doc.start_date
-					end_date_value = doc.end_date
-
-					# Perform the update with the calculated value
-					frappe.db.set_value('SD Data Report',
-										{'employee_name': emp_name, 'project_name': self.project},
-										'total_days', self.validate_duration_programmer(start_date_value, end_date_value))
-			else:
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Review Date")))
 
 	def validate_working_date(self, branch):
 		subject = frappe.db.get_value('Task', self.name, '_assign')
@@ -144,18 +72,11 @@ class Task(NestedSet):
 				for emp in result:
 					emp_name = frappe.db.get_value('User', emp, 'full_name')
 
-					
-
-					# Get the 'SD Data Report' document by name
 					doc = frappe.get_doc('SD Data Report', {'employee_name': emp_name, 'project_name': self.project})
 
 					start_date = doc.start_date
 					end_date = doc.end_date
 
-					# print("BRANCH : ", doc.employee_name)
-					# print("START DATE FROM DATA REPORT : ", doc.start_date)
-					# print("END DATE FROM DATA REPORT : ", doc.end_date)
-				
 					if branch == "Quality Assurance":
 						if start_date is None or self.exp_start_date < start_date:
 							frappe.db.set_value('SD Data Report', {'employee_name': emp_name, 'project_name': self.project}, 'start_date', self.exp_start_date)
@@ -176,7 +97,6 @@ class Task(NestedSet):
 		
 	def handle_completed_task(self):
 
-
 		status_before = frappe.db.get_value("Task", self.name, "status")
 
 		print(self.name);
@@ -188,8 +108,6 @@ class Task(NestedSet):
 
 			for d in self.sub_task:
 
-				# print("CHECKER NAME iS : ", d.checker_name)
-
 				if flt(d.weight) > 4 or flt(d.weight) < 1:
 					frappe.throw(_("Please set {0} value between {1}")
 							.format(frappe.bold("Sub Task Weight"), frappe.bold("1 to 4")))
@@ -199,17 +117,6 @@ class Task(NestedSet):
 				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
 				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
-
-				# print("INI BRANCH CHECKER : ",branch_checker)
-
-				# print("BRANCH : ",branch)
-				# print("COMPLETION : ",d.completion)
-
-				#Check Print
-				# print("status before : ", status_before)
-				# print("status : ", self.status)
-				# print(employee_name," ",branch)
-				# print("JUMLAH CHECKER NAME : ", jumlah_total_elemen_checker_name)
 
 
 				# if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
@@ -224,10 +131,6 @@ class Task(NestedSet):
 										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
 
 						update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
-
-						# self.validate_working_date(branch_checker)
-						
-					# update_employee_weight(checker_name,self.project,d.qa_weight,branch,self.qa_total_day,d.subject)
 
 
 				if status_before == "Completed" and self.status != "Completed":
@@ -281,55 +184,6 @@ class Task(NestedSet):
 						else:
 							update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.programmer_total_day),self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
-							# self.validate_working_date(branch)
-
-
-
-
-
-
-					# update_employee_weight(emp_name,self.project,-self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status)
-					# update_employee_weight(emp_name,self.project,-self.task_weight,branch, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status)
-
-
-			# query = """
-			# 		SELECT _assign FROM `tabTask` WHERE tabTask.name = %(task_name)s
-			# 		"""
-
-			# # Execute the query with parameters
-			# task_name = self.name
-			# results = []
-			# # frappe.db.sql(query, {"task_name": task_name}, as_dict=True, callback=lambda row: results.append(row))
-			# query_results = frappe.db.sql(query, {"task_name": task_name}, as_dict=True)
-
-			# for row in query_results:
-			# 	print(row)
-			# 	results.append(row)
-			# # print(results)
-
-			# # Process the results
-			# if results:
-			# 	first_row = results[0]
-			# 	print(first_row)
-			# 	# if assign_array:
-
-       			# 	 print(", ".join(str(element) for element in assign_array))
-
-		# employee_name_query = """
-		# 	SELECT employee_name FROM `tabEmployee` WHERE tabEmployee.user_id = %(employee_name)s
-		# 	"""
-		# employee_name = row._assign
-		# results = frappe.db.sql(employee_name_query, {"employee_name": employee_name}, as_dict=True)
-		# print(results)
-		# employee_name = frappe.db.get_value("Employee", d.employee_name, "employee_name")
-		# print(employee_name)
-		# checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
-		# branch = frappe.db.get_value("Employee", d.employee_name, "branch")
-		# if self.status == "Completed":
-		# 	update_employee_weight(employee_name,self.project,self.task_weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task))
-
-		# 	update_employee_weight(checker_name,self.project,d.qa_weight,branch, self.qa_total_day,d.subject,self.name,len(self.sub_task))
-
 
 
 	def validate_dates(self):
@@ -356,8 +210,9 @@ class Task(NestedSet):
 			)
 
 		if getdate(self.qa_open_date) > getdate(self.qa_testing_date):
-			frappe.throw(_("{0} Cannot be greater than {1}").format(frappe.bold("QA Start Working Date"),frappe.bold("QA End Working Date")))
+			frappe.throw(_("{0} cannot be greater than {1} or {1} cannot be less than {0} ").format(frappe.bold("QA Open Date"),frappe.bold("QA Testing Date")), title=("QA Date Invalid"))
 
+			
 	def validate_parent_expected_end_date(self):
 		if self.parent_task:
 			parent_exp_end_date = frappe.db.get_value("Task", self.parent_task, "exp_end_date")
@@ -381,11 +236,6 @@ class Task(NestedSet):
 			validate_project_dates(
 				getdate(expected_end_date), self, "act_start_date", "act_end_date", "Actual"
 			)
-
-	# def before_save(doc):
-	#     # Set the "read-only" flag to True if a certain condition is met
-	# 	if doc.some_field == "Some Value":
-	# 		doc.read_only = 1
 
 	def validate_sub_task(self):
 
@@ -443,22 +293,6 @@ class Task(NestedSet):
 			self.individual_progress = percentage_programmer
 			self.qa_progress = percentage_qa
 
-			# print("Total Percentage : "+ str(percentage))
-
-		else:
-			print("Manual Percentage")
-
-		# # if d.task and d.task not in depends_on_tasks:
-		# # 	depends_on_tasks += d.task + ","
-
-		# boolean_arr = [d.completion == True for d.completion in self.sub_task]
-		# print(boolean_arr) 
-		# # Menghitung jumlah True dalam array boolean
-		# count_true = sum(boolean_arr)
-		# print(count_true)  # Output: 3
-		# # percentage = (count_true / len(d)) * 100
-		# # print(percentage)  # Output: 60.0
-
 
 	def validate_status_child(self):
 
@@ -470,42 +304,6 @@ class Task(NestedSet):
 
 	def validate_on_going_sprint(self):
 
-		# events = frappe.get_list(	
-		# 				"Event", filters={"status": "Open"}, fields=["name", "starts_on"]
-		# 			)
-		# for event in events:
-		# 	if (event.starts_on and getdate(event.starts_on) == getdate(nowdate())):
-		# 		# ongoing=frappe.db.set_value('Task', event.name, 'ongoing_sprint', event.name)
-		# 		self.ongoing_sprint = frappe.db.get_value("Event",event.name,'name')
-		# 		# task_subject = frappe.db.get_value('Event', event.name, 'name')
-		# 		# print(task_subject)
-		# 		# asd =frappe.db.set_value('Task', task_subject, 'ongoing_sprint', event.name)
-		# 		# print(asd)
-		# 		# print(ongoing_sprint)
-		# print(self.multi_sprint.items());
-
-		# event = frappe.db.get_list('Event', pluck='starts_on',
-		# filters={
-		# 	# 'starts_on': ['<=', getdate(nowdate())],
-		# 	"name" : ["in", self.multi_sprint]
-		# },
-		# 				fields=['starts_on', 'name'],
-		# 				order_by='starts_on desc',
-		# 				page_length=2,
-		# 				as_list=False
-		# 				)
-		# assigment_sprint = frappe.db.get_list('Assignment Sprint', 
-		# filters={
-		# 	'parent': self.name
-		# },
-		# 				fields=['parent', 'name', 'sprint_id'],
-		# 				page_length=10000,
-		# 				as_list=False
-		# 				)
-
-
-		# self.exp_start_date = event[1] if event[1] else event[0]
-
 		arr = [] 
 		for items in self.multi_sprint:
 			doc = frappe.get_doc('Event', items.sprint_id)
@@ -516,42 +314,8 @@ class Task(NestedSet):
 		if (len(arr) <= 0):
 			frappe.throw(_("You need to fill {0} field in Category Sprint to continue").format(frappe.bold("Sprint")))
 
-		# print(min(arr),max(arr))
 		self.exp_start_date =min(arr)
 		self.exp_end_date = max(arr)
-
-
-
-		# for items in self.multi_sprint:
-		# 	doc = frappe.get_doc('Event', items.sprint_id)
-		# 	arr.append(doc.starts_on)
-		# 	if (doc.ends_on):
-		# 		if (getdate(doc.ends_on) >= getdate(nowdate())):
-		# 			# self.ongoing_sprint = doc
-		# 			# print("ends on",doc.ends_on)
-		# 			# min_val = max(arr)
-		# 			# self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
-		# 			self.exp_end_date = frappe.db.get_value("Event",doc.name,'ends_on')
-		# 		elif (doc.starts_on):
-
-		# 			if (getdate(doc.starts_on) <= getdate(nowdate())):
-		# 				# self.ongoing_sprint = doc
-		# 				print(doc)
-		# 				# min_val = max(arr)
-		# 				# self.ongoing_sprint = frappe.db.get_value("Event",doc.name,'name')
-		# 				self.exp_start_date = frappe.db.get_value("Event",doc.name,'starts_on')
-		# 				self.exp_end_date = frappe.db.get_value("Event",doc.name,'ends_on')
-
-
-
-
-		# 	# print("Minimum value in the array:", min_val)
-		# if (len(arr) <= 0):
-		# 	# 	# self.ongoing_sprint = ""
-		# 	# self.exp_start_date = ""
-		# 	# self.exp_end_date = ""
-		# 	frappe.throw(_("You need to fill {0} field in Category Sprint to continue").format(frappe.bold("Sprint")))
-
 
 
 	def validate_status(self):
@@ -571,36 +335,45 @@ class Task(NestedSet):
 	def validate_completed_task(self):
 		if self.status == "Completed":
 			self.completed_by = frappe.session.user
-			self.completed_on = getdate(today())
 
-	days = 0
-	d1 = 0
-	d2 = 0
+			if self.completed_on == None:
+				self.completed_on = getdate(today())
+		else:
+			self.completed_on = None
 
-	def validate_duration_integration(self):
-		if self.start_date_integration is not None and self.end_date_integration is not None:
-			self.integration_start = str(self.start_date_integration)
-			self.integration_end = str(self.end_date_integration)
+	def calculate_daydiff(self, start_date, end_date, total_day):
+		total_day_diff = 0
+		self.start = datetime.strptime(str(start_date), "%Y-%m-%d")
+		self.end = datetime.strptime(str(end_date), "%Y-%m-%d")
+		self.daydiff = self.end.weekday() - self.start.weekday()
 
-			self.integration1 = datetime.strptime(self.integration_start, "%Y-%m-%d")
-			self.integration2 = datetime.strptime(self.integration_end, "%Y-%m-%d")
+		total_day_diff = ((self.end - self.start).days - self.daydiff) / 7 * 5 + min(self.daydiff, 5) - (max(self.end.weekday() - 4, 0) % 5) + 1
 
-			self.daydiffIntegration = self.integration2.weekday() - self.integration1.weekday()
-			self.daysIntegration = ((self.integration2-self.integration1).days - self.daydiffIntegration) / 7 * 5 + min(self.daydiffIntegration,5) - (max(self.integration2.weekday() - 4, 0) % 5) + 1
+		if total_day_diff < 0:
+				total_day = 0
+		else:
+			total_day = total_day_diff
 
-			if self.daysIntegration < 0:
-				self.total_day_integration = 0
-			else:
-				self.total_day_integration = self.daysIntegration
+		return total_day
 
 
-	def validate_duration_qa(self, exp_start_date, completed_on, qa_open_date, qa_testing_date):
-		qa_total_idle_day = 0
+	def validate_duration_qa(self):
+		qa_testing = 0
+		qa_integration_testing = 0
+
 		if self.qa_total_day is None:
 			self.qa_total_day = 0
 
-		if self.review_date is not None and self.qa_open_date is not None and self.qa_testing_date is not None and exp_start_date is not None and completed_on is not None:
+		if self.qa_open_date != None and self.qa_testing_date != None:
+			qa_testing = self.calculate_daydiff(self.qa_open_date, self.qa_testing_date, self.qa_total_day)
 
+		if self.end_date_integration != None and self.completed_on != None:	
+			qa_integration_testing = self.calculate_daydiff(self.end_date_integration, self.completed_on, self.qa_total_day)
+		
+		self.qa_total_day = qa_testing + qa_integration_testing
+		"""
+		if self.review_date is not None and self.qa_open_date is not None and self.qa_testing_date is not None and exp_start_date is not None:
+			
 			self.start_date = str(self.exp_start_date)
 			self.end_date = str(self.completed_on)
 
@@ -620,56 +393,23 @@ class Task(NestedSet):
 			print("QA TOTAL DAY : ", self.qa_total_day)
 			if self.qa_total_day < 0:
 				self.qa_total_day = 0
-		
-		# print("QA TOTAL DAY : ", self.qa_total_day)
-		# print("QA TOTAL IDLE DAY : ", self.qa_total_idle_day)
-		return self.qa_total_day, qa_total_idle_day
+			"""
+			
+		return self.qa_total_day
 
 
-	def validate_duration_programmer(self,start_date,end_date):
+	def validate_duration_programmer(self):
 
-		# print("INI START DATE : ",start_date)
-		# print("INI REVIEW DATE : ",end_date)
+		working_total_days = 0
+		integration_total_days = 0
+
 		if self.programmer_total_day is None:
 			self.programmer_total_day = 0
 		
 		if self.status == "Pending Review" or self.status == "Completed":
 			if self.review_date is None:
-				frappe.throw(_("{0} Cannot be empty").format(frappe.bold(self.name + " : Review Date")))
-			# print("START DATE : ", self.exp_start_date)
-			# print("START DATE : ", self.start_date)
-			# print("END DATE : ", self.end_date)
-			self.date_start = str(start_date)
-			self.end_date = str(end_date)
+				frappe.throw(_("{0} Cannot be empty").format(frappe.bold(self.name + " : Review Date"),title=_("Review Date is Empty")))
 
-			self.d1 = datetime.strptime(self.date_start, "%Y-%m-%d")
-			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-
-			self.daydiff = self.d2.weekday() - self.d1.weekday()
-
-			self.total_day = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-
-			if self.total_day < 0:
-				self.total_day = 0
-
-			if self.status == "Pending Review":
-				self.programmer_total_day = self.total_day
-				return self.programmer_total_day
-			elif self.status == "Completed":
-				return self.total_day
-					
-				# print("TOTAL HARINYA COY : ",self.programmer_total_day)
-				
-
-				# self.strdays = str(self.days).split('.')[0]
-
-				# self.duration = self.days
-
-				# self.programmer_total_day = self.duration
-
-				# print("TOTAL DAYS PROGRAMMER: ", self.duration)
-			# else:
-			# 	frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Review Date")))
 
 	def validate_duration(self):
 		if flt(self.exp_start_date == None):
@@ -684,33 +424,28 @@ class Task(NestedSet):
 			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
 		else:
 			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-		# 	# delta = self.d2 - self.d1
 
 		self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
 		self.daydiff = self.d2.weekday() - self.d1.weekday()
 
 		self.duration = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
 
-		# self.strdays = str(self.days).split('.')[0]
-
-		# self.duration = self.days
-
 	def validate_progress(self):
 
 		checker_name_list = [x for x in self.sub_task if x.checker_name != "" and x.checker_name != None]
-		# print(json.dumps([x.checker_name for x in self.sub_task]))
+		
 		jumlah_total_elemen_checker_name = len(checker_name_list)	
 
 		if flt(self.progress or 0) > 100:
 			frappe.throw(_("Progress % for a task cannot be more than 100."))
 
 		if flt(self.individual_progress or 0) > 100 or flt(self.individual_progress) < 0:
-			# frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+			
 			frappe.throw(_("Your Individual Progress is {0}. Individual Progress {1} for a task cannot be more than "+ "'{2}' or less than "+ "'{3}'")
 				.format(frappe.bold(f'{self.individual_progress} %'),frappe.bold("%"),frappe.bold("100%"),frappe.bold("0%")))
 
 		if flt(self.qa_progress or 0) > 100 or flt(self.qa_progress) < 0:
-			# frappe.throw(_("Individual Progress % for a task cannot be more than 100."))
+			
 			frappe.throw(_("Your QA Task Progress is {0}. QA Task Progress {1} for a task cannot be more than "+ "'{2}' or less than "+ "'{3}'")
 				.format(frappe.bold(f'{self.qa_progress} %'),frappe.bold("%"),frappe.bold("100%"),frappe.bold("0%")))
 
@@ -820,65 +555,6 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 
 		self.progress = str(self.progress).split('.')[0]
-
-
-
-		# if (self.is_group != True and self.status != "Open"):
-		# 	if self.priority == "Low":
-		# 		# if flt(self.task_weight) > 2 or flt(self.task_weight) < 1:
-		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 1 to 2"))
-		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
-
-		# 		if flt(self.days) > 10:
-		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 10 days")))
-
-		# 	if self.priority == "Medium":
-		# 		# if self.status != "QA Testing" and self.status != "QA Integration Testing":
-		# 		# if flt(self.task_weight) > 5 or flt(self.task_weight) < 3:
-		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-
-		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 3 to 5"))
-		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
-
-		# 		if flt(self.days) > 7:
-		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 				.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
-
-
-		# 	if self.priority == "High":
-		# 		# if flt(self.task_weight) > 8 or flt(self.task_weight) < 6:
-		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-
-		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 6 to 8"))
-		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
-
-		# 		if flt(self.days) > 5:
-		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 7 days")))
-
-
-		# 	if self.priority == "Urgent":
-		# 		# if flt(self.task_weight) > 10 or flt(self.task_weight) < 9:
-		# 		if flt(self.task_weight) > 10 or flt(self.task_weight) < 1:
-
-		# 			# frappe.throw(_("Please set Weight value for " + "'" + self.priority + "'" + " " +"Priority between 9 to 10"))
-		# 			frappe.throw(_("Please set {0} value for "+ "'{1}'"+ " Priority between {2}")
-		# 			.format(frappe.bold("Weight"),frappe.bold(self.priority), frappe.bold("1 to 10")))
-
-		# 		if flt(self.days) > 2:
-		# 			frappe.throw(_("Difference between Start to End date is {0}, for "+ "'{1}'"+ " priority is {2}")
-		# 			.format(frappe.bold(f'{self.strdays} days'),frappe.bold(self.priority), frappe.bold("< 3 days")))
-
-		# if self.priority == "Medium":
-
-
-		# 	self.exp_start_date =  datetime.now().date()
-		# 	self.exp_end_date = datetime.now() + timedelta(days=1)
 
 
 	def validate_dependencies_for_template_task(self):
@@ -1029,23 +705,7 @@ class Task(NestedSet):
 				)
 				parent.save()
 
-		
-		# if self.ongoing_sprint:
-		# 	# frappe.db.set_value("DocType", docname, "fieldname", value_to_set)
-		# 	# parent = frappe.db.get_value("Event", {"ongoing_sprint": parent})
-		# 	parent = frappe.get_doc("Event", self.ongoing_sprint)
-		# 	print(parent)
-		# parent.append(
-		# 		"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
-                #             )
-		# parent.save()
-		# if self.name not in [row.sprint_id for row in multi_issue_value.multi_sprint]:
-		# self.ongoing_sprint.append(
-		# 		"multi_sprint", {"doctype": "Assignment Sprint", "sprint_id": self.name}
-                #             )
-		# self.ongoing_sprint.save()
-
-
+	
 	def on_trash(self):
 		if check_if_child_exists(self.name):
 			throw(_("Child Task exists for this Task. You can not delete this Task."))
@@ -1332,144 +992,11 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 				# user.db_update()
 
 		elif status != "Completed":
-			# user.weight = weights + weight
-			# user.qa_idle_total_day = qa_idle_day - qa_idle_total_day
-			# user.total_days = tot + int(total_day)
+			
 			item_to_remove = task_item.task_name
-			# print("ITEM TO REMOVE : ",item_to_remove)
 
 			if any(row.task_name == item_to_remove for row in parent.task):
 				parent.task = [row for row in parent.task if row.task_name != item_to_remove]
 				parent.save()
 
 			parent.save()
-
-			# user.db_update()
-		# user.save()
-	# else:
-	# 	print("blm ada")
-
-	# 	print(user.name)
-	# 	user.db_insert()
-
-
-	# 	weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
-	# 	# print(user.weight)
-
-	# 	user.name = name
-	# 	user.branch = branch
-	# 	user.total_days = total_day
-	# 	user.weight = weight
-	# 	parent = frappe.get_doc("SD Data Report", user.name)
-
-	# 	if int(has_sub_task) > 0:
-	# 		if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
-	# 			# user.weight = weights + weight
-	# 			parent.append(
-	# 									"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
-	# 													)
-	# 			parent.save()
-	# 			user.db_update()
-	# 	else:
-	# 		if task_item.task_name not in [row.task_name for row in parent.task]:
-	# 			# user.weight = weights + weight
-	# 			parent.append(
-	# 									"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
-	# 													)
-	# 			parent.save()
-
-
-	# 			user.db_update()
-
-
-def update_employee_weight2(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status):
-	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch, total_days=total_day)
-	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
-
-	# print("PROJECT NAME : ", user.project_name)
-	# print(task_item)
-	# project = frappe.get_doc({"doctype":"SD Data Report", "employee_name":employee_name, "project":project})
-	if frappe.db.exists({"doctype": "SD Data Report", "employee_name": employee_name, "project_name": project}):
-		# print("udah ada")
-		weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
-		user.name = name
-		user.branch = branch
-		user.total_days = total_day
-
-		parent = frappe.get_doc("SD Data Report", user.name)
-		if int(has_sub_task) > 0:
-			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
-				user.weight = weights + weight
-				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
-														)
-				parent.save()
-				user.db_update()
-
-			elif status != "Completed":
-				user.weight = weights + weight
-				item_to_remove = task_name + " - " + task_item.task_name
-
-				if any(row.task_name == item_to_remove for row in parent.task):
-					parent.task = [row for row in parent.task if row.task_name != item_to_remove]
-					parent.save()
-
-				parent.save()
-
-				user.db_update()
-		else:
-			if task_name not in [row.task_name for row in parent.task]:
-				user.weight = weights + weight
-				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
-														)
-				parent.save()
-				user.db_update()
-
-			elif status != "Completed":
-				user.weight = weights + weight
-				item_to_remove = task_item.task_name
-				# print("ITEM TO REMOVE : ",item_to_remove)
-
-				if any(row.task_name == item_to_remove for row in parent.task):
-					parent.task = [row for row in parent.task if row.task_name != item_to_remove]
-					parent.save()
-
-				parent.save()
-
-				user.db_update()
-		# user.save()
-	else:
-		# print("blm ada")
-
-		# print(user.name)
-		user.db_insert()
-
-
-		weights, name = frappe.db.get_value('SD Data Report',{'employee_name':employee_name,'project_name': project},['weight','name'])
-		# print(user.weight)
-
-		user.name = name
-		user.branch = branch
-		user.total_days = total_day
-		user.weight = weight
-		parent = frappe.get_doc("SD Data Report", user.name)
-
-		if int(has_sub_task) > 0:
-			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
-				# user.weight = weights + weight
-				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name}
-														)
-				parent.save()
-				user.db_update()
-		else:
-			if task_item.task_name not in [row.task_name for row in parent.task]:
-				# user.weight = weights + weight
-				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name}
-														)
-				parent.save()
-
-
-				user.db_update()

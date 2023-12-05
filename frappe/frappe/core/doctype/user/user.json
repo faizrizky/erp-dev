@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "enabled",
+  "create_user_permission",
   "section_break_3",
   "email",
   "first_name",
@@ -24,7 +25,6 @@
   "user_image",
   "sb1",
   "role",
-  "section_break_sbmeh",
   "role_profile_name",
   "roles_html",
   "roles",
@@ -110,6 +110,7 @@
   {
    "fieldname": "email",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Email",
    "no_copy": 1,
    "oldfieldname": "email",
@@ -120,6 +121,7 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "First Name",
    "oldfieldname": "first_name",
    "oldfieldtype": "Data",
@@ -128,7 +130,6 @@
   {
    "fieldname": "middle_name",
    "fieldtype": "Data",
-   "hidden": 1,
    "label": "Middle Name",
    "oldfieldname": "middle_name",
    "oldfieldtype": "Data"
@@ -176,7 +177,6 @@
    "fieldname": "username",
    "fieldtype": "Data",
    "in_global_search": 1,
-   "in_standard_filter": 1,
    "label": "Username",
    "unique": 1
   },
@@ -471,8 +471,6 @@
    "description": "If the user has any role checked, then the user becomes a \"System User\". \"System User\" has access to the desktop",
    "fieldname": "user_type",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "User Type",
    "oldfieldname": "user_type",
    "oldfieldtype": "Select",
@@ -668,13 +666,16 @@
   {
    "fieldname": "role",
    "fieldtype": "Link",
-   "in_standard_filter": 1,
+   "hidden": 1,
    "label": "Team",
    "options": "Branch"
   },
   {
-   "fieldname": "section_break_sbmeh",
-   "fieldtype": "Section Break"
+   "default": "0",
+   "fieldname": "create_user_permission",
+   "fieldtype": "Check",
+   "label": "Create User Permission",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-user",
@@ -737,7 +738,7 @@
    "link_fieldname": "user"
   }
  ],
- "modified": "2023-06-30 13:11:15.388402",
+ "modified": "2023-11-30 14:29:44.219807",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
@@ -768,7 +769,6 @@
    "select": 1
   }
  ],
- "quick_entry": 1,
  "route": "user",
  "search_fields": "full_name",
  "show_name_in_global_search": 1,

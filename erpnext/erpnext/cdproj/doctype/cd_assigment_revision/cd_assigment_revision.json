@@ -1,0 +1,175 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-07 11:32:31.024239",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "subject",
+  "column_break_4rvx6",
+  "employee_name",
+  "time_details_section",
+  "revision_start_date",
+  "revision_total_hours",
+  "column_break_16vui",
+  "revision_end_date",
+  "revision_completion_check_section",
+  "revision_completed",
+  "revision_timeline_details_section",
+  "revision_testing_start_date",
+  "testing_type",
+  "revision_testing_total_hours",
+  "column_break_j41ju",
+  "revision_testing_end_date",
+  "testing_weight",
+  "revision_testing_completion_check_section",
+  "testing_revision_completed"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Revision Details"
+  },
+  {
+   "columns": 2,
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Revision Subject",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4rvx6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "fieldname": "employee_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "time_details_section",
+   "fieldtype": "Section Break",
+   "label": "Revision Time Details"
+  },
+  {
+   "fieldname": "column_break_16vui",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval:doc.revision_completed == true",
+   "fieldname": "testing_type",
+   "fieldtype": "Link",
+   "label": "Revision Testing Type",
+   "options": "CD Task Type",
+   "read_only_depends_on": "eval:doc.revision_testing_start_date == null"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "revision_completed",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Revision Completed"
+  },
+  {
+   "fieldname": "column_break_j41ju",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.revision_testing_start_date != \"\" || doc.revision_testing_start_date != null",
+   "fieldname": "testing_revision_completed",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Testing Revision Completed",
+   "read_only_depends_on": "eval.doc.revision_testing_start_date == null"
+  },
+  {
+   "fieldname": "revision_timeline_details_section",
+   "fieldtype": "Section Break",
+   "label": "Revision Testing Time Details"
+  },
+  {
+   "fieldname": "revision_total_hours",
+   "fieldtype": "Data",
+   "label": "Revision Total Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "revision_start_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Revision Start Date",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "revision_end_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Revision End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "revision_testing_total_hours",
+   "fieldtype": "Data",
+   "label": "Revision Testing Total Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "revision_completion_check_section",
+   "fieldtype": "Section Break",
+   "label": "Revision Completion Check",
+   "read_only_depends_on": "eval:doc.revision_start_date == \"\""
+  },
+  {
+   "depends_on": "eval:doc.revision_completed == true",
+   "fieldname": "revision_testing_completion_check_section",
+   "fieldtype": "Section Break",
+   "label": "Revision Testing Completion Check"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval:doc.testing_type != null || doc.revision_completed == true",
+   "fetch_from": "testing_type.testing_weight",
+   "fieldname": "testing_weight",
+   "fieldtype": "Data",
+   "label": "Testing Weight",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.revision_completed == true",
+   "fieldname": "revision_testing_start_date",
+   "fieldtype": "Datetime",
+   "label": "Revision Testing Start Date"
+  },
+  {
+   "fieldname": "revision_testing_end_date",
+   "fieldtype": "Datetime",
+   "label": "Revision Testing End Date",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-05 10:25:08.462379",
+ "modified_by": "Administrator",
+ "module": "CDProj",
+ "name": "CD Assigment Revision",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

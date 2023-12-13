@@ -44,8 +44,9 @@
   "total_revision_hours",
   "completed_status_details",
   "progress",
-  "completed_on",
+  "total_hours",
   "column_break_erpzz",
+  "completed_on",
   "completed_by",
   "review_section",
   "review_date",
@@ -235,7 +236,6 @@
    "label": "Start Date",
    "oldfieldname": "exp_start_date",
    "oldfieldtype": "Date",
-   "read_only_depends_on": "eval: doc.parent_cd_task != \"\"",
    "reqd": 1
   },
   {
@@ -251,7 +251,6 @@
    "label": "End Date",
    "oldfieldname": "exp_end_date",
    "oldfieldtype": "Date",
-   "read_only_depends_on": "eval: doc.parent_cd_task != \"\"",
    "reqd": 1,
    "search_index": 1
   },
@@ -377,7 +376,7 @@
    "fieldtype": "Table",
    "label": "Dependent Tasks",
    "options": "CD Task Depends On",
-   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('\tHOD Content Division') == 1"
   },
   {
    "fieldname": "depends_on_tasks",
@@ -542,6 +541,13 @@
    "fieldtype": "Data",
    "label": "Total Revision Hours",
    "read_only": 1
+  },
+  {
+   "description": "The value above is based on the sum of \"Total Working Hours\", \"Total Testing Hours\", and if there is \"Revision Total Hours\".",
+   "fieldname": "total_hours",
+   "fieldtype": "Data",
+   "label": "Total Hours",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-check",
@@ -549,7 +555,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-12-05 15:55:20.959451",
+ "modified": "2023-12-08 15:21:10.564153",
  "modified_by": "Administrator",
  "module": "CDProj",
  "name": "CD Task",
@@ -566,7 +572,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Leader Software Developer",
+   "role": "HOD Content Division",
    "select": 1,
    "share": 1,
    "write": 1

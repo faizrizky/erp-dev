@@ -41,6 +41,55 @@ frappe.ui.form.on("CD Task", {
 	},
 
 	refresh(frm) {
+		// alert(frm.doc.revision_table.length);
+		if (
+			frm.doc.status == "Testing Open" ||
+			frm.doc.status == "Ongoing Testing"
+		)
+			if (frm.doc.revision_table.length > 0) {
+				frappe.confirm(
+					'There is a revision in your task, if you set the status to <strong style="font-weight: bold;">' +
+						frm.doc.status +
+						"</strong>, the Revision Table will be deleted, are you sure you want to proceed?",
+					() => {
+						frm.clear_table("revision_table");
+						frappe.msgprint({
+							title: __("Notification"),
+							indicator: "green",
+							message: __(
+								"Revision Table has been deleted successfully"
+							),
+						});
+					},
+					() => {
+						frm.set_value("status", "Revision");
+						cur_frm.save();
+					}
+				);
+
+				frm.set_query("task", "depends_on", function () {
+					let filters = {
+						name: ["!=", frm.doc.name],
+					};
+					if (frm.doc.project) filters["project"] = frm.doc.project;
+					return {
+						filters: filters,
+					};
+				});
+			}
+
+		if (
+			frm.doc.parent_cd_task != "" ||
+			(frm.doc.parent_cd_task != null &&
+				frm.doc.parent_cd_task != undefined)
+		) {
+			frm.set_df_property("exp_start_date", "read_only", 0);
+			frm.set_df_property("exp_end_date", "read_only", 0);
+		} else {
+			frm.set_df_property("exp_start_date", "read_only", 1);
+			frm.set_df_property("exp_end_date", "read_only", 1);
+		}
+
 		if (
 			frm.doc.revision_start_date == "" ||
 			(frm.doc.revision_end_date == "" && frm.doc.status === "Completed")
@@ -72,17 +121,7 @@ frappe.ui.form.on("CD Task", {
 	},
 
 	onload: function (frm) {
-		frm.set_query("task", "depends_on", function () {
-			let filters = {
-				name: ["!=", frm.doc.name],
-			};
-			if (frm.doc.project) filters["project"] = frm.doc.project;
-			return {
-				filters: filters,
-			};
-		});
-
-		frm.set_query("parent_task", function () {
+		frm.set_query("parent_cd_task", function () {
 			let filters = {
 				is_group: 1,
 				name: ["!=", frm.doc.name],

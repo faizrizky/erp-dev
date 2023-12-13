@@ -275,6 +275,13 @@ class CDTask(NestedSet):
 						if getattr(d,"testing_completed") != True and getattr(d,"testing_start_date") == "" and getattr(d,"testing_start_date") == None:
 							frappe.throw(_("In no {0} with Subject : {1}, {2} in {3} is {4}. Please review the information in the {5}.").format(frappe.bold(count),frappe.bold(d.subject),frappe.bold(type + " " +"Start Date"),frappe.bold("Testing"),frappe.bold("empty"),frappe.bold("Testing"),frappe.bold(type + " " + "Table")),title=_(type + " " +"Start Date is Empty"))
 
+						if self.status == "Revision" and getattr(d,"testing_completed") != True:
+							frappe.throw(_("In no {0} with Subject : {1} is not completed. Please review the information in the {2}.").format(
+								frappe.bold(count),
+								frappe.bold(d.subject),
+								frappe.bold(type + " " + "Table")),
+								title=_(type + " " +"Testing is Not Completed"))
+							
 					elif type == "Revision":
 						if getattr(d,"revision_start_date") == None or getattr(d,"revision_start_date") == "":
 							frappe.throw(_("In no {0} with Subject : {1}, {2} in {3} cannot be empty. Please review the information in the {4}.").format(frappe.bold(count),frappe.bold(d.subject),frappe.bold("Revision Start Date"),frappe.bold("Revision Testing"),frappe.bold(type + " " + "Table")),title=_("Revision Start Date is Empty"))
@@ -291,7 +298,7 @@ class CDTask(NestedSet):
 						if self.exp_start_date and hasattr(d, "revision_end_date"):
 							end_date = getdate(getattr(d, "revision_end_date"))
 
-						# print("STATUS AFTER : ",getattr(d,"revision_completed"))
+						# print("STATUS BEFORE :", status_before_revision_completed)
 						if status_before_revision_completed == False and getattr(d,"revision_completed") == True :
 							if getattr(d,"revision_completed") == True :
 								setattr(d,"revision_end_date", datetime.now() + timedelta(hours=7))
@@ -299,8 +306,16 @@ class CDTask(NestedSet):
 							else :
 								setattr(d,"revision_end_date", None)
 								setattr(d,"revision_total_hours", None)
+								setattr(d,"testing_revision_completed", None)
+								setattr(d,"revision_testing_total_hours", None)
+
 						elif getattr(d,"revision_completed") == False:
+							print("REVISION COMPLETED : ",getattr(d,"revision_completed"))
+							print(getattr(d,"revision_testing_end_date"))
 							setattr(d,"revision_end_date", None)
+							setattr(d,"revision_testing_end_date", None)
+							setattr(d,"testing_revision_completed", False)
+							setattr(d,"revision_testing_total_hours", None)
 
 
 						if getattr(d,"revision_start_date") == None or getattr(d,"revision_start_date") == "":
@@ -308,6 +323,13 @@ class CDTask(NestedSet):
 						
 						if getattr(d,"revision_completed") != True and getattr(d,"revision_start_date") == "" and getattr(d,"revision_start_date") == None:
 							frappe.throw(_("In no {0} with Subject : {1}, {2} in {3} is {4}. Please review the information in the {5}.").format(frappe.bold(count),frappe.bold(d.subject),frappe.bold(type + " " +"Start Date"),frappe.bold("Revision Testing"),frappe.bold("empty"),frappe.bold("Revision"),frappe.bold(type + " " + "Table")),title=_(type + " " +"Start Date is Empty"))
+
+						# if self.status == "Testing Open" or self.status == "Ongoing Testing" and len(data_table) > 0:
+						# 	frappe.throw(_("In no {0} with Subject : {1} is not completed. Please review the information in the {2}.").format(
+						# 		frappe.bold(count),
+						# 		frappe.bold(d.subject),
+						# 		frappe.bold(type + " " + "Table")),
+						# 		title=_(type + " " +"Testing is Not Completed"))
 
 					elif type == "Revision Testing":
 						# print("REVISION TESTING START DATE : ",getattr(d,"revision_testing_start_date"))
@@ -574,8 +596,34 @@ class CDTask(NestedSet):
 		self.hours, self.minutes, self.seconds = map(int, self.time_parts)
 		return timedelta(days=self.days, hours=self.hours, minutes=self.minutes, seconds=self.seconds)
 
+	
 	def validate_completed_task(self):
+		testing_not_completed_data = []
+		revision_not_completed_data = []
+		for testing in self.testing_table:
+			testing_not_completed_data.append(testing.subject)
+
+		for revision in self.revision_table:
+			revision_not_completed_data.append(revision.subject)
+		
 		if self.status == "Completed":
+			if testing.testing_end_date == None or testing.testing_end_date == "" and testing.testing_completed != True:
+				
+				frappe.throw(
+					_("Subject with the name : {0} is not completed. Please complete your testing in the {1} before completing the task")
+					.format(
+						frappe.bold((" , ").join(testing_not_completed_data)),
+						frappe.bold("Testing Table"),
+					),title="Testing not Completed")
+				
+			if revision.testing_revision_completed != True:
+				frappe.throw(
+					_("Subject with the name : {0} is not completed. Please complete your Revision and Revision Testing in the {1} before completing the task")
+					.format(
+						frappe.bold((" , ").join(revision_not_completed_data)),
+						frappe.bold("Revision Table"),
+					),title="Revision not Completed")
+				
 			self.completed_by = frappe.session.user
 
 			if self.completed_on == "" or self.completed_on is None:
@@ -843,28 +891,49 @@ class CDTask(NestedSet):
 			return self.total_working_hours
 
 	def validate_duration(self):
-		if flt(self.exp_start_date == None):
+		date_format_1 = "%Y-%m-%d"
+		date_format_2 = "%Y-%m-%d %H:%M:%S"
+
+		if self.exp_start_date is None:
 			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
 
-		self.start_date = str(self.exp_start_date)
-		self.end_date = str(self.exp_end_date)
+		try:
+			# Try to parse the date with the first format
+			start_input_date_time = datetime.strptime(str(self.exp_start_date), date_format_1)
+		except ValueError:
+			try:
+				# If the first format fails, try the second format
+				start_input_date_time = datetime.strptime(str(self.exp_start_date), date_format_2)
+			except ValueError:
+				# If both formats fail, raise an error
+				frappe.throw(_("Invalid date format for Expected Start Date"))
 
-		self.d1 = datetime.strptime(self.start_date, "%Y-%m-%d")
+		start_result_date = start_input_date_time.replace(hour=0, minute=0, second=0)
+		d1 = start_result_date  # Now d1 is a datetime object
+		print("D1: ", d1)
 
-		if flt(self.exp_end_date == None):
+		if self.exp_end_date is None:
 			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected End Date")))
-		else:
-			self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-		# 	# delta = self.d2 - self.d1
 
-		self.d2 = datetime.strptime(self.end_date, "%Y-%m-%d")
-		self.daydiff = self.d2.weekday() - self.d1.weekday()
+		try:
+			# Try to parse the date with the first format
+			end_input_date_time = datetime.strptime(str(self.exp_end_date), date_format_1)
+		except ValueError:
+			try:
+				# If the first format fails, try the second format
+				end_input_date_time = datetime.strptime(str(self.exp_end_date), date_format_2)
+			except ValueError:
+				# If both formats fail, raise an error
+				frappe.throw(_("Invalid date format for Expected End Date"))
 
-		self.duration = ((self.d2-self.d1).days - self.daydiff) / 7 * 5 + min(self.daydiff,5) - (max(self.d2.weekday() - 4, 0) % 5) + 1
-	
-		# self.strdays = str(self.days).split('.')[0]
+		end_result_date = end_input_date_time.replace(hour=0, minute=0, second=0)
+		d2 = end_result_date  # Now d2 is a datetime object
+		print("D2: ", d2)
 
-		# self.duration = self.days
+		self.daydiff = d2.weekday() - d1.weekday()
+
+		self.duration = ((d2 - d1).days - self.daydiff) / 7 * 5 + min(self.daydiff, 5) - (
+				max(d2.weekday() - 4, 0) % 5) + 1
 
 	def validate_progress(self):
 		if flt(self.progress or 0) > 100 or flt(self.progress) < 0:
@@ -896,10 +965,10 @@ class CDTask(NestedSet):
 			self.completed_on = None
 		
 		if self.status == "Testing Open":
-			self.progress = 80
+			self.progress = 90
 			
 		if self.status == "Ongoing Testing":
-			self.progress = 90
+			self.progress = 95
 
 		if self.status == "Revision":
 			self.progress = 0

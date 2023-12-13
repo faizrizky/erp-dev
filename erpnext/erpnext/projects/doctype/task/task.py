@@ -441,6 +441,10 @@ class Task(NestedSet):
 			# self.exp_start_date = ""
 			self.duration = 0
 
+			self.qa_total_day = 0
+
+			self.programmer_total_day = 0
+
 			# self.validate_duration()
 
 		if self.status == "Completed":
@@ -590,6 +594,38 @@ class Task(NestedSet):
 			close_all_assignments(self.doctype, self.name)
 		if self.status == "Cancelled":
 			clear(self.doctype, self.name)
+
+	def update_timesheet_date(self):
+
+		employee_info = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ['name', 'employee_name'], as_dict=1)
+
+		tl = frappe.db.sql(
+			 """select min(td.from_time) as start_date, max(td.to_time) as end_date,
+			sum(td.hours) as time, td.project as project, td.task as task, td.hours_count as total_working_hrs 
+			from `tabTimesheet Detail` td
+			where td.task = %s and td.docstatus = 1""",
+			(self.name),
+			as_dict=1,
+		)[0]
+
+		
+		# frappe.throw(tl.task)
+	
+		data = frappe.get_doc("Task", tl.task)
+		# if self.name not in [row.task for row in data.timesheets_data]:
+		data.append(
+			"timesheets_data", {"doctype": "SD Assignment Timesheets Data","employee_name":employee_info.name, "project": tl.project, "task": tl.task,"total_working_hours": tl.total_working_hrs ,"from_date": tl.start_date, "to_date": tl.end_date}
+		)
+		data.save()
+		data.reload()
+
+		
+
+		
+
+		# self.actual_time = tl.time
+		# self.act_start_date = tl.start_date
+		# self.act_end_date = tl.end_date
 
 	def update_time_and_costing(self):
 		tl = frappe.db.sql(

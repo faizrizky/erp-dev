@@ -897,16 +897,26 @@ class CDTask(NestedSet):
 		if self.exp_start_date is None:
 			frappe.throw(_("{0} Cannot be empty").format(frappe.bold("Expected Start Date")))
 
+		from datetime import timedelta
+
 		try:
-			# Try to parse the date with the first format
-			start_input_date_time = datetime.strptime(str(self.exp_start_date), date_format_1)
+			# Try to parse the input as "%H:%M:%S"
+			actual_time_timedelta = datetime.strptime(actual_time_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
 		except ValueError:
 			try:
-				# If the first format fails, try the second format
-				start_input_date_time = datetime.strptime(str(self.exp_start_date), date_format_2)
+				# Try to parse the input as "%Y-%m-%d %H:%M:%S"
+				actual_time_timedelta = datetime.strptime(actual_time_str, "%Y-%m-%d %H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
 			except ValueError:
-				# If both formats fail, raise an error
-				frappe.throw(_("Invalid date format for Expected Start Date"))
+				try:
+					# Try to parse the input as "X days, HH:MM:SS"
+					days, time_str = actual_time_str.split(", ")
+					days = int(days.split()[0])
+					hours, minutes, seconds = map(int, time_str.split(":"))
+					actual_time_timedelta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+				except ValueError:
+					# Handle the case where the format is unknown
+					raise ValueError("Unknown time format: {}".format(actual_time_str))
+
 
 		start_result_date = start_input_date_time.replace(hour=0, minute=0, second=0)
 		d1 = start_result_date  # Now d1 is a datetime object

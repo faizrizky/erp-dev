@@ -83,12 +83,17 @@ class CDIssue(Document):
 				if row.issue_id == self.name:
 					row.delete()
 
+	def after_insert(doc):
+    # Perform actions after the document is created (inserted)
+		frappe.msgprint(f"Document {doc.doctype} {doc.name} created successfully!")
+
 	def validate_status_taken(self):
 		
 		
 
 		issue_personel = frappe.db.get_value('CD Issue', self.name, '_assign')
 		arr_issue_personel = []
+
 		if issue_personel is not None:
 			result = json.loads(issue_personel)
 			for emp_issue in result:
@@ -96,6 +101,7 @@ class CDIssue(Document):
 
 		subject = frappe.db.get_value('CD Task', self.task_issue, '_assign')
 		task_personel = []
+
 		if subject is not None:
 			result = json.loads(subject)
 			for emp in result:
@@ -103,52 +109,56 @@ class CDIssue(Document):
 
 			doc = frappe.get_doc("CD Task", self.task_issue)
 			testing_table_data = doc.get("testing_table")
-			testing_personel = []
+			
 			for testing_row in testing_table_data:
+				testing_personel = []
 				testing_personel.append(testing_row.employee_name)
+				
 
-			if frappe.session.user in task_personel:
-				if frappe.session.user in arr_issue_personel:
-					if testing_row.employee_name == self.employee:
-						if self.status != "Open" and self.status != "Closed":
-							frappe.throw(_("You have been assigned as a {0} for the task {4}. The {5} can only change the status when it is not {1}, {2}, and {3}")
-								.format(
-									frappe.bold("Tester"), 
-									frappe.bold("Replied"), 
-									frappe.bold("On Hold"), 
-									frappe.bold("Resolved"), 
-									frappe.bold(self.task_issue), 
-									frappe.bold("Testers")),
+				if frappe.session.user in task_personel:
+					if frappe.session.user in arr_issue_personel:
+						if testing_row.employee_name == self.employee:
+							if self.status != "Open" and self.status != "Closed":
+								frappe.throw(
+									_("You have been assigned as a {0} for the task {4}. The {5} can only change the status when it is not {1}, {2}, and {3}")
+									.format(
+										frappe.bold("Tester"),
+										frappe.bold("Replied"),
+										frappe.bold("On Hold"),
+										frappe.bold("Resolved"),
+										frappe.bold(self.task_issue),
+										frappe.bold("Testers")),
 									title="Permission Denied")
-							
-					elif testing_row.employee_name != self.employee:
-						frappe.throw(_("You are not a {0}, if you want to be a {0}, please assign your self into {1} inside the {2}")
-								.format(frappe.bold("Tester"), 
-								frappe.bold("Testing Table"), 
-								frappe.bold(self.task_issue)),
-								title="Permission Denied")
+					
 					else:
 						if self.status == "Closed":
 							frappe.throw(_("Only {0} can {1} this issue")
 								.format(frappe.bold("Tester"), frappe.bold(self.status)))
 							
 				else:
-					frappe.throw(_("You have assigned for the (''{0}'') but have not assigned for this issue (''{1}''). Please make sure to assign yourself for this issue as well.")
-								.format(
-									frappe.bold(self.task_issue), 
-									frappe.bold(self.name)),
-									title="Editing Issue Failed")
-
-			else:
-				if frappe.session.user in arr_issue_personel:
-					frappe.throw(_("You have assigned for this task (''{0}'') but have not assigned for the issue (''{1}''). Please make sure to assign yourself for the task as well.")
-								.format(
-									frappe.bold(self.task_issue), 
-									frappe.bold(self.name)),
-									title="Editing Issue Failed")
-				else:
 					frappe.throw(_("You are unable to edit this document because you are not assigned to this issue or the task."),title="Permission Denied")
-
+					# frappe.throw(_("You have assigned for the (''{0}'') but have not assigned for this issue (''{1}''). Please make sure to assign yourself for this issue as well.")
+					# 			.format(
+					# 				frappe.bold(self.task_issue), 
+					# 				frappe.bold(self.name)),
+					# 				title="Editing Issue Failed")
+				# else:
+				# frappe.throw(_("You are unable to edit this document because you are not assigned to this issue or the task."),title="Permission Denied")
+			# else:
+			# 	print(frappe.session.user, arr_issue_personel)
+			# 	if frappe.session.user in arr_issue_personel:
+			# 		frappe.throw(_("You have assigned for this task (''{0}'') but have not assigned for the issue (''{1}''). Please make sure to assign yourself for the task as well.")
+			# 					.format(
+			# 						frappe.bold(self.task_issue), 
+			# 						frappe.bold(self.name)),
+			# 						title="Editing Issue Failed")
+		
+			if self.employee not in testing_personel:
+						frappe.throw(_("You are not a {0}, if you want to be a {0}, please assign your self into {1} inside the {2}")
+								.format(frappe.bold("Tester"), 
+								frappe.bold("Testing Table"), 
+								frappe.bold(self.task_issue)),
+								title="Permission Denied")
 	def set_lead_contact(self, email_id):
 		import email.utils
 

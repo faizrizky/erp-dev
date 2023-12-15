@@ -72,12 +72,11 @@
   "total_billing_amount",
   "sb_more_info",
   "closing_date",
-  "department",
-  "column_break_22",
   "company",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "timesheets_data"
  ],
  "fields": [
   {
@@ -336,7 +335,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
    "fieldname": "sb_more_info",
    "fieldtype": "Section Break",
    "label": "More Info"
@@ -357,17 +355,6 @@
    "label": "Closing Date",
    "oldfieldname": "closing_date",
    "oldfieldtype": "Date"
-  },
-  {
-   "fieldname": "column_break_22",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "label": "Department",
-   "options": "Department",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
   },
   {
    "fetch_from": "project.company",
@@ -580,6 +567,12 @@
    "fieldname": "qa_progress",
    "fieldtype": "Percent",
    "label": "% QA Task Progress"
+  },
+  {
+   "fieldname": "timesheets_data",
+   "fieldtype": "Table",
+   "label": "Timesheets Data",
+   "options": "SD Assignment Timesheets Data"
   }
  ],
  "icon": "fa fa-check",
@@ -588,7 +581,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-11-21 16:28:29.989343",
+ "modified": "2023-12-08 11:00:19.868647",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

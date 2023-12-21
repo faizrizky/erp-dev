@@ -99,7 +99,7 @@ class Task(NestedSet):
 
 		status_before = frappe.db.get_value("Task", self.name, "status")
 
-		print(self.name);
+		# print(self.name);
 
 		checker_name_list = [x for x in self.sub_task if not x.checker_name == "" and not x.checker_name == None]
 		jumlah_total_elemen_checker_name = len(checker_name_list)	
@@ -595,35 +595,181 @@ class Task(NestedSet):
 		if self.status == "Cancelled":
 			clear(self.doctype, self.name)
 
-	def update_timesheet_date(self):
+	def update_timesheet_date(self, task_name):
 		employee_info = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ['name', 'employee_name'], as_dict=1)
 
-		tl = frappe.db.sql(
-			"""select min(td.from_time) as start_date, max(td.to_time) as end_date
-			from `tabTimesheet Detail` td
-			where td.task = %s and td.docstatus = 1""",
-			(self.name),
-			as_dict=1,
-		)[0]
+		# tl = frappe.db.sql(
+		# 	"""select min(td.from_time) as start_date, max(td.to_time) as end_date
+		# 	from `tabTimesheet Detail` td
+		# 	where td.task = %s and td.docstatus = 1""",
+		# 	(self.name),
+		# 	as_dict=1,
+		# )[0]
+  
+		query = """
+			SELECT
+				(SELECT min(td.from_time) 
+    		FROM `tabTimesheet Detail` td 
+      		WHERE td.task = %s AND td.docstatus = 1) as start_date,
+				(SELECT max(td.to_time) 
+    		FROM `tabTimesheet Detail` td 
+      		WHERE td.task = %s AND td.docstatus = 1) as end_date,
+				tsd.hours_count, tsd.task, tsd.project
+			FROM
+				`tabTimesheet Detail` tsd
+			WHERE
+				tsd.parent = %s AND tsd.task = %s
+		"""
 
-		start_date_today = getdate(now())
+		end_date_today = getdate(now())
+
+
+  
+		# frappe.throw(tl.hours_count)
 
 		timesheets = frappe.get_list('SD Timesheets',
 									filters={
 										'title': employee_info.name,
-										'start_date': ['>=', start_date_today]
+										'end_date': ['>=', end_date_today],
+										'docstatus': '1'
 									},
 									limit=1)
 
 		if timesheets:
 			timesheet_name = timesheets[0].get('name')
-			timesheet_doc = frappe.get_doc('SD Timesheets', timesheet_name)
-			time_logs = timesheet_doc.get('time_logs')
+			# timesheet_doc = frappe.get_doc('SD Timesheets', timesheet_name)
+			# time_logs = timesheet_doc.get('time_logs')
+			# frappe.throw(f' Timesheet Name : {timesheet_name}')
 
+			result = frappe.db.sql(query, (task_name, task_name, timesheet_name, task_name), as_dict=True)
+
+   
+			if result:
+				start_date = result[0]['start_date']
+				end_date = result[0]['end_date']
+				actual_time_str = result[0]['hours_count']
+				task = result[0]['task']
+				project = result[0]['project']
+
+				# Use frappe.throw to display the values
+			# 	frappe.throw(f"Start Date: {start_date}, End Date: {end_date}, Hours Count: {hours_count_value}, Task: {task_value}, Project: {project_value}")
+			# else:
+			# 	frappe.throw("No data found for the specified Timesheet and Task")
+   
+			# tsd = """
+			# 	SELECT tsd.hours_count, tsd.task, tsd.project
+			# 	FROM `tabTimesheet Detail` tsd
+			# 	WHERE tsd.parent = %s AND tsd.task = %s
+			# """
+
+			# Execute the SQL query with the sd_timesheet_name as a parameter
+			# result = frappe.db.sql(tsd, (timesheet_name,))
+
+	
+			# for row in result:
+			# 	hours_count_value = row[0]  # Assuming hours_count is the first column in the result
+			# 	print(f'Hours Count: {hours_count_value}')
+			# result = frappe.db.sql(tsd, (timesheet_name, task_name))
+    
+			# actual_time_str = result[0][0]
+			# task = result[0][1]
+			# project = result[0][2]
+			# frappe.throw(f"Hours Count and Task: {result}")
+   
+			try:
+				# Try to parse the input as "%H:%M:%S"
+				actual_time_timedelta = datetime.strptime(actual_time_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+			except ValueError:
+				try:
+					# Try to parse the input as "%Y-%m-%d %H:%M:%S"
+					actual_time_timedelta = datetime.strptime(actual_time_str, "%Y-%m-%d %H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+				except ValueError:
+					try:
+						# Try to parse the input as "X days, HH:MM:SS"
+						days, time_str = actual_time_str.split(", ")
+						days = int(days.split()[0])
+						hours, minutes, seconds = map(int, time_str.split(":"))
+						actual_time_timedelta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+					except ValueError:
+						# Handle the case where the format is unknown
+						raise ValueError("Unknown time format: {}".format(actual_time_str))
+
+
+
+			data = frappe.get_doc("Task", task)
+			existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.project == project), None)
+
+			if existing_row:
+				# Convert existing total working hours string to a timedelta object
+				existing_total_hours_str = existing_row.get("total_working_hours", "00:00:00")
+				# existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+				# print("existing_total_hours_str : " + str(existing_total_hours_str))
+				try:
+					# Try to parse the input as "%H:%M:%S"
+					existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+				except ValueError:
+					try:
+						# Try to parse the input as "%Y-%m-%d %H:%M:%S"
+						existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%Y-%m-%d %H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+					except ValueError:
+						try:
+							# Try to parse the input as "X days, HH:MM:SS"
+							days, time_str = existing_total_hours_str.split(", ")
+							days = int(days.split()[0])
+							hours, minutes, seconds = map(int, time_str.split(":"))
+							existing_total_hours_timedelta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+						except ValueError:
+							# Handle the case where the format is unknown
+							raise ValueError("Unknown time format: {}".format(existing_total_hours_str))
+
+				# Sum the existing total working hours with actual_time_timedelta
+				new_total_hours_timedelta = existing_total_hours_timedelta + actual_time_timedelta
+
+				#Check throw total working hours
+				# frappe.throw(str(existing_total_hours_timedelta) + " || " + " || " + str(actual_time_timedelta) + " || "+ str(new_total_hours_timedelta))
+
+				# Convert the new total hours timedelta back to a string in the "HH:MM:SS" format
+				new_total_hours_str = str(new_total_hours_timedelta)
+				
+				# frappe.throw(str(new_total_hours_timedelta.total_seconds()))
+				# If the total working hours exceed 24 hours, change the format
+				# if new_total_hours_timedelta.total_seconds() >= 86400:
+				# 	new_total_hours_str = new_total_hours_timedelta.strftime("%Y-%m-%d %H:%M:%S")
+
+				# Update existing row
+				# print("Updating Data : " + employee_info.name, str(new_total_hours_str), str(task))
+				existing_row.update({
+					"total_working_hours": new_total_hours_str,
+					"from_date": start_date,
+					"to_date": end_date
+				})
+				# Save and reload the data
+				
+				
+			else:
+				# Add a new row
+				# print("Appending new Data : " + employee_info.name, str(actual_time_timedelta), str(task))
+				data.append(
+					"timesheets_data", {
+						"doctype": "SD Assignment Timesheets Data",
+						"employee_name": employee_info.name,
+						"project": project,
+						"total_working_hours": actual_time_timedelta,
+						"from_date": start_date,
+						"to_date": end_date
+					}
+				)
+			# # Save and reload the data
+			data.save()
+			# data.reload()
+			# print("DATA SAVED AND RELOAD THE DATA")
+	
+			'''
 			for d in time_logs:
 				actual_time_str = d.get('hours_count')  # Assuming the format is "HH:MM:SS"
 				project = d.get('project')
 				task = d.get('task')
+    
 				# print("NAMA TIMESHEETS : " + str(timesheet_name))
 				# print("NAMA TASK : " + str(task))
 				
@@ -721,11 +867,16 @@ class Task(NestedSet):
 				data.save()
 				# data.reload()
 				# print("DATA SAVED AND RELOAD THE DATA")
-
+			'''
 				
 		else:
 			# Handle the case where no matching records were found
-			frappe.msgprint('No matching records found for the given filters.')
+			# frappe.msgprint('No matching records found for the given filters.')
+			frappe.throw(
+				title='Timesheet not found',
+				msg='Timesheet not found, contact your leader / supervisor',
+				# exc=EnvironmentError
+			)
 
 	def update_time_and_costing(self):
 		tl = frappe.db.sql(
@@ -853,7 +1004,8 @@ def validate_sprint():
 
 	event = frappe.db.get_list('Event', pluck='name',
 		filters={
-			'starts_on': ['<=', getdate(nowdate())]
+			'starts_on': ['<=', getdate(nowdate())],
+			'event_category': ['=', 'Sprint']
 		},
 						fields=['starts_on', 'name'],
 						order_by='starts_on desc',

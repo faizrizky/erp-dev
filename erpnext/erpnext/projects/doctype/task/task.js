@@ -78,6 +78,16 @@ frappe.ui.form.on("Task", {
 			};
 		});
 
+		frm.set_query("multi_sprint", function () {
+			let filters = {
+				event_category: ["=", "Sprint"],
+			};
+
+			return {
+				filters: filters,
+			};
+		});
+
 		frm.set_query("parent_task", function () {
 			let filters = {
 				is_group: 1,

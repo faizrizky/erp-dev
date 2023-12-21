@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
+  "employee_name",
   "project",
   "project_name",
   "section_break_3",
@@ -20,6 +21,7 @@
   "expected_hours",
   "hours_count",
   "column_break_2",
+  "actual_time_float",
   "expected_hours_count",
   "section_break_6",
   "description",
@@ -64,9 +66,7 @@
    "columns": 1,
    "fieldname": "hours",
    "fieldtype": "Float",
-   "hidden": 1,
    "hide_days": 1,
-   "in_list_view": 1,
    "label": "Hrs",
    "read_only": 1
   },
@@ -281,12 +281,24 @@
    "fieldname": "status_section",
    "fieldtype": "Section Break",
    "label": "Status"
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Link",
+   "label": "Employee Name",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "actual_time_float",
+   "fieldtype": "Data",
+   "label": "Actual Time Float",
+   "read_only": 1
   }
  ],
  "idx": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-05-03 11:32:14.218382",
+ "modified": "2023-12-16 14:10:59.978638",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Timesheet Detail",

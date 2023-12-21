@@ -62,6 +62,75 @@ frappe.ui.form.on("SD Timesheets", {
 		}
 	},
 
+	// after_save: function (frm) {
+
+	// },
+
+	on_submit: function (frm) {
+		let end_date_today = frappe.datetime.get_today();
+
+		frappe.call({
+			method: "frappe.client.get_list",
+			args: {
+				doctype: "SD Timesheets",
+				filters: {
+					title: frm.doc.employee_info,
+					end_date: [">=", end_date_today],
+					docstatus: 1,
+				},
+				limit: 1,
+			},
+			callback: function (response) {
+				// Check if response.message is valid
+				if (
+					response &&
+					response.message &&
+					response.message.length > 0
+				) {
+					// Handle the response
+					if (frm.doc.docstatus == 1) {
+						frappe.show_alert(
+							{
+								message: __(
+									'Your working hours will be stored to <strong style="font-weight: bold;">' +
+										"Timesheet Table" +
+										"</strong>, in every Task you choose."
+								),
+								indicator: "green",
+							},
+							7
+						);
+					}
+					// } else {
+					// 	frappe.confirm(
+					// 		'This data will be stored to <strong style="font-weight: bold;">' +
+					// 			"Timesheet Table" +
+					// 			"</strong>, in every Task you choose, are you sure you want to proceed?",
+					// 		() => {
+					// 			// frm.clear_table("revision_table");
+					// 			cur_frm.save("Cancel");
+					// 			frappe.msgprint({
+					// 				title: __("Notification"),
+					// 				indicator: "green",
+					// 				message: __(
+					// 					"Revision Table has been deleted successfully"
+					// 				),
+					// 			});
+					// 		},
+					// 		() => {
+					// 			// frm.set_value("status", "Revision");
+					// 			// cur_frm.save();
+					// 		}
+					// 	);
+				}
+			},
+			error: function (xhr, textStatus, error) {
+				// Handle the error
+				console.error(xhr.responseText);
+			},
+		});
+	},
+
 	refresh: function (frm) {
 		if (frm.doc.docstatus == 1) {
 			if (

@@ -100,10 +100,8 @@ class SDTimesheets(Document):
 		self.update_task_and_project()
 
 	def on_submit(self):
-		frappe.log_error("Entering on_submit", "Custom Log")
 		self.validate_mandatory_fields()
 		self.update_task_time_tracking_and_project()
-		frappe.log_error("Exiting on_submit", "Custom Log")
 
 
 	# def on_update(self):
@@ -120,18 +118,20 @@ class SDTimesheets(Document):
 				frappe.throw(_("Row {0}: Hours value must be greater than zero.").format(data.idx))
 
 	def update_task_time_tracking_and_project(self):
-		task_id_to_process = "Side Quest"
-		task = frappe.get_doc("Task", task_id_to_process)
-		task.update_timesheet_date()
-		# tasks = []
+		# task_id_to_process = "Side Quest"
+		# task = frappe.get_doc("Task", task_id_to_process)
+		# task.update_timesheet_date()
+		tasks = []
 
-		# for data in self.time_logs:
-		# 	if data.task and data.task not in tasks:
-		# 		print("START CALLING TASK")
-		# 		task = frappe.get_doc("Task", data.task)
-		# 		task.update_timesheet_date()
-		# 		tasks.append(data.task)
-		# 		break
+		for data in self.time_logs:
+			if data.task and data.task not in tasks:
+				task = frappe.get_doc("Task", data.task)
+				print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
+				task.update_timesheet_date(data.task)
+				tasks.append(data.task)
+
+		
+
 		
 	def update_task_and_project(self):
 		tasks, projects = [], []

@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-20 11:09:57.031237",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "asset_name",
+  "asset_name_data",
+  "column_break_hl3kb",
+  "to_employee",
+  "section_break_f6gqs",
+  "reason"
+ ],
+ "fields": [
+  {
+   "allow_on_submit": 1,
+   "fieldname": "asset_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Asset",
+   "options": "CD Asset",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "asset_name.asset_name",
+   "fieldname": "asset_name_data",
+   "fieldtype": "Data",
+   "label": "Asset Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "To Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Reason",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hl3kb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_f6gqs",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-28 13:09:42.577225",
+ "modified_by": "Administrator",
+ "module": "devContent",
+ "name": "CD Asset Borrow",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

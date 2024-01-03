@@ -1,0 +1,191 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-14 13:43:21.768566",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_asset_information",
+  "asset_name",
+  "company",
+  "type",
+  "custodian",
+  "column_break_uxjli",
+  "condition",
+  "department",
+  "status",
+  "sarpras_information_section",
+  "sarpras_type",
+  "employee",
+  "column_break_sqa0d",
+  "room",
+  "custodian_location",
+  "sb_detail",
+  "spesification",
+  "note",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Data",
+   "label": "Asset Name",
+   "max_height": "35px",
+   "reqd": 1,
+   "width": "50px"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "reqd": 1
+  },
+  {
+   "fieldname": "spesification",
+   "fieldtype": "Text",
+   "label": "Spesification"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Text",
+   "label": "Note"
+  },
+  {
+   "fieldname": "column_break_uxjli",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible_depends_on": "eval:doc.__islocal",
+   "fieldname": "sb_asset_information",
+   "fieldtype": "Section Break",
+   "label": "Assets Information"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "CD Asset",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "\nHardware\nSoftware"
+  },
+  {
+   "collapsible_depends_on": "eval:doc.__islocal",
+   "fieldname": "sb_detail",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Room",
+   "options": "CD Room"
+  },
+  {
+   "fieldname": "sarpras_type",
+   "fieldtype": "Select",
+   "label": "Sarpras Type",
+   "options": "\nGeneral\nEmployee"
+  },
+  {
+   "depends_on": "eval:doc.sarpras_type == 'Employee'",
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "\nStored\nBorrowed"
+  },
+  {
+   "fieldname": "condition",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Condition",
+   "options": "\nNone\nGood\nIn Maintenance\nBroken\nMissing",
+   "reqd": 1
+  },
+  {
+   "collapsible_depends_on": "eval:doc.__islocal",
+   "fieldname": "sarpras_information_section",
+   "fieldtype": "Section Break",
+   "label": "Sarpras Information"
+  },
+  {
+   "fieldname": "column_break_sqa0d",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.custodian != null",
+   "fieldname": "custodian",
+   "fieldtype": "Link",
+   "label": "Custodian",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.custodian_location != null",
+   "fieldname": "custodian_location",
+   "fieldtype": "Data",
+   "label": "Custodian Location Room",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-27 14:15:46.977839",
+ "modified_by": "Administrator",
+ "module": "devContent",
+ "name": "CD Asset",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}

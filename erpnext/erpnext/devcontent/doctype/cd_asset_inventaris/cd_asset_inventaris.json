@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-14 16:25:08.222949",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_asset_information",
+  "asset_name",
+  "status",
+  "column_break_5aqqe",
+  "type",
+  "condition",
+  "room",
+  "sb_details",
+  "spesification",
+  "note"
+ ],
+ "fields": [
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Asset Name",
+   "options": "CD Asset",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "asset_name.status",
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "asset_name.spesification",
+   "fieldname": "spesification",
+   "fieldtype": "Text",
+   "label": "Spesification"
+  },
+  {
+   "fetch_from": "asset_name.note",
+   "fieldname": "note",
+   "fieldtype": "Text",
+   "label": "Note"
+  },
+  {
+   "fetch_from": "asset_name.type",
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "label": "Type",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "asset_name.room",
+   "fieldname": "room",
+   "fieldtype": "Data",
+   "label": "Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sb_asset_information",
+   "fieldtype": "Section Break",
+   "label": "Asset Information"
+  },
+  {
+   "fieldname": "column_break_5aqqe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fetch_from": "asset_name.condition",
+   "fieldname": "condition",
+   "fieldtype": "Data",
+   "label": "Condition"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-21 14:21:55.062191",
+ "modified_by": "Administrator",
+ "module": "devContent",
+ "name": "CD Asset Inventaris",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

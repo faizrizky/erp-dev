@@ -53,6 +53,7 @@
    "description": "Its Weight * 5%",
    "fieldname": "testing_weight",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Testing Weight",
    "read_only": 1
   },
@@ -65,7 +66,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-05 10:25:03.045142",
+ "modified": "2024-01-02 11:56:20.802543",
  "modified_by": "Administrator",
  "module": "CDProj",
  "name": "CD Task Type",

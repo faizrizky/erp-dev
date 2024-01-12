@@ -46,7 +46,8 @@ def on_doctype_update():
 
 def get_abbreviated_name(name, company):
 	abbr = frappe.get_cached_value("Company", company, "abbr")
-	new_name = "{0} - {1}".format(name, abbr)
+	#new_name = "{0} - {1}".format(name, abbr)
+	new_name = "{0}".format(name, abbr)
 	return new_name
 
 

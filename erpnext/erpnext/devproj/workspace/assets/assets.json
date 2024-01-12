@@ -115,7 +115,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-05-22 10:37:04.439982",
+ "modified": "2023-11-02 18:01:09.635168",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Assets",
@@ -124,7 +124,20 @@
  "public": 1,
  "quick_lists": [],
  "restrict_to_domain": "",
- "roles": [],
+ "roles": [
+  {
+   "role": "Chief Technology Officer"
+  },
+  {
+   "role": "Leader Software Developer"
+  },
+  {
+   "role": "Technical Architect Software Developer"
+  },
+  {
+   "role": "Software Developer"
+  }
+ ],
  "sequence_id": 6.1,
  "shortcuts": [
   {

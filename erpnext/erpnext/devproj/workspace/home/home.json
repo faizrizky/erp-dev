@@ -107,7 +107,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-10-03 17:09:30.146256",
+ "modified": "2023-11-02 18:01:28.204362",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Home",
@@ -124,7 +124,20 @@
    "label": "SD Timesheets"
   }
  ],
- "roles": [],
+ "roles": [
+  {
+   "role": "Leader Software Developer"
+  },
+  {
+   "role": "Technical Architect Software Developer"
+  },
+  {
+   "role": "Software Developer"
+  },
+  {
+   "role": "Chief Technology Officer"
+  }
+ ],
  "sequence_id": 1.0,
  "shortcuts": [
   {

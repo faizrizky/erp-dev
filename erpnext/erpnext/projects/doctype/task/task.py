@@ -41,6 +41,8 @@ class Task(NestedSet):
 
 	def before_validate(self):		
 		self.validate_task_name()
+		self.sub_task_data_before_saved()
+	
 
 	def validate(self):
 		self.validate_completed_on()
@@ -59,6 +61,8 @@ class Task(NestedSet):
 		self.validate_duration_programmer()
 		self.validate_duration_qa()			
 		self.handle_completed_task()
+		# self.update_sub_task_status('testo mantap djiwa aw aw aw mamacita ayaya')
+		self.sub_task_data_after_saved()
 
 	def validate_task_name(self):
 		if self.subject.count("-") > 1 : 
@@ -246,24 +250,35 @@ class Task(NestedSet):
 		arr_qa = []
 		check_val = dict([])
 		has_error = []
-		has_hypen= []
+		# has_hypen= []
 
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
 				# check if the same pa aji
-				if d.subject not in check_val :
-					check_val[d.subject] = 1
+				if d.sub_task not in check_val :
+					check_val[d.sub_task] = 1
 				else:
-					check_val[d.subject] += 1
+					check_val[d.sub_task] += 1
 				
-				if d.subject.count("-") > 0:
-					has_hypen.append(d.subject)
+				# if d.sub_task.count("-") > 0:
+				# 	has_hypen.append(d.sub_task)
+     
+				if d.completion == True:
+					print(frappe.db.get_value('SD Sub Task', d.sub_task, 'status'))
+					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Working":
+						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Completed')
+				
+				if d.completion == False:
+					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Completed":
+						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Working')
+					
 
-				if check_val[d.subject] <= 1:
+				if check_val[d.sub_task] <= 1:
 
 					jumlah_total_elemen = len(self.sub_task)
 
 					programmer_condition = sum(1 for x in self.sub_task if d.completion == True)
+					
 					sub_task_percentage_programmer = (programmer_condition / jumlah_total_elemen) * 100
 
 					qa_condition = sum(1 for x in self.sub_task if d.qa_completion == True)
@@ -279,16 +294,25 @@ class Task(NestedSet):
 					count_true_programmer = len(arr)
 					count_true_qa = len(arr_qa)
 				else:
-					has_error.append(d.subject)
+					has_error.append(d.sub_task)
 
 			if len(has_error) > 0 : 
-				frappe.throw(_("{0} Name in the {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
+				# frappe.throw(_("{0} Name in the {1} cannot be same").format(frappe.bold((" , ").join(has_error)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
+				frappe.throw(_("Name in the {0} cannot be same").format(frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
 			
-			if len(has_hypen) > 0:
-				frappe.throw(_("{0} Name in the {1} cannot contain a hyphen (-)").format(frappe.bold((" , ").join(has_hypen)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
+			# if len(has_hypen) > 0:
+			# 	frappe.throw(_("{0} Name in the {1} cannot contain a hyphen (-)").format(frappe.bold((" , ").join(has_hypen)),frappe.bold("Sub Task Table")),title=_("Invalid Sub Task Name"))
 
+			if self.ongoing_sprint != None or self.ongoing_sprint != "":
+				frappe.db.set_value('SD Sub Task', d.sub_task, {
+					'task': self.name,
+					'status': 'Open'
+				})
+			
 			percentage_programmer = (count_true_programmer / len(self.sub_task)) * 100
 			percentage_qa = (count_true_qa / len(self.sub_task)) * 100
+   
+
 
 			self.individual_progress = percentage_programmer
 			self.qa_progress = percentage_qa
@@ -594,7 +618,69 @@ class Task(NestedSet):
 			close_all_assignments(self.doctype, self.name)
 		if self.status == "Cancelled":
 			clear(self.doctype, self.name)
+	
+	def sub_task_data_before_saved(self):
+		query = """
+			SELECT
+				td.sub_task
+			FROM 
+				`tabAssignment Sub Task` td
+			WHERE
+				td.parent = %s
+		"""
 
+		result = frappe.db.sql(query, (self.name,), as_dict=True)
+		print("list before : ",result,"Total : ",len(result))
+
+		return result
+		
+
+	def sub_task_data_after_saved(self):
+
+		formatted_data = []
+
+		for row in self.sub_task:
+			if hasattr(row, 'sub_task'):
+					formatted_data.append({"sub_task": row.sub_task})	
+     	
+		print("list after : ",formatted_data,"Total : ",len(formatted_data))
+  
+		sub_tasks_array1 = set(item['sub_task'] for item in self.sub_task_data_before_saved())
+		sub_tasks_array2 = set(item['sub_task'] for item in formatted_data)
+
+
+		if len(sub_tasks_array1) > len(sub_tasks_array2):
+			difference = list(sub_tasks_array1.symmetric_difference(sub_tasks_array2))[0]
+			print("Sub task ada yg di delete yaitu : ", difference)
+			frappe.db.set_value('SD Sub Task', difference, 'status', 'Open	')
+		elif len(sub_tasks_array1) < len(sub_tasks_array2):
+			print("Nambah subtaksnya")
+		else:
+			print("Both arrays have the same number of elements.")
+		return formatted_data
+		
+		# sub_task_dict = {}
+		# for index, row in enumerate(self.sub_task):
+		# 	sub_task_dict[index] = row.sub_task
+		# 	print("Dictionary after:", sub_task_dict)
+	def update_sub_task_status(self):
+     
+		for sub_task_name in self.sub_task:
+			sub_task_list = frappe.db.get_list('SD Sub Task',
+							filters={
+								'status': 'Open',
+								'name': sub_task_name.sub_task
+							},
+							fields=['subject','name'],
+							# page_length=10,
+							as_list=True
+							)
+
+			for subject in sub_task_list:       
+				subject = sub_task_list[0]
+				if frappe.db.get_value('SD Sub Task', subject, 'status') == "Open":
+					frappe.db.set_value('SD Sub Task', subject, 'status', 'Working')
+			
 	def update_timesheet_date(self, task_name):
 		employee_info = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ['name', 'employee_name'], as_dict=1)
 
@@ -614,7 +700,7 @@ class Task(NestedSet):
 				(SELECT max(td.to_time) 
     		FROM `tabTimesheet Detail` td 
       		WHERE td.task = %s AND td.docstatus = 1) as end_date,
-				tsd.hours_count, tsd.task, tsd.project
+				tsd.hours_count, tsd.task, tsd.project, tsd.sub_task, tsd.activity_type
 			FROM
 				`tabTimesheet Detail` tsd
 			WHERE
@@ -635,6 +721,7 @@ class Task(NestedSet):
 									},
 									limit=1)
 
+		# print(timesheets)
 		if timesheets:
 			timesheet_name = timesheets[0].get('name')
 			# timesheet_doc = frappe.get_doc('SD Timesheets', timesheet_name)
@@ -642,11 +729,12 @@ class Task(NestedSet):
 			# frappe.throw(f' Timesheet Name : {timesheet_name}')
 
 			result = frappe.db.sql(query, (task_name, task_name, timesheet_name, task_name), as_dict=True)
-
    
 			if result:
 				start_date = result[0]['start_date']
 				end_date = result[0]['end_date']
+				sub_task = result[0]['sub_task']
+				activity_type = result[0]['activity_type']
 				actual_time_str = result[0]['hours_count']
 				task = result[0]['task']
 				project = result[0]['project']
@@ -698,7 +786,10 @@ class Task(NestedSet):
 
 			data = frappe.get_doc("Task", task)
 			existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.project == project), None)
+   
 
+			self.update_sub_task_status()
+   
 			if existing_row:
 				# Convert existing total working hours string to a timedelta object
 				existing_total_hours_str = existing_row.get("total_working_hours", "00:00:00")
@@ -753,6 +844,8 @@ class Task(NestedSet):
 					"timesheets_data", {
 						"doctype": "SD Assignment Timesheets Data",
 						"employee_name": employee_info.name,
+						"sub_task": sub_task,
+						"activity_type": activity_type,
 						"project": project,
 						"total_working_hours": actual_time_timedelta,
 						"from_date": start_date,

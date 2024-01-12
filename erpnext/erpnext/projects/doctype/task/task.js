@@ -55,6 +55,61 @@ frappe.ui.form.on("Task", {
 			// console.log(frm.doc.sub_task.length)
 			frm.set_df_property("qa_progress", "read_only", 1);
 		} else frm.set_df_property("qa_progress", "read_only", 0);
+
+
+		frappe.call({
+			method: "frappe.client.get_value",
+			args: {
+				doctype: "Employee",
+				filters: { user_id: frappe.session.user },
+				fieldname: ["branch"]
+			},
+			callback: function (response) {
+				if (response && response.message) {
+					var user_branch = response.message.branch;
+
+					frm.fields_dict['sub_task'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
+						return {
+							filters: {
+								department: ["like", "%" + user_branch + "%"],
+								_assign: ["like", "%" + frappe.session.user + "%"],
+							}
+						};
+					};
+
+					frm.fields_dict['sub_task'].grid.get_field('employee_name').get_query = function (doc, cdt, cdn) {
+						var selected_sub_task = locals[cdt][cdn].sub_task;
+
+						var department_value = frappe.call({
+							method: "frappe.client.get_value",
+							args: {
+								doctype: "SD Sub Task",
+								filters: { "name": selected_sub_task },
+								fieldname: ["department"]
+							},
+							async: false
+						}).responseJSON.message.department;
+
+						return {
+							filters: {
+								branch: ["like", "%" + department_value + "%"],
+							}
+						};
+					}
+
+					frm.fields_dict['sub_task'].grid.get_field('checker_name').get_query = function (doc, cdt, cdn) {
+						return {
+							filters: {
+								branch: ["like", "%" + "Quality Assurance" + "%"],
+							}
+						};
+					};
+				}
+			}
+		});
+
+
+
 	},
 
 	onload: function (frm) {

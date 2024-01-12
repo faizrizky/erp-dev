@@ -1,12 +1,39 @@
 // Copyright (c) 2023, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
+function checkSubTaskLength(doc) {
+	var subTasksFilter = []; // Declare subTasksFilter variable here
+
+	frappe.call({
+		method: "frappe.client.get_list",
+		args: {
+			doctype: "Task",
+			filters: { subject: doc },
+			fields: ["sub_task.sub_task"]
+		},
+		async: false,
+		callback: function (response) {
+			if (response && response.message) {
+				var subTasks = response.message.map(entry => entry.sub_task ? entry.sub_task[0].sub_task : null);
+				subTasksFilter = subTasks.filter(subTask => {
+					if (subTask !== null) {
+						return true;
+					}
+					return false;
+				});
+			}
+		},
+	});
+	return subTasksFilter;
+}
+
 frappe.ui.form.on("SD Timesheets", {
 	// refresh: function(frm) {
 
 	// }
 
 	setup: function (frm) {
+		console.log("Executed in setuo")
 		frappe.require("/assets/erpnext/js/projects/timer.js");
 
 		frm.fields_dict.employee.get_query = function () {
@@ -40,6 +67,18 @@ frappe.ui.form.on("SD Timesheets", {
 				};
 			};
 
+		frm.fields_dict["time_logs"].grid.get_field("sub_task").get_query =
+			function (frm, cdt, cdn) {
+				var child = locals[cdt][cdn];
+				return {
+					filters: {
+						// project: child.project,
+						status: ["!=", "Cancelled"],
+						_assign: ["like", "%" + frappe.session.user + "%"],
+					},
+				};
+			};
+
 		frm.fields_dict["time_logs"].grid.get_field("project").get_query =
 			function () {
 				return {
@@ -53,6 +92,7 @@ frappe.ui.form.on("SD Timesheets", {
 	},
 
 	onload: function (frm) {
+		console.log("Executed on onload")
 		if (frm.doc.__islocal && frm.doc.time_logs) {
 			calculate_time_and_amount(frm);
 		}
@@ -93,8 +133,8 @@ frappe.ui.form.on("SD Timesheets", {
 							{
 								message: __(
 									'Your working hours will be stored to <strong style="font-weight: bold;">' +
-										"Timesheet Table" +
-										"</strong>, in every Task you choose."
+									"Timesheet Table" +
+									"</strong>, in every Task you choose."
 								),
 								indicator: "green",
 							},
@@ -132,6 +172,7 @@ frappe.ui.form.on("SD Timesheets", {
 	},
 
 	refresh: function (frm) {
+		console.log("Executed on refresh")
 		if (frm.doc.docstatus == 1) {
 			if (
 				frm.doc.per_billed < 100 &&
@@ -141,6 +182,63 @@ frappe.ui.form.on("SD Timesheets", {
 				frm.add_custom_button(__("Create Sales Invoice"), function () {
 					frm.trigger("make_invoice");
 				});
+			}
+		}
+
+		// frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
+		// 	var child = locals[cdt][cdn];
+		// 	if (child.sub_task === null) {
+		// 		// sub_task is null
+		// 		console.log("sub_task is null");
+		// 	} else {
+		// 		// sub_task is not null
+		// 		console.log("sub_task is not null");
+		// 	}
+		// }
+
+		var timeLogs = frm.doc.time_logs;
+		var subTaskField = frm.fields_dict['time_logs'];
+		// console.log("Total Timesheet : ", timeLogs.length)
+
+		if (timeLogs && timeLogs.length > 0) {
+			var lastTask = timeLogs[timeLogs.length - 1].task;
+			if (lastTask !== undefined) {
+				frappe.call({
+					method: 'frappe.client.get',
+					args: {
+						doctype: 'Task',
+						name: lastTask
+					},
+					callback: function (response) {
+						var doc = response.message;
+						/*
+						console.log("subTaskField : ", subTaskField.doc.time_logs[timeLogs.length - 1].sub_task)
+						for (let index = 0; index < doc.sub_task.length; index++) {
+							const element = doc.sub_task[index].sub_task;
+							console.log('Task Document Name:', element);
+						}
+						
+						// console.log("Total Sub Task : ", response.message.sub_task.length)
+						*/
+						if (response.message && doc.sub_task.length > 0) {
+							console.log("Masuk")
+							subTaskField.grid.toggle_display('sub_task', true);
+							if (timeLogs[timeLogs.length - 1].sub_task == undefined) {
+								frappe.msgprint(__("Sub Task cannot be null. Please select a sub task."));
+								throw __("Sub Task cannot be null.");
+							}
+							// console.log("TASK : ", timeLogs[timeLogs.length - 1].task)
+						}
+						else {
+							subTaskField.grid.toggle_display('sub_task', false);
+							// console.log("TASK MASUK ELSE : ", timeLogs[timeLogs.length - 1].task)
+						}
+					}
+					//eval: (function () { var subTaskLength = checkSubTaskLength(doc.task).length; if (subTaskLength > 0) { return true; } else { doc.sub_task = null; return false; } })()
+				});
+			}
+			else {
+				console.log("Undifiened")
 			}
 		}
 
@@ -416,6 +514,7 @@ frappe.ui.form.on("Timesheet Detail", {
 	// 		},
 	// 	});
 	// },
+
 	time_logs_remove: function (frm) {
 		calculate_time_and_amount(frm);
 	},
@@ -423,6 +522,19 @@ frappe.ui.form.on("Timesheet Detail", {
 	task: (frm, cdt, cdn) => {
 		console.log("Script executed");
 		let row = frm.selected_doc;
+
+
+
+		if (checkSubTaskLength(row.task).length > 0) {
+			frm.cur_grid.grid.toggle_display("sub_task", true);
+			frm.cur_grid.grid.toggle_reqd("sub_task", true);
+
+		} else {
+			frm.cur_grid.grid.toggle_display("sub_task", false);
+			frm.cur_grid.grid.toggle_reqd("sub_task", false);
+			frappe.model.set_value(cdt, cdn, "sub_task", null);
+		}
+
 		if (row.task) {
 			frappe.db.get_value("Task", row.task, "project", (r) => {
 				frappe.model.set_value(cdt, cdn, "project", r.project);

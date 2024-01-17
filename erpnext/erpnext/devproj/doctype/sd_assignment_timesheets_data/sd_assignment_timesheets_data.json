@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-08 10:53:53.084257",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "employee_name",
+  "sub_task",
+  "column_break_1kclh",
+  "project",
+  "task_timeline_section",
+  "from_date",
+  "activity_type",
+  "column_break_3w5tw",
+  "to_date",
+  "total_section",
+  "total_working_hours"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "fieldname": "total_working_hours",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Total Working Hours",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "from_date",
+   "fieldtype": "Datetime",
+   "label": "From Date",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "to_date",
+   "fieldtype": "Datetime",
+   "label": "To Date",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "employee_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1kclh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "task_timeline_section",
+   "fieldtype": "Section Break",
+   "label": "Task Timeline"
+  },
+  {
+   "fieldname": "column_break_3w5tw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_section",
+   "fieldtype": "Section Break",
+   "label": "Total"
+  },
+  {
+   "fieldname": "activity_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Activity Type",
+   "options": "Activity Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sub_task",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sub Task",
+   "options": "SD Sub Task",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-09 14:43:00.842310",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "SD Assignment Timesheets Data",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

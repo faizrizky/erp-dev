@@ -39,6 +39,7 @@
   "reports_to",
   "column_break_18",
   "branch",
+  "cd_department",
   "role_profile",
   "employment_details",
   "scheduled_confirmation_date",
@@ -131,7 +132,8 @@
    "label": "Employee",
    "no_copy": 1,
    "print_hide": 1,
-   "report_hide": 1
+   "report_hide": 1,
+   "unique": 1
   },
   {
    "fieldname": "naming_series",
@@ -274,7 +276,6 @@
    "label": "Relation"
   },
   {
-   "collapsible": 1,
    "fieldname": "erpnext_user",
    "fieldtype": "Section Break",
    "label": "User Details"
@@ -351,7 +352,7 @@
    "fieldname": "department",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Department",
+   "label": "Division",
    "oldfieldname": "department",
    "oldfieldtype": "Link",
    "options": "Department"
@@ -377,11 +378,10 @@
    "options": "Employee"
   },
   {
+   "depends_on": "eval:(frappe.user_roles.join(\",\").toLowerCase().includes(\"software\"))",
    "fieldname": "branch",
    "fieldtype": "Link",
-   "label": "Team",
-   "oldfieldname": "branch",
-   "oldfieldtype": "Link",
+   "label": "Department",
    "options": "Branch"
   },
   {
@@ -813,13 +813,22 @@
    "fieldtype": "Link",
    "label": "Role",
    "options": "Role"
+  },
+  {
+   "depends_on": "eval:(frappe.user_roles.join(\",\").toLowerCase().includes(\"content\")) && doc.designation == \"Content Developer\"",
+   "fieldname": "cd_department",
+   "fieldtype": "Link",
+   "label": "CD Department",
+   "oldfieldname": "branch",
+   "oldfieldtype": "Link",
+   "options": "CD Department"
   }
  ],
  "icon": "fa fa-user",
  "idx": 24,
  "image_field": "image",
  "links": [],
- "modified": "2023-06-30 13:19:18.294740",
+ "modified": "2023-11-29 14:41:33.510338",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",
@@ -864,7 +873,6 @@
  ],
  "search_fields": "employee_name",
  "show_name_in_global_search": 1,
- "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

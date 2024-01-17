@@ -10,6 +10,7 @@
   "project_name",
   "section_break_3",
   "task",
+  "sub_task",
   "activity_type",
   "column_break_0dzcy",
   "from_time",
@@ -20,6 +21,7 @@
   "expected_hours",
   "hours_count",
   "column_break_2",
+  "actual_time_float",
   "expected_hours_count",
   "section_break_6",
   "description",
@@ -66,7 +68,6 @@
    "fieldtype": "Float",
    "hidden": 1,
    "hide_days": 1,
-   "in_list_view": 1,
    "label": "Hrs",
    "read_only": 1
   },
@@ -281,12 +282,27 @@
    "fieldname": "status_section",
    "fieldtype": "Section Break",
    "label": "Status"
+  },
+  {
+   "fieldname": "actual_time_float",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Actual Time Float",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.project != null && doc.task != null",
+   "fieldname": "sub_task",
+   "fieldtype": "Link",
+   "label": "Sub Task",
+   "options": "SD Sub Task",
+   "read_only_depends_on": "eval: doc.hours_count != null"
   }
  ],
  "idx": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-05-03 11:32:14.218382",
+ "modified": "2024-01-09 11:39:57.546486",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Timesheet Detail",

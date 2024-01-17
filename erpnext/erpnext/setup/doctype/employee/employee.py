@@ -29,6 +29,8 @@ class Employee(NestedSet):
 
 	def autoname(self):
 		set_name_by_naming_series(self)
+		self.set_employee_name()
+		self.name = self.employee_name
 		self.employee = self.name
 
 	def validate(self):
@@ -37,7 +39,6 @@ class Employee(NestedSet):
 		validate_status(self.status, ["Active", "Inactive", "Suspended", "Left"])
 
 		self.employee = self.name
-		self.set_employee_name()
 		self.validate_date()
 		self.validate_email()
 		self.validate_status()
@@ -95,7 +96,14 @@ class Employee(NestedSet):
 		if employee_user_permission_exists:
 			return
 
-		add_user_permission("Employee", self.name, self.user_id)
+		# add_user_permission("Employee", self.name, self.user_id)
+		designation_permission_exists = frappe.db.get_value("Employee", self.name, "designation").lower()
+
+		if "software" in designation_permission_exists:
+			add_user_permission("Employee", self.name, self.user_id, applicable_for="SD Timesheets")
+		elif "content" in designation_permission_exists:
+			add_user_permission("Employee", self.name, self.user_id, applicable_for="CD Timesheets")
+
 		set_user_permission_if_allowed("Company", self.company, self.user_id)
 
 	def update_user(self):

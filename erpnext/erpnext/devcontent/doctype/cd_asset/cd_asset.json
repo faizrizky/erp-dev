@@ -7,20 +7,20 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "sb_asset_information",
-  "asset_name",
-  "company",
-  "type",
-  "custodian",
-  "column_break_uxjli",
-  "condition",
-  "department",
-  "status",
   "sarpras_information_section",
+  "company",
   "sarpras_type",
   "employee",
-  "column_break_sqa0d",
+  "column_break_uxjli",
+  "department",
   "room",
+  "sb_asset_information",
+  "asset_name",
+  "type",
+  "custodian",
+  "column_break_sqa0d",
+  "condition",
+  "status",
   "custodian_location",
   "sb_detail",
   "spesification",
@@ -107,14 +107,18 @@
   {
    "fieldname": "sarpras_type",
    "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Sarpras Type",
    "options": "\nGeneral\nEmployee"
   },
   {
-   "depends_on": "eval:doc.sarpras_type == 'Employee'",
+   "depends_on": "eval: doc.sarpras_type == \"Employee\"",
    "fieldname": "employee",
    "fieldtype": "Link",
    "label": "Employee",
+   "mandatory_depends_on": "eval: doc.sarpras_type == \"Employee\"",
    "options": "Employee"
   },
   {
@@ -124,7 +128,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "\nStored\nBorrowed"
+   "options": "\nFixed Asset\nStored\nBorrowed"
   },
   {
    "fieldname": "condition",
@@ -150,6 +154,9 @@
    "depends_on": "eval:doc.custodian != null",
    "fieldname": "custodian",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Custodian",
    "options": "Employee",
    "read_only": 1
@@ -164,7 +171,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-27 14:15:46.977839",
+ "modified": "2024-01-12 09:52:44.252439",
  "modified_by": "Administrator",
  "module": "devContent",
  "name": "CD Asset",

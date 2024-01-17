@@ -3,10 +3,10 @@ frappe.listview_settings["CD Asset"] = {
 		var colors = {
 			"Stored": "green",
 			"Borrowed": "blue",
-			"In Maintenance": "orange",
-			"Missing": "red",
+			"Fixed Asset": "darkgrey",
+			"Hardware": "red",
 		}
-        
-		return [__(doc.status), colors[doc.status], "status,=," + doc.status];
+
+		return [__(doc.status), colors[doc.status], "status,=," + doc.status];	
 	},
 };

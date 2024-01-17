@@ -15,19 +15,24 @@ class CDAssetStore(Document):
 		self.validate_employee()
 
 	def validate_employee(self):
-		current_custodian = frappe.db.get_value("CD Asset", self.asset_name, "custodian")
+		cd_assets = frappe.db.get_value("CD Asset", self.asset_name, ["custodian", "asset_name"], as_dict=1)
 		current_employee = frappe.db.get_value("Employee", self.custodian, "employee_name")
-		current_userid = frappe.db.get_value("Employee", current_custodian, "user_id")
-		belongs_to_employee = frappe.db.get_value("Employee", current_custodian, "employee_name")
-		
-		# if frappe.session.user != current_userid:
-		# 	frappe.throw(_("You are not permitted to return item : ( {0} ) that have been borrowed by someone else. The actual Custodian is {1}").format(frappe.bold(self.asset_name),frappe.bold(belongs_to_employee)))
+		belongs_to_employee = frappe.db.get_value("Employee", cd_assets.custodian, "employee_name")
 
-		if current_custodian != self.custodian:
+		if cd_assets.custodian != self.custodian:
 			frappe.throw(_("The asset : {0} does not belong to the custodian : {1}, it belongs to {2}").format(frappe.bold(self.asset_name),frappe.bold(current_employee),frappe.bold(belongs_to_employee)))
 
 		else:
-			frappe.db.set_value('CD Asset', self.asset_name, 'custodian', None)
-			frappe.db.set_value('CD Asset', self.asset_name, 'custodian_location', None)
-			frappe.db.set_value('CD Asset', self.asset_name, 'room', self.store_asset_to)
-			frappe.db.set_value('CD Asset', self.asset_name, 'status', 'Stored')
+			frappe.db.delete("CD Asset Inventaris", { 'asset_name': cd_assets.asset_name })
+			frappe.db.set_value('CD Asset', self.asset_name,{
+				'custodian': None,
+				'custodian_location': None,
+				'room': self.store_asset_to,
+				'status': 'Stored'
+			})
+
+	@frappe.whitelist()
+	def custom_query(doctype, txt, searchfield, start, page_len, filters):
+		# your logic
+		filtered_list = frappe.db.get_list('CD Asset', filters={ 'status': ['!=', filters] })
+		return filtered_list

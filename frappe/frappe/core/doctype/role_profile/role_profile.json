@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_rename": 1,
  "autoname": "role_profile",
  "creation": "2017-08-31 04:16:38.764465",
  "doctype": "DocType",
@@ -42,7 +43,7 @@
    "link_fieldname": "role_profile_name"
   }
  ],
- "modified": "2021-12-03 15:45:45.270963",
+ "modified": "2023-11-21 13:48:20.863978",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Role Profile",
@@ -75,6 +76,7 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "title_field": "role_profile",
  "track_changes": 1
 }

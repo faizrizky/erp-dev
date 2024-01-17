@@ -7,7 +7,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_to_date, flt, get_datetime, getdate, time_diff_in_hours
-
+from frappe.desk.form.save import savedocs
 from erpnext.controllers.queries import get_match_cond
 from erpnext.setup.utils import get_exchange_rate
 from datetime import timedelta
@@ -30,6 +30,7 @@ class SDTimesheets(Document):
 		self.calculate_total_amounts()
 		self.calculate_percentage_billed()
 		self.set_dates()
+		
 
 	def calculate_total_amounts(self):
 		self.total_hours = 0.0
@@ -100,7 +101,10 @@ class SDTimesheets(Document):
 
 	def on_submit(self):
 		self.validate_mandatory_fields()
-		self.update_task_and_project()
+		self.update_task_time_tracking_and_project()
+
+
+	# def on_update(self):
 
 	def validate_mandatory_fields(self):
 		for data in self.time_logs:
@@ -113,6 +117,22 @@ class SDTimesheets(Document):
 			if flt(data.hours) == 0.0:
 				frappe.throw(_("Row {0}: Hours value must be greater than zero.").format(data.idx))
 
+	def update_task_time_tracking_and_project(self):
+		# task_id_to_process = "Side Quest"
+		# task = frappe.get_doc("Task", task_id_to_process)
+		# task.update_timesheet_date()
+		tasks = []
+
+		for data in self.time_logs:
+			if data.task and data.task not in tasks:
+				task = frappe.get_doc("Task", data.task)
+				print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
+				task.update_timesheet_date(data.task)
+				tasks.append(data.task)
+
+		
+
+		
 	def update_task_and_project(self):
 		tasks, projects = [], []
 
@@ -177,6 +197,8 @@ class SDTimesheets(Document):
 				),
 				OverlapError,
 			)
+
+	
 
 	def get_overlap_for(self, fieldname, args, value):
 		timesheet = frappe.qb.DocType("Timesheet")
@@ -459,6 +481,27 @@ def get_events(start, end, filters=None):
 		update={"allDay": 0},
 	)
 
+def auto_submit():
+		# if frappe.session.user_fullname == "Muhammad Faiz Rizky":
+		doc = json.dumps(
+			{
+				"docstatus": 0,
+				"doctype": "SD Timesheets",
+				"name": "TS-2023-02632",
+				"__islocal": 1,
+				"__unsaved": 0,
+				# "owner": "Administrator",
+				
+			}
+		)
+		# doc = frappe.get_doc("SD Timesheets", "TS-2023-02632")
+		savedocs(doc, "Save")
+
+		# user_doc = frappe.db.get_value("User", frappe.session.user, "full_name")
+
+		# if user_doc == "Muhammad Faiz Rizky":
+		# 	timesheet_doc = frappe.get_doc("SD Timesheets", {"title": user_doc})
+		# 	savedocs(timesheet_doc, "Save")
 
 def get_timesheets_list(
 	doctype, txt, filters, limit_start, limit_page_length=20, order_by="modified"

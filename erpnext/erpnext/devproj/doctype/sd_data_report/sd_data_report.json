@@ -27,6 +27,7 @@
    "fieldname": "employee_name",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Employee Name",
    "read_only": 1
   },
@@ -54,7 +55,8 @@
    "fieldname": "branch",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Team",
+   "in_standard_filter": 1,
+   "label": "Department",
    "read_only": 1
   },
   {
@@ -68,6 +70,7 @@
    "fieldname": "project_name",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Project",
    "options": "Project"
   },
@@ -101,7 +104,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-25 09:26:56.873018",
+ "modified": "2023-12-29 10:50:45.204452",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Data Report",

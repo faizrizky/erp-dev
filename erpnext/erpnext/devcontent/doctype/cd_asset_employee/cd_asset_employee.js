@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('CD Asset Employee', {
-	// refresh: function(frm) {
-
-	// }
+	refresh: function(frm) {
+		frm.doc.assets_employee
+	}
 });

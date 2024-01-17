@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:cd_department",
+ "creation": "2023-11-02 10:57:59.586141",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "cd_department"
+ ],
+ "fields": [
+  {
+   "fieldname": "cd_department",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Department",
+   "oldfieldname": "branch",
+   "oldfieldtype": "Data",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "icon": "fa fa-code-fork",
+ "links": [],
+ "modified": "2023-12-05 10:25:07.255949",
+ "modified_by": "Administrator",
+ "module": "CDProj",
+ "name": "CD Department",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

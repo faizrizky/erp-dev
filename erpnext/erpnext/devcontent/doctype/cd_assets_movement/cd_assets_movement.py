@@ -52,6 +52,19 @@ class CDAssetsMovement(Document):
 					'status': 'Borrowed',
 					'custodian_location': custodianDesk
 				})
+				cd_assets		= frappe.db.get_value("CD Asset", borrow.asset_name, ["name", "asset_name", "status", "condition", "type", "spesification", "note", "room"], as_dict=1)
+				doc = frappe.get_doc('CD Asset Employee', borrow.to_employee)
+				doc.append("assets_employee", {
+					'asset_name': cd_assets.asset_name,
+					'status': cd_assets.status,
+					'condition': cd_assets.condition,
+					'type': cd_assets.type,
+					'spesification': cd_assets.spesification,
+					'note': cd_assets.note,
+					'room': cd_assets.room
+				})
+				doc.save()
+				doc.reload()
 
 	def validate_employee_transfer(self):
 		for transfer in self.transfer_asset_list:
@@ -68,7 +81,21 @@ class CDAssetsMovement(Document):
 					frappe.db.set_value('CD Asset', transfer.asset_transfer,{
 						'custodian': transfer.to_employee_transfer,
 						'status': 'Borrowed'
+					})					
+					cd_assets	= frappe.db.get_value("CD Asset", transfer.asset_transfer, ["name", "asset_name", "status", "condition", "type", "spesification", "note", "room"], as_dict=1)
+					current_inventaris = frappe.db.get_value('CD Asset Inventaris', {'parent': current_custodian}, ['parent'])
+					frappe.db.delete("CD Asset Inventaris", { 'parent': current_inventaris })
+					doc = frappe.get_doc('CD Asset Employee', transfer.to_employee_transfer)
+					doc.append("assets_employee", {
+						'asset_name': cd_assets.asset_name,
+						'status': cd_assets.status,
+						'condition': cd_assets.condition,
+						'type': cd_assets.type,
+						'spesification': cd_assets.spesification,
+						'note': cd_assets.note,
+						'room': cd_assets.room
 					})
+					doc.save()
 		
 	@frappe.whitelist()
 	def get_linked_doc(self):
@@ -82,9 +109,3 @@ class CDAssetsMovement(Document):
 					title='Announcement',
 					indicator='blue',
 				)
-				# frappe.db.set_value('CD Asset', cd_assets.name, {
-				# 	'custodian': None,
-				# 	'custodian_location': None,
-				# 	'status': 'Stored'
-				# })
-				# frappe.db.delete('CD Asset Borrow', {'asset_name': cd_assets.name})

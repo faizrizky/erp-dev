@@ -4,7 +4,13 @@ from datetime import timedelta
 
 import frappe
 import frappe.defaults
-import frappe.permissions
+from frappe.permissions import (
+	add_user_permission,
+	get_doc_permissions,
+	has_permission,
+	remove_user_permission,
+	set_user_permission_if_allowed,
+)
 import frappe.share
 from frappe import STANDARD_USERS, _, msgprint, throw
 from frappe.core.doctype.user_type.user_type import user_linked_with_permission_on_doctype
@@ -119,6 +125,8 @@ class User(Document):
 		clear_notifications(user=self.name)
 		frappe.clear_cache(user=self.name)
 		now = frappe.flags.in_test or frappe.flags.in_install
+		if self.email:
+			self.update_user_permissions()
 		self.send_password_notification(self.__new_password)
 		frappe.enqueue(
 			"frappe.core.doctype.user.user.create_contact", user=self, ignore_mandatory=True, now=now
@@ -137,12 +145,75 @@ class User(Document):
 		elif self.has_value_changed("allow_in_mentions") or self.has_value_changed("user_type"):
 			frappe.cache().delete_key("users_for_mentions")
 
+	def update_user_permissions(self):
+		if not self.create_user_permission:
+			return
+		
+		cd_staff_role_profile_permission_exists = ""
+		hod_content_role_profile_permission_exists = ""
+		designation_permission_exists = ""
+
+		role_profile_name_lower = frappe.db.get_value("User", self.name, "role_profile_name").lower()
+
+		if "content" in role_profile_name_lower:
+			hod_content_role_profile_permission_exists = frappe.db.exists(
+				"User Permission", {"allow": "Role Profile", "for_value": "HOD Content Division", "user": self.email}
+			)
+			cd_staff_role_profile_permission_exists = frappe.db.exists(
+				"User Permission", {"allow": "Role Profile", "for_value": "Content Developer Staff", "user": self.email}
+			)
+
+			designation_permission_exists = frappe.db.exists(
+				"User Permission", {"allow": "Designation", "for_value": "Content Developer", "user": self.email}
+			)
+
+			if not (hod_content_role_profile_permission_exists and cd_staff_role_profile_permission_exists and designation_permission_exists):
+				add_user_permission("Designation", "Content Developer", self.email)
+				add_user_permission("Role Profile", "HOD Content Division", self.email)
+				add_user_permission("Role Profile", "Content Developer Staff", self.email)
+				# employee_exists = frappe.db.exists("Employee", {"employee_name": self.full_name})
+				# if employee_exists:
+				# 	add_user_permission("Employee", self.full_name, self.email, applicable_for="CD Timesheets")
+				# 	frappe.db.set_value("Employee", {"employee_name": self.full_name}, "user_id", self.email)
+				# else:
+				# 	frappe.throw(_("To create user permission you need to create Employee with name {0}. Please create Employee first in Employee page with name {0}.").format(frappe.bold(self.full_name)),title=_("Employee doesn't exist"))
+
+		elif "software" in role_profile_name_lower:
+			role_profile_permission_exists = frappe.db.exists(
+				"User Permission", {"allow": "Role Profile", "for_value": self.role_profile_name, "user": self.email}
+			)
+
+			designation_permission_exists = frappe.db.exists(
+				"User Permission", {"allow": "Designation", "for_value": "Software Developer", "user": self.email}
+			)
+
+			if not (role_profile_permission_exists and designation_permission_exists):
+				add_user_permission("Designation", "Software Developer", self.email)
+				add_user_permission("Role Profile", "Leader Software Developer", self.email)
+				add_user_permission("Role Profile", "Software Developer", self.email)
+				# if employee_exists:
+				# 	add_user_permission("Employee", self.full_name, self.email, applicable_for="SD Timesheets")
+				# 	frappe.db.set_value("Employee", {"employee_name": self.full_name}, "user_id", self.email)
+				# else:
+				# 	frappe.throw(_("To create user permission you need to create Employee with name {0}. Please create Employee first in Employee page with name {0}.").format(frappe.bold(self.full_name)),title=_("Employee doesn't exist"))
+
+				# 	frappe.throw(f"Employee with name {self.full_name}  `{self.full_name}`")
+
+		department_permission_exists = frappe.db.exists(
+			"User Permission", {"allow": "Department", "for_value": "Project", "user": self.email}
+		)
+
+		if not (department_permission_exists and hod_content_role_profile_permission_exists and cd_staff_role_profile_permission_exists):
+			add_user_permission("Department", "Project", self.email)
+			
+
+		
 	def has_website_permission(self, ptype, user, verbose=False):
 		"""Returns true if current user is the session user"""
 		return self.name == frappe.session.user
 
 	def set_full_name(self):
-		self.full_name = " ".join(filter(None, [self.first_name, self.last_name]))
+		self.full_name = " ".join(filter(None, [self.first_name, self.middle_name, self.last_name]))
 
 	def check_enable_disable(self):
 		# do not allow disabling administrator/guest

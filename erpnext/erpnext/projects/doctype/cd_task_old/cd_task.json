@@ -1,0 +1,531 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:subject",
+ "creation": "2023-10-09 11:57:25.636303",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "task_details",
+  "subject",
+  "task_name",
+  "project",
+  "issue",
+  "multi_issue",
+  "type",
+  "priority",
+  "task_weight",
+  "color",
+  "is_group",
+  "is_template",
+  "column_break0",
+  "status",
+  "department",
+  "task_category",
+  "task_type",
+  "parent_cd_task",
+  "sb_timeline",
+  "exp_start_date",
+  "column_break_11",
+  "exp_end_date",
+  "duration",
+  "working_details_section",
+  "start_working_hours",
+  "column_break_9z8rv",
+  "total_working_hours",
+  "duration_section",
+  "progress",
+  "completed_status_details",
+  "completed_on",
+  "column_break_erpzz",
+  "completed_by",
+  "review_section",
+  "review_date",
+  "is_milestone",
+  "sub_task_table_section",
+  "sub_task",
+  "sb_details",
+  "description",
+  "sb_depends_on",
+  "depends_on",
+  "depends_on_tasks",
+  "sb_actual",
+  "act_start_date",
+  "actual_time",
+  "column_break_15",
+  "act_end_date",
+  "sb_costing",
+  "total_costing_amount",
+  "column_break_20",
+  "total_billing_amount",
+  "sb_more_info",
+  "company",
+  "closing_date",
+  "column_break_22",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_details",
+   "fieldtype": "Section Break",
+   "label": "Task Details"
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Subject",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "task_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Task Name"
+  },
+  {
+   "bold": 1,
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "oldfieldname": "project",
+   "oldfieldtype": "Link",
+   "options": "CD Project",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')",
+   "remember_last_selected_value": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "issue",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Issue",
+   "length": 100,
+   "options": "CD Issue"
+  },
+  {
+   "fieldname": "multi_issue",
+   "fieldtype": "Table MultiSelect",
+   "label": "Issue",
+   "options": "CD Assigment Issue"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Type",
+   "options": "Task Type"
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Priority",
+   "oldfieldname": "priority",
+   "oldfieldtype": "Select",
+   "options": "Low\nMedium\nHigh\nUrgent",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')",
+   "search_index": 1
+  },
+  {
+   "fetch_from": "task_type.weight",
+   "fieldname": "task_weight",
+   "fieldtype": "Float",
+   "label": "Weight",
+   "read_only": 1,
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')"
+  },
+  {
+   "bold": 1,
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "is Parent Task",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_template",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Is Template",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+  },
+  {
+   "fieldname": "column_break0",
+   "fieldtype": "Column Break",
+   "oldfieldtype": "Column Break",
+   "print_width": "50%",
+   "width": "50%"
+  },
+  {
+   "bold": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "oldfieldname": "status",
+   "oldfieldtype": "Select",
+   "options": "Open\nOngoing\nPending\nRevision\nOverdue\nCompleted\nCancelled"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Select",
+   "label": "Department",
+   "options": "3D Artist\n2D Artist\nConcept Artist\nVideo Editor",
+   "search_index": 1
+  },
+  {
+   "depends_on": "eval:doc.select_department == \"3D Artist\"",
+   "fieldname": "task_category",
+   "fieldtype": "Select",
+   "label": "Task Category",
+   "options": "None\nHardsurface\nOrganic\nRigging\nAnimating\nAssemblying\nPrefabs Making\nTerrain"
+  },
+  {
+   "fieldname": "task_type",
+   "fieldtype": "Link",
+   "label": "Task Type",
+   "options": "CD Task Type",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "parent_cd_task",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Task",
+   "options": "CD Task",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')",
+   "search_index": 1
+  },
+  {
+   "collapsible_depends_on": "eval:doc.__islocal",
+   "fieldname": "sb_timeline",
+   "fieldtype": "Section Break",
+   "label": "Task Timeline"
+  },
+  {
+   "fieldname": "exp_start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "oldfieldname": "exp_start_date",
+   "oldfieldtype": "Date",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')"
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "exp_end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "End Date",
+   "oldfieldname": "exp_end_date",
+   "oldfieldtype": "Date",
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator')?0:frappe.user.has_role('Software Developer')",
+   "search_index": 1
+  },
+  {
+   "fieldname": "duration",
+   "fieldtype": "Int",
+   "label": "Task Duration (Days)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "working_details_section",
+   "fieldtype": "Section Break",
+   "label": "Working Details"
+  },
+  {
+   "fieldname": "start_working_hours",
+   "fieldtype": "Datetime",
+   "label": "Start Working Hours"
+  },
+  {
+   "fieldname": "column_break_9z8rv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "The value above is calculated starting from the 'Ongoing' status up to 'Completed.",
+   "fieldname": "total_working_hours",
+   "fieldtype": "Data",
+   "label": "Total Working Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "duration_section",
+   "fieldtype": "Section Break",
+   "label": "Progress"
+  },
+  {
+   "fieldname": "progress",
+   "fieldtype": "Percent",
+   "label": "% Overall Task Progress",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_status_details",
+   "fieldtype": "Section Break",
+   "label": "Completed Status Details"
+  },
+  {
+   "depends_on": "eval: doc.status == \"Completed\"",
+   "fieldname": "completed_on",
+   "fieldtype": "Datetime",
+   "label": "Completed On"
+  },
+  {
+   "fieldname": "column_break_erpzz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.status == \"Completed\"",
+   "fieldname": "completed_by",
+   "fieldtype": "Link",
+   "label": "Completed By",
+   "no_copy": 1,
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "description": "Isi tanggal ketika Technical Architect sudah melakukan pengecekan terhadap task yang bersangkutan",
+   "fieldname": "review_section",
+   "fieldtype": "Section Break",
+   "label": "Review Section"
+  },
+  {
+   "depends_on": "eval:doc.status != \"Closed\" || doc.status != \"Open\" || doc.status != \"Working\"",
+   "fieldname": "review_date",
+   "fieldtype": "Date",
+   "label": "Review Date",
+   "oldfieldname": "review_date",
+   "oldfieldtype": "Date",
+   "read_only_depends_on": "eval:doc.status != \"Pending Review\""
+  },
+  {
+   "default": "0",
+   "fieldname": "is_milestone",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Is Milestone",
+   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+  },
+  {
+   "fieldname": "sub_task_table_section",
+   "fieldtype": "Section Break",
+   "label": "Sub Task Table"
+  },
+  {
+   "fieldname": "sub_task",
+   "fieldtype": "Table",
+   "label": "Sub Task",
+   "options": "Assignment CD Sub Task"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Details",
+   "oldfieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Task Description",
+   "oldfieldname": "description",
+   "oldfieldtype": "Text Editor",
+   "print_width": "300px",
+   "width": "300px"
+  },
+  {
+   "fieldname": "sb_depends_on",
+   "fieldtype": "Section Break",
+   "label": "Dependencies",
+   "oldfieldtype": "Section Break"
+  },
+  {
+   "fieldname": "depends_on",
+   "fieldtype": "Table",
+   "label": "Dependent Tasks",
+   "options": "CD Task Depends On",
+   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+  },
+  {
+   "fieldname": "depends_on_tasks",
+   "fieldtype": "Code",
+   "label": "Depends on Tasks",
+   "read_only": 1,
+   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+  },
+  {
+   "fieldname": "sb_actual",
+   "fieldtype": "Section Break",
+   "oldfieldtype": "Column Break",
+   "print_width": "50%",
+   "width": "50%"
+  },
+  {
+   "fieldname": "act_start_date",
+   "fieldtype": "Date",
+   "label": "Actual Start Date (via Time Sheet)",
+   "oldfieldname": "act_start_date",
+   "oldfieldtype": "Date",
+   "read_only": 1,
+   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+  },
+  {
+   "fieldname": "actual_time",
+   "fieldtype": "Float",
+   "label": "Actual Time (in Hours via Time Sheet)",
+   "read_only": 1,
+   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "act_end_date",
+   "fieldtype": "Date",
+   "label": "Actual End Date (via Time Sheet)",
+   "oldfieldname": "act_end_date",
+   "oldfieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_costing",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Costing"
+  },
+  {
+   "fieldname": "total_costing_amount",
+   "fieldtype": "Currency",
+   "label": "Total Costing Amount (via Time Sheet)",
+   "oldfieldname": "actual_budget",
+   "oldfieldtype": "Currency",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_billing_amount",
+   "fieldtype": "Currency",
+   "label": "Total Billing Amount (via Time Sheet)",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_more_info",
+   "fieldtype": "Section Break",
+   "label": "More Info"
+  },
+  {
+   "fetch_from": "project.company",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
+   "remember_last_selected_value": 1
+  },
+  {
+   "depends_on": "eval:doc.status == \"Closed\"",
+   "fieldname": "closing_date",
+   "fieldtype": "Date",
+   "label": "Closing Date",
+   "oldfieldname": "closing_date",
+   "oldfieldtype": "Date"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "lft",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "rgt",
+   "read_only": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "ignore_user_permissions": 1,
+   "label": "Old Parent",
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-check",
+ "is_calendar_and_gantt": 1,
+ "is_tree": 1,
+ "links": [],
+ "max_attachments": 5,
+ "modified": "2023-11-02 17:40:22.797862",
+ "modified_by": "Administrator",
+ "module": "Projects",
+ "name": "CD Task",
+ "name_case": "Title Case",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_cd_task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Leader Software Developer",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_name_in_global_search": 1,
+ "show_preview_popup": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "timeline_field": "project",
+ "title_field": "subject",
+ "track_changes": 1,
+ "track_seen": 1
+}

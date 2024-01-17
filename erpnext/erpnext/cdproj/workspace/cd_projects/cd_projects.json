@@ -1,0 +1,197 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"rcSDdxkEGq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Issue\",\"col\":3}},{\"id\":\"VFhnJMCdck\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Task Type\",\"col\":3}},{\"id\":\"FmHg4tEENS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activity Type\",\"col\":3}},{\"id\":\"Jh6dEJhrxW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Import Task\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Projects &amp; Time Tracking</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
+ "creation": "2023-10-11 14:46:59.249823",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "project",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "CD Projects",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Settings",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects Settings",
+   "link_count": 0,
+   "link_to": "Projects Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project",
+   "link_count": 0,
+   "link_to": "CD Project",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "CD Task",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Type",
+   "link_count": 0,
+   "link_to": "Project Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "CD Task Type",
+   "link_count": 0,
+   "link_to": "CD Task Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Time Tracking",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "CD Timesheet",
+   "link_count": 0,
+   "link_to": "CD Timesheets",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Activity Type",
+   "link_count": 0,
+   "link_to": "CD Activity Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-11-29 14:21:09.170162",
+ "modified_by": "Administrator",
+ "module": "CDProj",
+ "name": "CD Projects",
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "HOD Content Division"
+  },
+  {
+   "role": "Content Developer Staff"
+  }
+ ],
+ "sequence_id": 2.1,
+ "shortcuts": [
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Total",
+   "label": "Activity Type",
+   "link_to": "CD Activity Type",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "",
+   "format": "{} Open",
+   "label": "Project",
+   "link_to": "CD Project",
+   "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "format": "{} Pending",
+   "label": "Import Task",
+   "link_to": "Data Import",
+   "stats_filter": "{\"reference_doctype\":[\"=\",\"CD Task\"],\"status\":[\"=\",\"Pending\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "CD Issue",
+   "link_to": "CD Issue",
+   "stats_filter": "{\"status\":[\"=\",\"Open\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "CD Task Type",
+   "link_to": "CD Task Type",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Total",
+   "label": "Task",
+   "link_to": "CD Task",
+   "stats_filter": "{\"idx\":[\"=\",null]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Total Today",
+   "label": "CD Timesheets",
+   "link_to": "CD Timesheets",
+   "stats_filter": "{\"idx\":[\"=\",null],\"start_date\":[\"Timespan\",\"today\"]}",
+   "type": "DocType"
+  }
+ ],
+ "title": "CD Projects"
+}

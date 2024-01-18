@@ -1,11 +1,11 @@
 APP_NAME="custom_app"
 
 variable "FRAPPE_VERSION" {
-  default = "v14"
+  default = "version-14"
 }
 
 variable "ERPNEXT_VERSION" {
-  default = "v14"
+  default = "version-14"
 }
 
 variable "REGISTRY_NAME" {

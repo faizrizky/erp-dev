@@ -43,6 +43,11 @@ frappe.views.BaseList = class BaseList {
 		this.settings = frappe.listview_settings[this.doctype] || {};
 		this.user_settings = frappe.get_user_settings(this.doctype);
 
+		this.user_settings.List.sort_by = 'modified'
+
+		console.log(this.user_settings)
+
+
 		this.start = 0;
 		this.page_length = 20;
 		this.data = [];
@@ -155,9 +160,9 @@ frappe.views.BaseList = class BaseList {
 		return frappe.model.with_doctype(this.doctype);
 	}
 
-	show_skeleton() {}
+	show_skeleton() { }
 
-	hide_skeleton() {}
+	hide_skeleton() { }
 
 	check_permissions() {
 		return true;
@@ -359,15 +364,15 @@ frappe.views.BaseList = class BaseList {
 				<div class="level-left">
 					<div class="btn-group">
 						${paging_values
-							.map(
-								(value) => `
+				.map(
+					(value) => `
 							<button type="button" class="btn btn-default btn-sm btn-paging"
 								data-value="${value}">
 								${value}
 							</button>
 						`
-							)
-							.join("")}
+				)
+				.join("")}
 					</div>
 				</div>
 				<div class="level-right">
@@ -527,9 +532,9 @@ frappe.views.BaseList = class BaseList {
 		// show a freeze message while data is loading
 	}
 
-	before_render() {}
+	before_render() { }
 
-	after_render() {}
+	after_render() { }
 
 	render() {
 		// for child classes

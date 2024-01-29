@@ -24,17 +24,17 @@ class SDSubTask(Document):
             frappe.throw(_("{0} cannot be {1}.")
 											.format(frappe.bold("Weight"), frappe.bold("empty")),title=_("Invalid QA Weight"))
         
-        if self.qa_weight != None:
-            if self.qa_weight > 4 or self.qa_weight < 1 and self.department != "Document Engineer" or self.department != "Technical Architect Document Engineer":
-                frappe.throw(_("Please set {0} value between {1}")
-											.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")),title=_("Invalid QA Weight"))
-        else:
-            if self.department == "Document Engineer" or self.department == "Technical Architect Document Engineer":
-                self.qa_weight = "0"
-            
+        if self.department == "Document Engineer" or self.department == "Technical Architect Document Engineer":
+                self.qa_weight = 0
+                
+        if self.department != "Document Engineer" and self.department != "Technical Architect Document Engineer":
+            if self.qa_weight > 0:
+                if self.qa_weight > 4 or self.qa_weight < 1 :
+                    frappe.throw(_("Please set {0} value between {1}")
+                                                .format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")),title=_("Invalid QA Weight"))
             else:
                 frappe.throw(_("{0} cannot be {1}.")
-											.format(frappe.bold("QA Weight"), frappe.bold("empty")),title=_("Invalid QA Weight"))
+                                            .format(frappe.bold("QA Weight"), frappe.bold("0")),title=_("Invalid QA Weight"))
 			
   	
 

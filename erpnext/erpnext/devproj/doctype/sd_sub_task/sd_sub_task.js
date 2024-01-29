@@ -65,7 +65,7 @@ frappe.ui.form.on('SD Sub Task', {
 		frm.set_query("department", function () {
 			if (frm.doc.department == "Document Engineer" || frm.doc.department == "Technical Architect Document Engineer") {
 				console.log("EXECUTED")
-				frm.doc.qa_weight = "0";
+				frm.doc.qa_weight = 0;
 				frm.refresh_field('qa_weight');
 			}
 		});

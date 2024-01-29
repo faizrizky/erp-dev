@@ -9,6 +9,12 @@
  "email_append_to": 1,
  "engine": "InnoDB",
  "field_order": [
+  "additional_info",
+  "employee",
+  "company",
+  "contact",
+  "column_break_16",
+  "project",
   "subject_section",
   "naming_series",
   "subject",
@@ -47,14 +53,9 @@
   "resolution_time",
   "estimated_rectification_date",
   "user_resolution_time",
-  "additional_info",
   "lead",
-  "contact",
   "email_account",
-  "company",
-  "column_break_16",
   "customer_name",
-  "project",
   "via_customer_portal",
   "attachment",
   "content_type"
@@ -173,11 +174,13 @@
   {
    "fieldname": "service_level_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Service Level Agreement Details"
   },
   {
    "fieldname": "service_level_agreement",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Service Level Agreement",
    "options": "Service Level Agreement"
   },
@@ -347,6 +350,7 @@
    "description": "Masukkan kontak yang sudah membuat issue ini",
    "fieldname": "contact",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Contact",
    "options": "Contact"
   },
@@ -382,7 +386,8 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -419,11 +424,19 @@
    "fieldname": "resolved_time",
    "fieldtype": "Datetime",
    "label": "Resolved Date"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Issue Maker",
+   "options": "Employee",
+   "read_only": 1,
+   "reqd": 1
   }
  ],
  "icon": "fa fa-ticket",
  "links": [],
- "modified": "2023-06-20 10:24:07.298906",
+ "modified": "2024-01-24 16:03:34.214692",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Issue",

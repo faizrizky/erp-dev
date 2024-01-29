@@ -43,7 +43,9 @@ frappe.views.BaseList = class BaseList {
 		this.settings = frappe.listview_settings[this.doctype] || {};
 		this.user_settings = frappe.get_user_settings(this.doctype);
 
-		this.user_settings.List.sort_by = 'modified'
+		if (this.user_settings.List) {
+			this.user_settings.List.sort_by = 'modified';
+		}
 
 		console.log(this.user_settings)
 

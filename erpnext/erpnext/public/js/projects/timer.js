@@ -378,8 +378,8 @@ erpnext.timesheet.control_timer = function (frm, dialog, row, timestamp = 0) {
 
     // console.log(currentIncrement);
 
-    alert("SECOND : " + currentIncrement);
-    alert("HOURS : " + currentIncrement / 3600);
+    // alert("SECOND : " + currentIncrement);
+    // alert("HOURS : " + currentIncrement / 3600);
     // alert(moment({}).seconds(currentIncrement).format("D [days], HH:mm:ss"));
 
     if (currentIncrement >= 86400) {
@@ -387,15 +387,15 @@ erpnext.timesheet.control_timer = function (frm, dialog, row, timestamp = 0) {
         .duration(currentIncrement, "seconds")
         .format("D [days], HH:mm:ss");
 
-      alert(
-        moment.duration(currentIncrement, "second").format("D [days], HH:mm:ss")
-      );
+      // alert(
+      //   moment.duration(currentIncrement, "second").format("D [days], HH:mm:ss")
+      // );
     } else {
       grid_row.doc.hours_count = moment
         .utc(currentIncrement * 1000)
         .format("HH:mm:ss");
 
-      alert(moment.utc(currentIncrement * 1000).format("HH:mm:ss"));
+      // alert(moment.utc(currentIncrement * 1000).format("HH:mm:ss"));
     }
 
     // if (currentIncrement / 3600 < 24) {

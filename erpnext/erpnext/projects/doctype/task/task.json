@@ -4,6 +4,7 @@
  "allow_rename": 1,
  "autoname": "field:subject",
  "creation": "2023-03-23 10:21:55.159501",
+ "default_view": "List",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -99,8 +100,9 @@
    "oldfieldname": "project",
    "oldfieldtype": "Link",
    "options": "Project",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1",
    "remember_last_selected_value": 1,
+   "reqd": 1,
    "search_index": 1
   },
   {
@@ -144,7 +146,8 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "Open\nParent Task\nBacklog\nWorking\nPending Review\nQA Open\nQA Testing\nIntegration\nQA Integration Testing\nOverdue\nCompleted\nCancelled"
+   "options": "Open\nParent Task\nBacklog\nWorking\nPending Review\nQA Open\nQA Testing\nIntegration\nQA Integration Testing\nOverdue\nCompleted\nCancelled",
+   "reqd": 1
   },
   {
    "fieldname": "priority",
@@ -156,6 +159,7 @@
    "oldfieldtype": "Select",
    "options": "Low\nMedium\nHigh\nUrgent",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
+   "reqd": 1,
    "search_index": 1
   },
   {
@@ -205,7 +209,8 @@
    "fieldname": "task_weight",
    "fieldtype": "Float",
    "label": "Weight",
-   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_11",
@@ -277,6 +282,7 @@
   {
    "fieldname": "sb_actual",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "oldfieldtype": "Column Break",
    "print_width": "50%",
    "width": "50%"
@@ -284,6 +290,7 @@
   {
    "fieldname": "act_start_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Actual Start Date (via Time Sheet)",
    "oldfieldname": "act_start_date",
    "oldfieldtype": "Date",
@@ -293,17 +300,20 @@
   {
    "fieldname": "actual_time",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Actual Time (in Hours via Time Sheet)",
    "read_only": 1,
    "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
   },
   {
    "fieldname": "column_break_15",
-   "fieldtype": "Column Break"
+   "fieldtype": "Column Break",
+   "hidden": 1
   },
   {
    "fieldname": "act_end_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Actual End Date (via Time Sheet)",
    "oldfieldname": "act_end_date",
    "oldfieldtype": "Date",
@@ -319,6 +329,7 @@
   {
    "fieldname": "total_costing_amount",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Total Costing Amount (via Time Sheet)",
    "oldfieldname": "actual_budget",
    "oldfieldtype": "Currency",
@@ -327,17 +338,20 @@
   },
   {
    "fieldname": "column_break_20",
-   "fieldtype": "Column Break"
+   "fieldtype": "Column Break",
+   "hidden": 1
   },
   {
    "fieldname": "total_billing_amount",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Total Billing Amount (via Time Sheet)",
    "read_only": 1
   },
   {
    "fieldname": "sb_more_info",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "More Info"
   },
   {
@@ -353,6 +367,7 @@
    "depends_on": "eval:doc.status == \"Closed\"",
    "fieldname": "closing_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Closing Date",
    "oldfieldname": "closing_date",
    "oldfieldtype": "Date"
@@ -361,6 +376,7 @@
    "fetch_from": "project.company",
    "fieldname": "company",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Company",
    "options": "Company",
    "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1",
@@ -459,7 +475,7 @@
    "in_standard_filter": 1,
    "label": "Sprint",
    "options": "Assignment Sprint",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1"
   },
   {
    "fieldname": "column_break_jsu2l",
@@ -470,7 +486,7 @@
    "fieldtype": "Link",
    "label": "On Going Sprint",
    "options": "Event",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1"
   },
   {
    "default": "0",
@@ -589,13 +605,14 @@
    "label": "Employee Working Hours"
   }
  ],
+ "force_re_route_to_default_view": 1,
  "icon": "fa fa-check",
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2024-01-09 14:56:07.998186",
+ "modified": "2024-01-24 13:49:23.431458",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
@@ -631,7 +648,7 @@
  "show_name_in_global_search": 1,
  "show_preview_popup": 1,
  "sort_field": "modified",
- "sort_order": "DESC",
+ "sort_order": "ASC",
  "states": [],
  "timeline_field": "project",
  "title_field": "subject",

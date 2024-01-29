@@ -78,7 +78,7 @@ frappe.ui.form.AssignTo = class AssignTo {
         doctype: me.frm.doctype,
         docname: me.frm.docname,
         frm: me.frm,
-        callback: function(r) {
+        callback: function (r) {
           me.render(r.message);
         },
       });
@@ -119,7 +119,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       title: __("Add to ToDo"),
       fields: me.get_fields(),
       primary_action_label: __("Add"),
-      primary_action: function() {
+      primary_action: function () {
         let args = me.dialog.get_values();
 
         if (args && args.assign_to) {
@@ -135,7 +135,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
               re_assign: me.re_assign || false,
             }),
             btn: me.dialog.get_primary_btn(),
-            callback: function(r) {
+            callback: function (r) {
               if (!r.exc) {
                 if (me.callback) {
                   me.callback(r);
@@ -221,7 +221,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_ld")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Level Designer" },
+          filters: { branch: "Technical Architect Level Designer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -239,7 +239,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Level Designer" },
+          filters: { branch: "Technical Architect Level Designer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -261,7 +261,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_ld")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Level Designer" },
+          filters: { branch: "Level Designer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -279,7 +279,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Level Designer" },
+          filters: { branch: "Level Designer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -324,7 +324,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_be")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Backend Programmer" },
+          filters: { branch: "Technical Architect Backend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -341,7 +341,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Backend Programmer" },
+          filters: { branch: "Technical Architect Backend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -360,7 +360,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_be")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Backend Programmer" },
+          filters: { branch: "Backend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -377,7 +377,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Backend Programmer" },
+          filters: { branch: "Backend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -400,7 +400,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_fe")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Frontend Programmer" },
+          filters: { branch: "Technical Architect Frontend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -417,7 +417,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Frontend Programmer" },
+          filters: { branch: "Technical Architect Frontend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -436,7 +436,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_fe")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Frontend Programmer" },
+          filters: { branch: "Frontend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -453,7 +453,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Frontend Programmer" },
+          filters: { branch: "Frontend Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -476,7 +476,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_unityprog")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Unity Programmer" },
+          filters: { branch: "Technical Architect Unity Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -496,7 +496,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Unity Programmer" },
+          filters: { branch: "Technical Architect Unity Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -515,7 +515,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_unityprog")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Unity Programmer" },
+          filters: { branch: "Unity Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -535,7 +535,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Unity Programmer" },
+          filters: { branch: "Unity Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -557,7 +557,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_de")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Document Engineer" },
+          filters: { branch: "Technical Architect Document Engineer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -574,7 +574,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Document Engineer" },
+          filters: { branch: "Technical Architect Document Engineer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -593,7 +593,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_de")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Document Engineer" },
+          filters: { branch: "Document Engineer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -610,7 +610,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Document Engineer" },
+          filters: { branch: "Document Engineer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -631,7 +631,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_qa")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Quality Assurance" },
+          filters: { branch: "Technical Architect Quality Assurance", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -648,7 +648,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Technical Architect Quality Assurance" },
+          filters: { branch: "Technical Architect Quality Assurance", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -667,7 +667,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_qa")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Quality Assurance" },
+          filters: { branch: "Quality Assurance", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -684,7 +684,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Quality Assurance" },
+          filters: { branch: "Quality Assurance", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -707,7 +707,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_lead")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Co Division Software Programmer" },
+          filters: { branch: "Co Division Software Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -724,7 +724,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "Co Division Software Programmer" },
+          filters: { branch: "Co Division Software Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -743,7 +743,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     if (me.dialog.get_value("assign_lead")) {
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "HOD Software Programmer" },
+          filters: { branch: "HOD Software Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -760,7 +760,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       let me = this;
       frappe.db
         .get_list("Employee", {
-          filters: { branch: "HOD Software Programmer" },
+          filters: { branch: "HOD Software Programmer", status: "Active" },
           fields: ["user_id"],
         })
         .then((records) => {
@@ -792,40 +792,40 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     this.toggleBoolean(boolVar, false);
   }
 
-  get_user() {
-    //next filter untuk leader, tp masih error
-    frappe.db
-      .get_list("Employee", {
-        filters: { branch: "Leader Programmer" },
-        fields: ["user_id"],
-      })
-      .then((records) => {
-        // console.log(records)
-        // console.log(frappe.session.user)
+  // get_user() {
+  //   //next filter untuk leader, tp masih error
+  //   frappe.db
+  //     .get_list("Employee", {
+  //       filters: { branch: "Leader Programmer" },
+  //       fields: ["user_id"],
+  //     })
+  //     .then((records) => {
+  //       // console.log(records)
+  //       // console.log(frappe.session.user)
 
-        for (let i = 0; i < records.length; i++) {
-          // console.log(records[i].user_id)
-          if (frappe.session.user.includes(records[i].user_id)) {
-            // console.log(isBool)
-            arrUser.push(records[i].user_id);
-            isBool = true;
-            // console.log("INI ARRAY RECORDS 1" + records[i].user_id)
-            // console.log(isBool)
-            // console.log((isBool))
-            // return [
-            // 	{
-            // 		label: __("Assign to me"),
-            // 		fieldtype: "Check",
-            // 		fieldname: "assign_to_me",
-            // 		default: 0,
-            // 		onchange: () => me.assign_to_me(),
-            // 	},
-            // ];
-          }
-        }
-        this.get_fields();
-      });
-  }
+  //       for (let i = 0; i < records.length; i++) {
+  //         // console.log(records[i].user_id)
+  //         if (frappe.session.user.includes(records[i].user_id)) {
+  //           // console.log(isBool)
+  //           arrUser.push(records[i].user_id);
+  //           isBool = true;
+  //           // console.log("INI ARRAY RECORDS 1" + records[i].user_id)
+  //           // console.log(isBool)
+  //           // console.log((isBool))
+  //           // return [
+  //           // 	{
+  //           // 		label: __("Assign to me"),
+  //           // 		fieldtype: "Check",
+  //           // 		fieldname: "assign_to_me",
+  //           // 		default: 0,
+  //           // 		onchange: () => me.assign_to_me(),
+  //           // 	},
+  //           // ];
+  //         }
+  //       }
+  //       this.get_fields();
+  //     });
+  // }
 
   get_fields() {
     let me = this;
@@ -841,11 +841,11 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
       .toLowerCase()
       .includes("hod content");
 
-    let filters = { name: ["like", "%" + frappe.session.user + "%"] };
+    // let filters = { name: ["like", "%" + frappe.session.user + "%"] };
 
-    if (cdRole || sdRole || frappe.session.user === "Administrator") {
-      filters = {};
-    }
+    // if (cdRole || sdRole || frappe.session.user === "Administrator") {
+    //   filters = {};
+    // }
 
     if (sdRole) {
       return [
@@ -916,13 +916,13 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
         {
           fieldtype: "MultiSelectPills",
           fieldname: "assign_to",
-          label: __("Assign Toawkoawkowak"),
+          label: __("Assign To"),
           reqd: true,
-          get_data: function(txt) {
+          get_data: function (txt) {
             return frappe.db.get_link_options("User", txt, {
               user_type: "System User",
               enabled: 1,
-              filters: filters,
+              // filters: filters,
             });
           },
         },
@@ -953,7 +953,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
           fieldname: "assign_to",
           label: __("Assign To"),
           reqd: true,
-          get_data: function(txt) {
+          get_data: function (txt) {
             return frappe.db.get_link_options("User", txt, {
               user_type: "System User",
               enabled: 1,
@@ -985,13 +985,13 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
         {
           fieldtype: "MultiSelectPills",
           fieldname: "assign_to",
-          label: __("Assign Tokawdokawodk"),
+          label: __("Assign To"),
           reqd: true,
-          get_data: function(txt) {
+          get_data: function (txt) {
             return frappe.db.get_link_options("User", txt, {
               user_type: "System User",
-              enabled: 1,
-              filters: filters,
+              enabled: 0,
+              // filters: filters,
             });
           },
         },

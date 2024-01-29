@@ -386,10 +386,10 @@ scheduler_events = {
 		"0 1 * * *":[
 			"erpnext.projects.doctype.task.task.validate_sprint",
 		],
-		# #Every 1 Minutes
-		# "*/1 * * * *":[
-		# 	"erpnext.devproj.doctype.sd_timesheets.sd_timesheets.auto_submit",
-		# ],
+		#Every 17.15 PM
+		"15 17 * * *":[
+			"erpnext.projects.doctype.task.task.create_doc",
+		],
 
 	},
 	"all": [

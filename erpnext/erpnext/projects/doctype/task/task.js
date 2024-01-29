@@ -71,6 +71,7 @@ frappe.ui.form.on("Task", {
 					frm.fields_dict['sub_task'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
 						return {
 							filters: {
+								task: frm.doc.name,
 								department: ["like", "%" + user_branch + "%"],
 								_assign: ["like", "%" + frappe.session.user + "%"],
 							}

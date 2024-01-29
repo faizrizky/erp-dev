@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "autoname": "format:REPORT-DATA-{date}-{####}",
+ "creation": "2024-01-24 13:36:35.559467",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "timesheets_table_section",
+  "timesheets_data"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "timesheets_table_section",
+   "fieldtype": "Section Break",
+   "label": "Timesheets Report Table"
+  },
+  {
+   "fieldname": "timesheets_data",
+   "fieldtype": "Table",
+   "label": "Timesheets Data",
+   "options": "SD Daily Report Timesheets Items"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-24 16:05:18.310749",
+ "modified_by": "Administrator",
+ "module": "DevProj",
+ "name": "SD Daily Report Timesheets",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Leader Software Developer",
+   "select": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

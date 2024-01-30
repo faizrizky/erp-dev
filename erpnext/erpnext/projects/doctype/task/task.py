@@ -324,7 +324,6 @@ class Task(NestedSet):
 
 
 	def validate_status_child(self):
-
 		if self.status != self.get_db_value("status") and self.status == "Open":
 			for d in self.depends_on:
 				task_subject = frappe.db.get_value('Task', d.task, ['subject'])
@@ -332,14 +331,10 @@ class Task(NestedSet):
 
 
 	def validate_on_going_sprint(self):
-
-		if self.ongoing_sprint is not "":
+		if self.ongoing_sprint != "" and self.ongoing_sprint != None:
 			if all(self.ongoing_sprint not in item.sprint_id for item in self.multi_sprint):
 				self.append('multi_sprint', {'sprint_id': self.ongoing_sprint})
-    
-		# if self.ongoing_sprint is "" or self.multi_sprint is None:
-		# 	self.multi_sprint = []
-   
+
 		arr = [] 
 		if len(self.multi_sprint) > 0:
 			for items in self.multi_sprint:

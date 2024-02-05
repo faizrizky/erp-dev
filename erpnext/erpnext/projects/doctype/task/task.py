@@ -712,7 +712,7 @@ class Task(NestedSet):
 
 			# print("Sub Task JOJO : ",frappe.db.get_value('SD Sub Task',{'subject': 'jojo'}, ['name','subject','status'],as_dict = 1))
 			
-	def update_timesheet_date(self, task_name):
+	def update_timesheet_date(self, data):
 		employee_info = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ['name', 'employee_name'], as_dict=1)
 
 		# tl = frappe.db.sql(
@@ -723,20 +723,20 @@ class Task(NestedSet):
 		# 	as_dict=1,
 		# )[0]
   
-		query = """
-			SELECT
-				(SELECT min(td.from_time) 
-    		FROM `tabTimesheet Detail` td 
-      		WHERE td.task = %s AND td.docstatus = 1) as start_date,
-				(SELECT max(td.to_time) 
-    		FROM `tabTimesheet Detail` td 
-      		WHERE td.task = %s AND td.docstatus = 1) as end_date,
-				tsd.hours_count, tsd.task, tsd.project, tsd.sub_task, tsd.activity_type
-			FROM
-				`tabTimesheet Detail` tsd
-			WHERE
-				tsd.parent = %s AND tsd.task = %s
-		"""
+		# query = """
+		# 	SELECT
+		# 		(SELECT min(td.from_time) 
+    	# 	FROM `tabTimesheet Detail` td 
+      	# 	WHERE td.task = %s AND td.docstatus = 1) as start_date,
+		# 		(SELECT max(td.to_time) 
+    	# 	FROM `tabTimesheet Detail` td 
+      	# 	WHERE td.task = %s AND td.docstatus = 1) as end_date,
+		# 		tsd.hours_count, tsd.task, tsd.project, tsd.sub_task, tsd.activity_type
+		# 	FROM
+		# 		`tabTimesheet Detail` tsd
+		# 	WHERE
+		# 		tsd.parent = %s AND tsd.task = %s
+		# """
 
 		end_date_today = getdate(now())
 
@@ -754,24 +754,23 @@ class Task(NestedSet):
 
 		# print(timesheets)
 		if timesheets:
-			timesheet_name = timesheets[0].get('name')
+			# timesheet_name = timesheets[0].get('name')
 			# timesheet_doc = frappe.get_doc('SD Timesheets', timesheet_name)
 			# time_logs = timesheet_doc.get('time_logs')
 			# frappe.throw(f' Timesheet Name : {timesheet_name}')
 
-			result = frappe.db.sql(query, (task_name, task_name, timesheet_name, task_name), as_dict=True)
-   
-			if result:
-				start_date = result[0]['start_date']
-				end_date = result[0]['end_date']
-				sub_task = result[0]['sub_task']
-				activity_type = result[0]['activity_type']
-				actual_time_str = result[0]['hours_count']
-				task = result[0]['task']
-				project = result[0]['project']
+			# result = frappe.db.sql(query, (task_name, task_name, timesheet_name, task_name), as_dict=True)
+			if data:
+				start_date = data.parent_doc.start_date
+				end_date = data.parent_doc.end_date
+				sub_task = data.sub_task
+				activity_type = data.activity_type
+				actual_time_str = data.hours_count
+				task = data.task
+				project = data.project
 
-				for sub_task_name in result:
-					self.update_sub_task_status(sub_task_name.sub_task) #fix this
+				# for sub_task_name in data:
+				self.update_sub_task_status(sub_task) #fix this
 					# Use frappe.throw to display the values
 				# 	frappe.throw(f"Start Date: {start_date}, End Date: {end_date}, Hours Count: {hours_count_value}, Task: {task_value}, Project: {project_value}")
 				# else:
@@ -820,58 +819,45 @@ class Task(NestedSet):
 				data = frappe.get_doc("Task", task)
 				# existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.project == project), None)
 				existing_row = next((row for row in data.timesheets_data if row.sub_task == sub_task and row.activity_type == activity_type), None)
-	
-	
+				print("Existing Row:", bool(existing_row))
+				for row in data.timesheets_data:
+					print(f"Row: {row.sub_task}, {row.activity_type}")
 				if existing_row:
-					# Convert existing total working hours string to a timedelta object
 					existing_total_hours_str = existing_row.get("total_working_hours", "00:00:00")
-					# existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
-					# print("existing_total_hours_str : " + str(existing_total_hours_str))
+     
 					try:
-						# Try to parse the input as "%H:%M:%S"
 						existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
 					except ValueError:
 						try:
-							# Try to parse the input as "%Y-%m-%d %H:%M:%S"
+							
 							existing_total_hours_timedelta = datetime.strptime(existing_total_hours_str, "%Y-%m-%d %H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
 						except ValueError:
 							try:
-								# Try to parse the input as "X days, HH:MM:SS"
+								
 								days, time_str = existing_total_hours_str.split(", ")
 								days = int(days.split()[0])
 								hours, minutes, seconds = map(int, time_str.split(":"))
 								existing_total_hours_timedelta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
 							except ValueError:
-								# Handle the case where the format is unknown
+								
 								raise ValueError("Unknown time format: {}".format(existing_total_hours_str))
 
-					# Sum the existing total working hours with actual_time_timedelta
+					
 					new_total_hours_timedelta = existing_total_hours_timedelta + actual_time_timedelta
-
-					#Check throw total working hours
-					# frappe.throw(str(existing_total_hours_timedelta) + " || " + " || " + str(actual_time_timedelta) + " || "+ str(new_total_hours_timedelta))
-
-					# Convert the new total hours timedelta back to a string in the "HH:MM:SS" format
+     
 					new_total_hours_str = str(new_total_hours_timedelta)
 					
-					# frappe.throw(str(new_total_hours_timedelta.total_seconds()))
-					# If the total working hours exceed 24 hours, change the format
-					# if new_total_hours_timedelta.total_seconds() >= 86400:
-					# 	new_total_hours_str = new_total_hours_timedelta.strftime("%Y-%m-%d %H:%M:%S")
-
 					# Update existing row
-					# print("Updating Data : " + employee_info.name, str(new_total_hours_str), str(task))
+					print("Updating Data : " + employee_info.name, str(new_total_hours_str), str(task), str(sub_task))
 					existing_row.update({
 						"total_working_hours": new_total_hours_str,
 						"from_date": start_date,
 						"to_date": end_date
 					})
-					# Save and reload the data
-					
 					
 				else:
 					# Add a new row
-					# print("Appending new Data : " + employee_info.name, str(actual_time_timedelta), str(task))
+					print("Appending new Data : " + employee_info.name, str(actual_time_timedelta), str(task), str(sub_task))
 					data.append(
 						"timesheets_data", {
 							"doctype": "SD Assignment Timesheets Data",
@@ -884,11 +870,9 @@ class Task(NestedSet):
 							"to_date": end_date
 						}
 					)
-				# # Save and reload the data
+				
 				data.save()
-				# data.reload()
-				# print("DATA SAVED AND RELOAD THE DATA")
-		
+				
 				'''
 			for d in time_logs:
 				actual_time_str = d.get('hours_count')  # Assuming the format is "HH:MM:SS"

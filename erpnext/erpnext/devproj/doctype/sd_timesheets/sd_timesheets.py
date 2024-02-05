@@ -124,13 +124,20 @@ class SDTimesheets(Document):
 		tasks = []
 
 		for data in self.time_logs:
-			if data.task and data.task not in tasks:
+			if data.sub_task != None or data.sub_task != "":
+				if data.sub_task and data.sub_task not in tasks:
+					task = frappe.get_doc("Task", data.task)
+					print(f'START CALLING TASK \n Start Executed Task with Sub Task:{data.task, data.sub_task} ')
+					task.update_timesheet_date(data)
+					tasks.append(data.sub_task)
+    
+			elif data.task and data.task not in tasks:
 				task = frappe.get_doc("Task", data.task)
-				# print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
-				task.update_timesheet_date(data.task)
+				print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
+				task.update_timesheet_date(data)
 				tasks.append(data.task)
 
-		
+
 
 		
 	def update_task_and_project(self):

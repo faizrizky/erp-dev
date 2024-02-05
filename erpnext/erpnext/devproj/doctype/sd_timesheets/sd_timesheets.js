@@ -78,15 +78,33 @@ frappe.ui.form.on("SD Timesheets", {
 				if (response && response.message) {
 					var user_branch = response.message.branch;
 
+					// frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
+					// 	var child = locals[cdt][cdn];
+					// 	return {
+					// 		filters: {
+					// 			status: ["!=", "Cancelled"],
+					// 			task: child.task,
+					// 			department: ["like", "%" + user_branch + "%"],
+					// 			_assign: ["like", "%" + frappe.session.user + "%"],
+					// 		}
+					// 	};
+					// };
+
 					frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
 						var child = locals[cdt][cdn];
+						var filters = {
+							status: ["!=", "Cancelled"],
+							task: child.task,
+							_assign: ["like", "%" + frappe.session.user + "%"],
+						};
+
+						// Check if user_branch is not "Quality Assurance"
+						if (user_branch !== "Quality Assurance") {
+							filters.department = ["like", "%" + user_branch + "%"];
+						}
+
 						return {
-							filters: {
-								status: ["!=", "Cancelled"],
-								task: child.task,
-								department: ["like", "%" + user_branch + "%"],
-								_assign: ["like", "%" + frappe.session.user + "%"],
-							}
+							filters: filters
 						};
 					};
 				}
@@ -124,15 +142,16 @@ frappe.ui.form.on("SD Timesheets", {
 						args: {
 							doctype: "SD Timesheets",
 							filters: {
-								end_date: frappe.datetime.get_today(),
-								employee_name: user_employee_name
+								start_date: frappe.datetime.get_today(),
+								employee_name: user_employee_name,
+								docstatus: 1
 							},
 
 						},
 						callback: function (response) {
 							if (response && response.message) {
 								console.log("Number of SD Timesheets Today:", response.message.length);
-								if (response.message.length > 0) {
+								if (response.message.length > 1) {
 									frappe.msgprint({
 										title: __("Multiple Timesheets Detected"),
 										indicator: 'red',

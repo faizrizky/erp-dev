@@ -25,7 +25,8 @@ services:
 
   backend:
     <<: *backend_defaults
-
+    restart: always
+  
   mariadb:
     image: mariadb:10.6
     command:
@@ -48,12 +49,15 @@ services:
 
   redis-cache:
     image: redis:alpine
+    restart: always
 
   redis-queue:
     image: redis:alpine
+    restart: always
 
   redis-socketio:
     image: redis:alpine
+    restart: always
     
   frontend:
     image: frappe/frappe-nginx:latest
@@ -73,27 +77,34 @@ services:
     ports:
       - 3033:8080
 
+    restart: always
+
   websocket:
     <<: *depends_on_configurator
     image: frappe/frappe-socketio:latest
     volumes:
       - sites:/home/frappe/frappe-bench/sites
+    restart: always
 
   queue-short:
     <<: *backend_defaults
     command: bench worker --queue short
+    restart: always
 
   queue-default:
     <<: *backend_defaults
     command: bench worker --queue default
+    restart: always
 
   queue-long:
     <<: *backend_defaults
     command: bench worker --queue long
+    restart: always
 
   scheduler:
     <<: *backend_defaults
     command: bench schedule
+    restart: always
 
 # requires local assets access (Frappe does not)
 volumes:

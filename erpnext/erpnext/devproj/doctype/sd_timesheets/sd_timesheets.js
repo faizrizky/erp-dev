@@ -78,18 +78,6 @@ frappe.ui.form.on("SD Timesheets", {
 				if (response && response.message) {
 					var user_branch = response.message.branch;
 
-					// frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
-					// 	var child = locals[cdt][cdn];
-					// 	return {
-					// 		filters: {
-					// 			status: ["!=", "Cancelled"],
-					// 			task: child.task,
-					// 			department: ["like", "%" + user_branch + "%"],
-					// 			_assign: ["like", "%" + frappe.session.user + "%"],
-					// 		}
-					// 	};
-					// };
-
 					frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
 						var child = locals[cdt][cdn];
 						var filters = {
@@ -151,7 +139,8 @@ frappe.ui.form.on("SD Timesheets", {
 						callback: function (response) {
 							if (response && response.message) {
 								console.log("Number of SD Timesheets Today:", response.message.length);
-								if (response.message.length > 1) {
+								console.log("Date:", frappe.datetime.get_today());
+								if (response.message.length >= 1) {
 									frappe.msgprint({
 										title: __("Multiple Timesheets Detected"),
 										indicator: 'red',

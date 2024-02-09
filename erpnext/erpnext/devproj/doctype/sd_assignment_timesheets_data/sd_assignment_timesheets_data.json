@@ -18,7 +18,9 @@
   "column_break_3w5tw",
   "to_date",
   "total_section",
-  "total_working_hours"
+  "total_working_hours",
+  "column_break_hg4gz",
+  "late_submit_count"
  ],
  "fields": [
   {
@@ -101,12 +103,24 @@
    "label": "Sub Task",
    "options": "SD Sub Task",
    "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "late_submit_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Late Submit Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hg4gz",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-09 14:43:00.842310",
+ "modified": "2024-02-09 10:29:04.815763",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Assignment Timesheets Data",

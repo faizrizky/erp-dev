@@ -249,6 +249,7 @@ def get_chart_data(data):
     overdue = []
 
     branch_aliases = {
+    "HOD Software Programmer": "HOD SD",
     "Unity Programmer": "UD",
     "Backend Programmer": "BE",
     "Frontend Programmer": "FE",

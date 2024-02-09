@@ -187,25 +187,53 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
 
   dialog.fields_dict.sub_task.get_query = function (frm, cdt, cdn) {
     var selected_task = cur_dialog.fields_dict.task.value;
+    var userRole = frappe.user_roles.join(",").toLowerCase().includes("content");
+    var employeeName = ""
+    var deptName = ""
 
+    frappe.call({
+      method: 'frappe.client.get_value',
+      args: {
+        doctype: 'Employee',
+        filters: { user_id: frappe.session.user },
+        fieldname: ["employee_name", "branch"]
+      },
+      freeze: true,
+      async: false,
 
-    // var selected_sub_task = cur_dialog.fields_dict.sub_task.value.length;
-    // console.log(selected_sub_task)
-    var userRole = frappe.user_roles
-      .join(",")
-      .toLowerCase()
-      .includes("content");
+      callback: function (result) {
+        console.log(result);
+        employeeName = result.message.employee_name;
+        deptName = result.message.branch;
+      }
+    });
 
     if (!userRole) {
-      return {
-        filters: {
-          task: selected_task,
-          status: ["!=", "Cancelled"],
-          _assign: ["like", "%" + frappe.session.user + "%"],
-        },
+      var filters = {
+        status: ["!=", "Cancelled"],
+        task: selected_task,
+        _assign: ["like", "%" + frappe.session.user + "%"],
       };
+
+      if (deptName !== "Quality Assurance") {
+        filters.department = ["like", "%" + deptName + "%"];
+      }
+
+      return {
+        filters: filters
+      };
+      // return {
+      //   filters: {
+      //     task: selected_task,
+      //     status: ["!=", "Cancelled"],
+      //     _assign: ["like", "%" + frappe.session.user + "%"],
+      //     department: deptName
+      //   }
+      // };
     }
+
   };
+
 
   if (row) {
     dialog.set_values({

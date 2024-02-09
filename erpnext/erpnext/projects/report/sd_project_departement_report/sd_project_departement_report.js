@@ -9,7 +9,7 @@ frappe.query_reports["SD Project Departement Report"] = {
 			label: __("Project"),
 			fieldtype: "Link",
 			options: "Project",
-			// default: frappe.defaults.get_user_default("Project"),
+			default: "General Work",
 			reqd: 0,
 			custom_values_after: function (filter) {
 				var project = filter["project"];

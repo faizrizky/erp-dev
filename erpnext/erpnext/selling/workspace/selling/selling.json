@@ -13,7 +13,7 @@
  "hide_custom": 0,
  "icon": "sell",
  "idx": 0,
- "is_hidden": 0,
+ "is_hidden": 1,
  "label": "Selling",
  "links": [
   {
@@ -705,7 +705,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-01-31 12:17:25.575691",
+ "modified": "2024-02-09 14:25:50.095902",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Selling",
@@ -715,7 +715,7 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 20.0,
+ "sequence_id": 24.0,
  "shortcuts": [
   {
    "color": "Grey",

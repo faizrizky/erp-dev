@@ -11,7 +11,7 @@
  "is_hidden": 1,
  "label": "ERPNext Settings",
  "links": [],
- "modified": "2023-05-20 17:51:59.461140",
+ "modified": "2024-02-09 14:25:48.788811",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "ERPNext Settings",
@@ -21,7 +21,7 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 9.0,
+ "sequence_id": 12.0,
  "shortcuts": [
   {
    "icon": "project",

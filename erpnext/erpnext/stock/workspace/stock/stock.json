@@ -13,7 +13,7 @@
  "hide_custom": 0,
  "icon": "stock",
  "idx": 0,
- "is_hidden": 0,
+ "is_hidden": 1,
  "label": "Stock",
  "links": [
   {
@@ -718,7 +718,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-01-31 12:17:25.636320",
+ "modified": "2024-02-09 14:25:50.233715",
  "modified_by": "Administrator",
  "module": "Stock",
  "name": "Stock",
@@ -728,7 +728,7 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 21.0,
+ "sequence_id": 25.0,
  "shortcuts": [
   {
    "color": "Green",

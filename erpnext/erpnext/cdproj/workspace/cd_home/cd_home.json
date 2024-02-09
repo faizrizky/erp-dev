@@ -11,7 +11,7 @@
  "is_hidden": 0,
  "label": "CD Home",
  "links": [],
- "modified": "2023-11-29 16:32:24.654708",
+ "modified": "2024-02-09 14:25:47.798298",
  "modified_by": "Administrator",
  "module": "CDProj",
  "name": "CD Home",
@@ -37,7 +37,7 @@
    "role": "Content Developer Staff"
   }
  ],
- "sequence_id": 1.1,
+ "sequence_id": 2.0,
  "shortcuts": [],
  "title": "CD Home"
 }

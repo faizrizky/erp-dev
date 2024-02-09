@@ -1,0 +1,42 @@
+{
+ "chart_name": "SD Employee Report Chart",
+ "chart_type": "Report",
+ "creation": "2024-02-09 14:28:37.268897",
+ "custom_options": "{\"type\": \"bar\", \"colors\": [\"#8ccf54\", \"#1673c5\", \"#78d6ff\"], \"barOptions\": {\"stacked\": false}, \"axisOptions\": {\"shortenYAxisNumbers\": 1}, \"height\": 280}",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "dynamic_filters_json": "{}",
+ "filters_json": "{}",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 0,
+ "is_standard": 1,
+ "modified": "2024-02-09 14:28:37.268897",
+ "modified_by": "Administrator",
+ "module": "Projects",
+ "name": "SD Employee Report Chart",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "SD Employee Report",
+ "roles": [],
+ "time_interval": "Yearly",
+ "timeseries": 0,
+ "timespan": "Last Year",
+ "type": "Bar",
+ "use_report_chart": 0,
+ "x_field": "employee_name",
+ "y_axis": [
+  {
+   "color": "#449CF0",
+   "y_field": "task_taken"
+  },
+  {
+   "color": "#4463F0",
+   "y_field": "total_weight"
+  },
+  {
+   "color": "#29CD42",
+   "y_field": "total_days"
+  }
+ ]
+}

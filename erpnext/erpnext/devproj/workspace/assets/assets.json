@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"Pj-UOKo3Px\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"XlpM8182iW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset\",\"col\":3}},{\"id\":\"5rTf_LlZg9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset Movement\",\"col\":4}},{\"id\":\"jVJpNqtr_v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Store Asset\",\"col\":4}},{\"id\":\"ZLKaEpieia\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"kzgSeM2pes\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Assets\",\"col\":4}},{\"id\":\"cmTB3KOzYY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Asset Sarpras\",\"col\":3}},{\"id\":\"B0jRyh9pKl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Asset Employee\",\"col\":3}},{\"id\":\"ze0iWtKvwb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Asset Movement\",\"col\":3}},{\"id\":\"Myh0aEj2eQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CD Asset Store\",\"col\":3}},{\"id\":\"ZpqfyCp44i\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Assets &amp; Maintenance</b></span>\",\"col\":12}},{\"id\":\"G4o0mbEejH\",\"type\":\"card\",\"data\":{\"card_name\":\"Assets\",\"col\":4}},{\"id\":\"vc_-vYz-kP\",\"type\":\"card\",\"data\":{\"card_name\":\"Maintenance\",\"col\":4}}]",
+ "content": "[{\"id\":\"Pj-UOKo3Px\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"XlpM8182iW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset\",\"col\":3}},{\"id\":\"5rTf_LlZg9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Asset Movement\",\"col\":4}},{\"id\":\"jVJpNqtr_v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Store Asset\",\"col\":4}},{\"id\":\"ZLKaEpieia\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ZpqfyCp44i\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Assets &amp; Maintenance</b></span>\",\"col\":12}},{\"id\":\"G4o0mbEejH\",\"type\":\"card\",\"data\":{\"card_name\":\"Assets\",\"col\":4}},{\"id\":\"vc_-vYz-kP\",\"type\":\"card\",\"data\":{\"card_name\":\"Maintenance\",\"col\":4}}]",
  "creation": "2023-05-17 11:50:51.060968",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -115,7 +115,7 @@
    "type": "Link"
   }
  ],
- "modified": "2024-02-09 14:14:48.164973",
+ "modified": "2024-02-15 09:39:42.066567",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Assets",
@@ -150,14 +150,6 @@
    "type": "DocType"
   },
   {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "Total Asset : {} ",
-   "label": "CD Assets",
-   "link_to": "CD Asset",
-   "type": "DocType"
-  },
-  {
    "color": "Blue",
    "doc_view": "List",
    "format": "Total Log : {}",
@@ -167,44 +159,12 @@
    "type": "DocType"
   },
   {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "Total: {}",
-   "label": "CD Asset Employee",
-   "link_to": "CD Asset Employee",
-   "type": "DocType"
-  },
-  {
    "color": "Cyan",
    "doc_view": "List",
    "format": "Total Log : {}",
    "label": "SD Store Asset",
    "link_to": "SD Store Asset",
    "stats_filter": "{\"idx\":[\"=\",null]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "Total: {}",
-   "label": "CD Asset Sarpras",
-   "link_to": "CD Asset Sarpras",
-   "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "Total: {}",
-   "label": "CD Asset Movement",
-   "link_to": "CD Assets Movement",
-   "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "Total: {}",
-   "label": "CD Asset Store",
-   "link_to": "CD Asset Store",
    "type": "DocType"
   }
  ],

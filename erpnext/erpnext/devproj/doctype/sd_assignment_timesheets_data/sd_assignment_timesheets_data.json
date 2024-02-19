@@ -14,7 +14,6 @@
   "project",
   "task_timeline_section",
   "from_date",
-  "activity_type",
   "column_break_3w5tw",
   "to_date",
   "total_section",
@@ -87,15 +86,6 @@
    "label": "Total"
   },
   {
-   "fieldname": "activity_type",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Activity Type",
-   "options": "Activity Type",
-   "read_only": 1
-  },
-  {
    "fieldname": "sub_task",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -120,7 +110,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-09 10:29:04.815763",
+ "modified": "2024-02-17 16:01:45.936136",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Assignment Timesheets Data",

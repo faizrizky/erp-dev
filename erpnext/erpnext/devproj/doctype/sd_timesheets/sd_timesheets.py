@@ -10,7 +10,7 @@ from frappe.utils import add_to_date, flt, get_datetime, getdate, time_diff_in_h
 from frappe.desk.form.save import savedocs
 from erpnext.controllers.queries import get_match_cond
 from erpnext.setup.utils import get_exchange_rate
-from datetime import timedelta
+from datetime import timedelta, date
 
 
 
@@ -87,22 +87,35 @@ class SDTimesheets(Document):
 	def set_dates(self):
 		if self.docstatus < 2 and self.time_logs:
 			start_date = min(getdate(d.from_time) for d in self.time_logs)
-			end_date = max(getdate(d.to_time) for d in self.time_logs)
+			# end_date = max(getdate(d.to_time) for d in self.time_logs)
+			
 
-			if start_date and end_date:
+			if start_date:
 				self.start_date = getdate(start_date)
-				self.end_date = getdate(end_date)
+				self.end_date = getdate(date.today())
 
 	def before_cancel(self):
 		self.set_status()
 
 	def on_cancel(self):
 		self.update_task_and_project()
-
+  
+	def before_insert(self):
+		self.assign_to = frappe.session.user
+  
+	def register_hook(self):
+		self.assign.append(
+						"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
+					)
+  
 	def on_submit(self):
+		
+
+		# frappe.throw(_("assign to {0}.").format(frappe.db.get_value('SD Timesheets', self.name, '_assign')))
+		# self.register_hook()
+		self.end_date = getdate(date.today())
 		self.validate_mandatory_fields()
 		self.update_task_time_tracking_and_project()
-
 
 	# def on_update(self):
 
@@ -131,7 +144,7 @@ class SDTimesheets(Document):
 					task.update_timesheet_date(data)
 					tasks.append(data.sub_task)
     
-			elif data.task and data.task not in tasks:
+			if data.task and data.task not in tasks:
 				task = frappe.get_doc("Task", data.task)
 				print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
 				task.update_timesheet_date(data)

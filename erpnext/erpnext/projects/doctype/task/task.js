@@ -73,7 +73,7 @@ frappe.ui.form.on("Task", {
 							filters: {
 								task: frm.doc.name,
 								department: ["like", "%" + user_branch + "%"],
-								_assign: ["like", "%" + frappe.session.user + "%"],
+								// _assign: ["like", "%" + frappe.session.user + "%"],
 							}
 						};
 					};

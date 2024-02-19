@@ -12,10 +12,11 @@ from frappe.model.mapper import get_mapped_doc
 from frappe.utils import add_days, cstr, date_diff, flt, get_link_to_form, getdate, today,now
 from frappe.utils.nestedset import NestedSet
 from datetime import datetime
-from datetime import timedelta
+from datetime import timedelta, date
 from frappe.utils import nowdate
 from frappe import db
 import re
+from frappe.desk.form import assign_to
 
 
 
@@ -260,10 +261,11 @@ class Task(NestedSet):
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
 				# check if the same pa aji
-				if d.sub_task not in check_val :
-					check_val[d.sub_task] = 1
+				key = (d.sub_task, d.employee_name)
+				if key not in check_val :
+					check_val[key] = 1
 				else:
-					check_val[d.sub_task] += 1
+					check_val[key] += 1
 				
 				# if d.sub_task.count("-") > 0:
 				# 	has_hypen.append(d.sub_task)
@@ -278,7 +280,7 @@ class Task(NestedSet):
 						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Working')
 					
 
-				if check_val[d.sub_task] <= 1:
+				if check_val[key] <= 1:
 
 					jumlah_total_elemen = len(self.sub_task)
 
@@ -612,7 +614,7 @@ class Task(NestedSet):
 	def sub_task_data_before_saved(self):
 		query = """
 			SELECT
-				td.sub_task
+				td.sub_task, td.employee_name, td.checker_name
 			FROM 
 				`tabAssignment Sub Task` td
 			WHERE
@@ -622,26 +624,97 @@ class Task(NestedSet):
 		result = frappe.db.sql(query, (self.name,), as_dict=True)
 
 		return result
-		
 
 	def sub_task_data_after_saved(self):
-
-		formatted_data = []
-
+		formatted_data_employee = []
+		formatted_data_checker = []
+		
 		for row in self.sub_task:
-			if hasattr(row, 'sub_task'):
-					formatted_data.append({"sub_task": row.sub_task})	
+			if hasattr(row, 'sub_task') and hasattr(row, 'employee_name'):
+				formatted_data_checker.append({"sub_task": row.sub_task,"checker_name": row.checker_name})
 
-		sub_tasks_array1 = set(item['sub_task'] for item in self.sub_task_data_before_saved())
-		sub_tasks_array2 = set(item['sub_task'] for item in formatted_data)
+			existing_in_sub_task = frappe.db.get_value('SD Sub Task', row.sub_task, '_assign')
 
+			existing_in_task = json.loads(existing_in_sub_task) if existing_in_sub_task else []
+			print("existing_in_task: ", existing_in_task)
+   
+			emp_checker = frappe.db.get_value('Employee', {'name': row.checker_name}, ['user_id'])
 
-		if len(sub_tasks_array1) > len(sub_tasks_array2):
-			difference = list(sub_tasks_array1.symmetric_difference(sub_tasks_array2))[0]
-			print("Sub task ada yg di delete yaitu : ", difference)
-			frappe.db.set_value('SD Sub Task', difference, 'status', 'Open	')
+			print("checker name: ", row.checker_name)
+   
+			if emp_checker not in existing_in_task and emp_checker is not None:
+				
+				print("existing_in_task: ", existing_in_task)
+				existing_in_task.append(emp_checker)
+     
+				updated_assign_str = json.dumps(existing_in_task)
 
-		return formatted_data
+				assign_to.clear("SD Sub Task", row.sub_task)
+
+				assign_to.add(
+					dict(
+						assign_to=updated_assign_str,
+						doctype="SD Sub Task",
+						name=row.sub_task,
+						notify=True,
+						date=getdate(date.today()),
+					)
+				)
+    
+		for row in self.sub_task:
+			if hasattr(row, 'sub_task') and hasattr(row, 'employee_name'):
+				formatted_data_employee.append({"sub_task": row.sub_task, "employee_name": row.employee_name})
+
+			existing_in_sub_task = frappe.db.get_value('SD Sub Task', row.sub_task, '_assign')
+
+			existing_in_task = json.loads(existing_in_sub_task) if existing_in_sub_task else []
+			print("existing_in_task: ", existing_in_task)
+   
+			emp_name = frappe.db.get_value('User', {'full_name': row.employee_name}, ['email'])
+
+			print("emp name: ", row.checker_name)
+
+			if emp_name not in existing_in_task:
+     
+				existing_in_task.append(emp_name)
+				print("existing_in_task: ", existing_in_task)
+
+				updated_assign_str = json.dumps(existing_in_task)
+
+				assign_to.clear("SD Sub Task", row.sub_task)
+
+				assign_to.add(
+					dict(
+						assign_to=updated_assign_str,
+						doctype="SD Sub Task",
+						name=row.sub_task,
+						notify=True,
+						date=getdate(date.today()),
+					)
+				)
+
+		sub_tasks_array1 = set((item['sub_task'], item['employee_name']) for item in self.sub_task_data_before_saved())
+  
+		
+		sub_tasks_array2 = set((item['sub_task'], item['employee_name'])  for item in formatted_data_employee)
+  
+		sub_tasks_checker1 = set((item['sub_task'], item['checker_name']) for item in self.sub_task_data_before_saved())
+
+		sub_tasks_checker2 = set((item['sub_task'],item['checker_name'])  for item in formatted_data_checker)
+  
+		deleted_sub_tasks = sub_tasks_array1 - sub_tasks_array2
+		deleted_sub_tasks_checkers = sub_tasks_checker1 - sub_tasks_checker2
+  
+		for deleted_sub_task_checker, checker_name in deleted_sub_tasks_checkers:
+			print("Checker dihapus: ", deleted_sub_task_checker)
+			employee_checker_email = frappe.db.get_value('Employee', {'name': checker_name}, ['user_id'])
+			assign_to.remove("SD Sub Task", deleted_sub_task_checker, employee_checker_email)
+
+		for deleted_sub_task, employee_name in deleted_sub_tasks:
+			print("Sub task dihapus: ", deleted_sub_task)
+			employee_email = frappe.db.get_value('Employee', {'name': employee_name}, ['user_id'])
+			frappe.db.set_value('SD Sub Task', deleted_sub_task, 'status', 'Open')
+			assign_to.remove("SD Sub Task", deleted_sub_task, employee_email)
 
 	def update_sub_task_status(self,sub_task):
      
@@ -658,21 +731,24 @@ class Task(NestedSet):
 
 			if str(subject) == str(sub_task):
 				frappe.db.set_value('SD Sub Task', subject, 'status', 'Working')
-				
+	
 	def update_timesheet_date(self, data):
 		employee_info = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ['name', 'employee_name'], as_dict=1)
-  
+		
 		if data:
 			start_date = data.parent_doc.start_date
 			end_date = data.parent_doc.end_date
-			sub_task = data.sub_task
+			if data.sub_task != "":
+				sub_task = data.sub_task
+			else:
+				sub_task = "-"
 			activity_type = data.activity_type
 			actual_time_str = data.hours_count
 			task = data.task
 			project = data.project
-   
+
 			timesheet_msg_displayed = frappe.session.get('timesheet_msg_displayed', False)
-			if start_date != end_date:
+			if getdate(start_date) < getdate(end_date):
 				if not timesheet_msg_displayed:
 					user_roles = get_roles()
 					if "Administrator" not in user_roles:
@@ -704,7 +780,7 @@ class Task(NestedSet):
 
 			data = frappe.get_doc("Task", task)
 			# existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.project == project), None)
-			existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.sub_task == sub_task and row.activity_type == activity_type), None)
+			existing_row = next((row for row in data.timesheets_data if row.employee_name == employee_info.name and row.sub_task == sub_task), None)
 			# print("Existing Row:", bool(existing_row))
 			# for row in data.timesheets_data:
 			# 	print(f"Row: {row.sub_task}, {row.activity_type}")
@@ -741,7 +817,7 @@ class Task(NestedSet):
 					"to_date": end_date
 				})
 
-				if start_date != end_date:
+				if getdate(start_date) < getdate(end_date):
 					user_roles = get_roles()
 					print(user_roles)
      

@@ -97,27 +97,18 @@ class SDTimesheets(Document):
 	def before_cancel(self):
 		self.set_status()
 
-	def on_cancel(self):
-		self.update_task_and_project()
+	# def on_cancel(self):
+	# 	self.update_task_and_project()
   
 	def before_insert(self):
 		self.assign_to = frappe.session.user
   
-	def register_hook(self):
-		self.assign.append(
-						"task_list", {"doctype": "Sprint Task List", "task_id": self.name}
-					)
-  
+	
 	def on_submit(self):
-		
-
-		# frappe.throw(_("assign to {0}.").format(frappe.db.get_value('SD Timesheets', self.name, '_assign')))
-		# self.register_hook()
 		self.end_date = getdate(date.today())
 		self.validate_mandatory_fields()
 		self.update_task_time_tracking_and_project()
-
-	# def on_update(self):
+		self.update_task_and_project()
 
 	def validate_mandatory_fields(self):
 		for data in self.time_logs:

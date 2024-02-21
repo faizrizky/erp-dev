@@ -13,8 +13,10 @@ from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
 from frappe.query_builder import Interval
 from frappe.query_builder.functions import Now
-from frappe.utils import date_diff, get_datetime, now_datetime, time_diff_in_seconds
+from frappe.utils import date_diff, get_datetime, now_datetime, time_diff_in_seconds, getdate
+from datetime import date
 from frappe.utils.user import is_website_user
+from frappe.desk.form import assign_to
 
 class SDIssue(Document):
 	def get_feed(self):
@@ -34,6 +36,8 @@ class SDIssue(Document):
 		self.set_contact_responded()
 
 		self.set_resolved_on()
+  
+		self.set_assign_to()
 
 	def on_update(self):
 		# Add a communication in the issue timeline
@@ -42,6 +46,25 @@ class SDIssue(Document):
 		if self.flags.create_communication and self.via_customer_portal:
 			self.create_communication()
 			self.flags.communication_created = None
+
+	def set_assign_to(self):
+		existing_in_task = frappe.db.get_value('Task',self.task_issue, '_assign')
+		
+		existing_in_task = json.loads(existing_in_task) if existing_in_task else []
+		
+		updated_assign_str = json.dumps(existing_in_task)
+
+		assign_to.clear("SD Issue", self.name)
+
+		assign_to.add(
+			dict(
+				assign_to=updated_assign_str,
+				doctype="SD Issue",
+				name=self.name,
+				notify=True,
+				date=getdate(date.today()),
+			)
+		)
 
 	def set_contact_responded(self):
 		# subject = frappe.db.get_value('Task', self.name, '_assign')

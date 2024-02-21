@@ -54,7 +54,9 @@ frappe.ui.form.on('SD Issue', {
 					response.message.employee_name
 				) {
 					var employeeFullName = response.message.employee_name;
-					frm.set_value("employee", employeeFullName);
+					if (frm.doc.employee == null) {
+						frm.set_value("employee", employeeFullName);
+					}
 				} else {
 					frappe.msgprint("Employee not found!");
 				}

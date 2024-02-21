@@ -738,10 +738,11 @@ class Task(NestedSet):
 		if data:
 			start_date = data.parent_doc.start_date
 			end_date = data.parent_doc.end_date
-			if data.sub_task != "":
-				sub_task = data.sub_task
-			else:
-				sub_task = "-"
+			sub_task = data.sub_task
+			# if data.sub_task != None:
+			# 	sub_task = data.sub_task
+			# else:
+			# 	sub_task = "-"
 			activity_type = data.activity_type
 			actual_time_str = data.hours_count
 			task = data.task

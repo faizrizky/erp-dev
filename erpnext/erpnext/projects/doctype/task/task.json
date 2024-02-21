@@ -605,14 +605,13 @@
    "label": "Employee Working Hours"
   }
  ],
- "force_re_route_to_default_view": 1,
  "icon": "fa fa-check",
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2024-01-24 13:49:23.431458",
+ "modified": "2024-02-20 15:17:26.237528",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",

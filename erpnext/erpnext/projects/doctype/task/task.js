@@ -135,8 +135,17 @@ frappe.ui.form.on("Task", {
 		});
 
 		frm.set_query("multi_sprint", function () {
+			let currentYear = new Date().getFullYear();
+			let startDate = new Date(currentYear, 0, 1);
+			let endDate = new Date(currentYear, 11, 31);
+
+			let formattedStartDate = formatDate(startDate);
+			let formattedEndDate = formatDate(endDate);
+
 			let filters = {
 				event_category: ["=", "Sprint"],
+				starts_on: [">=", formattedStartDate],
+				ends_on: ["<=", formattedEndDate]
 			};
 
 			return {
@@ -180,3 +189,10 @@ frappe.ui.form.on("Task", {
 			frappe.model.remove_from_locals("Project", frm.doc.project);
 	},
 });
+
+function formatDate(date) {
+	let day = date.getDate().toString().padStart(2, '0');
+	let month = (date.getMonth() + 1).toString().padStart(2, '0'); // January is 0!
+	let year = date.getFullYear();
+	return day + '-' + month + '-' + year;
+}

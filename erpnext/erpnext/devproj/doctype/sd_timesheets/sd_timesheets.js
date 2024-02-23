@@ -112,6 +112,11 @@ frappe.ui.form.on("SD Timesheets", {
 	},
 
 	before_load: function (frm) {
+
+		if ((frm.doc.end_date != null) && (frm.doc.docstatus == 0)) {
+			frm.doc.end_date = frappe.datetime.get_today()
+		}
+
 		console.log("Executed before load")
 		frappe.call({
 			method: "frappe.client.get_value",

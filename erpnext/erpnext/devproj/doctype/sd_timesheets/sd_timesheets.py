@@ -87,12 +87,14 @@ class SDTimesheets(Document):
 	def set_dates(self):
 		if self.docstatus < 2 and self.time_logs:
 			start_date = min(getdate(d.from_time) for d in self.time_logs)
-			# end_date = max(getdate(d.to_time) for d in self.time_logs)
+			end_date = max(getdate(d.to_time) for d in self.time_logs)
 			
 
 			if start_date:
 				self.start_date = getdate(start_date)
-				# self.end_date = getdate(date.today())
+    
+			if self.end_date == None:
+				self.end_date = getdate(end_date)
 
 	def before_cancel(self):
 		self.set_status()

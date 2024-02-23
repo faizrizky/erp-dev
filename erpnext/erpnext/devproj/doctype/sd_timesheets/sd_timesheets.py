@@ -92,7 +92,7 @@ class SDTimesheets(Document):
 
 			if start_date:
 				self.start_date = getdate(start_date)
-				self.end_date = getdate(date.today())
+				# self.end_date = getdate(date.today())
 
 	def before_cancel(self):
 		self.set_status()

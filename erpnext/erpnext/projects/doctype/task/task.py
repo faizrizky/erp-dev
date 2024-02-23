@@ -832,14 +832,16 @@ class Task(NestedSet):
 						existing_row.update({
 							"late_submit_count": existing_late_submit_count,
 						})
+				data.save()
 				
 			else:
 				# Add a new row
 				# print("Appending new Data : " + employee_info.name, str(actual_time_timedelta), str(task), str(sub_task))
 				existing_late_submit_count = 0
+
 				if getdate(start_date) < getdate(end_date):
 					user_roles = get_roles()
-					
+
 					if "Administrator" not in user_roles:
 						existing_late_submit_count += 1
 
@@ -859,7 +861,7 @@ class Task(NestedSet):
 
 				data.append("timesheets_data", new_timesheet_data)
 			
-			data.save()
+				data.save()
 			
 		else:
 			frappe.throw(

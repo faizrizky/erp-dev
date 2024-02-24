@@ -839,11 +839,7 @@ class Task(NestedSet):
 				# print("Appending new Data : " + employee_info.name, str(actual_time_timedelta), str(task), str(sub_task))
 				existing_late_submit_count = 0
 
-				if getdate(start_date) < getdate(end_date):
-					user_roles = get_roles()
-
-					if "Administrator" not in user_roles:
-						existing_late_submit_count += 1
+				
 
 				new_timesheet_data = {
 					"doctype": "SD Assignment Timesheets Data",
@@ -855,9 +851,15 @@ class Task(NestedSet):
 					"from_date": start_date,
 					"to_date": end_date
 				}
+    
 
-				if existing_late_submit_count:
-					new_timesheet_data["late_submit_count"] = existing_late_submit_count
+			
+				if getdate(start_date) < getdate(end_date):
+					user_roles = get_roles()
+
+					if "Administrator" not in user_roles:
+						existing_late_submit_count += 1
+				new_timesheet_data["late_submit_count"] = existing_late_submit_count
 
 				data.append("timesheets_data", new_timesheet_data)
 			

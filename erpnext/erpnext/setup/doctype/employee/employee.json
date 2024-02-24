@@ -381,6 +381,7 @@
    "depends_on": "eval:(frappe.user_roles.join(\",\").toLowerCase().includes(\"software\"))",
    "fieldname": "branch",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Department",
    "options": "Branch"
   },
@@ -828,7 +829,7 @@
  "idx": 24,
  "image_field": "image",
  "links": [],
- "modified": "2023-11-29 14:41:33.510338",
+ "modified": "2024-02-21 13:40:08.198599",
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",

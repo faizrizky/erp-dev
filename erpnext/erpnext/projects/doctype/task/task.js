@@ -94,6 +94,7 @@ frappe.ui.form.on("Task", {
 						return {
 							filters: {
 								branch: ["like", "%" + department_value + "%"],
+								status: "Active"
 							}
 						};
 					}

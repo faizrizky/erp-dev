@@ -170,9 +170,9 @@ frappe.ui.form.on("SD Timesheets", {
 			set_employee_and_company(frm);
 		}
 
-		// if (frm.doc.end_date != null) {
-		// 	frm.doc.end_date = frappe.datetime.get_today()
-		// }
+		if ((frm.doc.end_date != null) && (frm.doc.docstatus == 0)) {
+			frm.doc.end_date = frappe.datetime.get_today()
+		}
 	},
 
 	// after_save: function (frm) {

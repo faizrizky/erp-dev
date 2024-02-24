@@ -105,7 +105,7 @@ class SDTimesheets(Document):
   
 	
 	def on_submit(self):
-		self.end_date = getdate(date.today())
+		# self.end_date = getdate(date.today())
 		self.validate_mandatory_fields()
 		self.update_task_time_tracking_and_project()
 		self.update_task_and_project()

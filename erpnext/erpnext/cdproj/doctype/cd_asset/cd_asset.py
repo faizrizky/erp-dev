@@ -12,11 +12,11 @@ class CDAsset(Document):
 		elif self.sarpras_type == 'Employee':
 			self.name = f'{self.asset_name} - {self.employee} - {self.room}'
 
-	def before_save(self) : 
-		if self.sarpras_type == 'General':
-			self.asset_name = f'{self.asset_name}'
-		elif self.sarpras_type == 'Employee':
-			self.asset_name = f'{self.asset_name} {self.employee}'
+	# def before_save(self) : 
+	# 	if self.sarpras_type == 'General':
+	# 		self.asset_name = f'{self.asset_name}'
+	# 	elif self.sarpras_type == 'Employee':
+	# 		self.asset_name = f'{self.asset_name} {self.employee}'
 
 	def on_update(self) :
 		return

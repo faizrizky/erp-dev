@@ -137,7 +137,7 @@ class SDTimesheets(Document):
 					task.update_timesheet_date(data)
 					tasks.append(data.sub_task)
     
-			if data.task and data.task not in tasks:
+			elif data.task and data.task not in tasks:
 				task = frappe.get_doc("Task", data.task)
 				print(f'START CALLING TASK \n Start Executed Task: {data.task} ')
 				task.update_timesheet_date(data)

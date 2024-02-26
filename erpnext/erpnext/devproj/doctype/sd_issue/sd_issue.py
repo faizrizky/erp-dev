@@ -36,13 +36,12 @@ class SDIssue(Document):
 		self.set_contact_responded()
 
 		self.set_resolved_on()
-  
-		self.set_assign_to()
 
 	def on_update(self):
 		# Add a communication in the issue timeline
 		self.validate_status_taken()
 		self.populate_depends_on()
+		self.set_assign_to()
 		if self.flags.create_communication and self.via_customer_portal:
 			self.create_communication()
 			self.flags.communication_created = None

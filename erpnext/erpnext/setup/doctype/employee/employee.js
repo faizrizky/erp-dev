@@ -132,7 +132,7 @@ frappe.ui.form.on("Employee", {
 						company: frm.doc.company,
 						designation: ["like", "%" + sd_Designation + "%"],
 						status: "Active",
-						role_profile: "Leader Software Developer",
+						role_profile: ["in", ["Leader Software Developer", "Technical Architect Software Developer"]],
 					},
 				};
 			});

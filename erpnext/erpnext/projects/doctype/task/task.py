@@ -128,71 +128,78 @@ class Task(NestedSet):
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
 				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
 
+				print ("sub_task:", d.sub_task)
+				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
+				print("Sub Task Subject:", sub_task_doc.subject)
+				for timesheets_data in self.timesheets_data:
+					sub_task_timesheet = frappe.get_doc("SD Sub Task", timesheets_data.sub_task)
+					print("timesheets_data :", sub_task_timesheet.subject)
+					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.employee_name:
+						print("timesheets_data subtask :", sub_task_timesheet.subject, " || sub_task : ", sub_task_doc.subject)
+						if d.completion == 1 and self.status == "Completed":
+							update_employee_weight(employee_name,self.project,d.weight,branch, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+							
+							# self.validate_working_date(branch)
 
-				# if d.completion == 1 and d.qa_completion == 1 and self.status == "Completed":
-				if d.completion == 1 and self.status == "Completed":
-					update_employee_weight(employee_name,self.project,d.weight,branch, self.programmer_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
-					
-					# self.validate_working_date(branch)
-
-					if jumlah_total_elemen_checker_name > 0:
-						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
-							frappe.throw(_("Please set {0} value between {1}")
-										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-
-						update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, self.qa_total_day,d.subject,self.name,len(self.sub_task),self.status,self.is_group)
+							if jumlah_total_elemen_checker_name > 0:
+								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+									frappe.throw(_("Please set {0} value between {1}")
+												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+								if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
+									update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
 
-				if status_before == "Completed" and self.status != "Completed":
-					update_employee_weight(employee_name,self.project,-d.weight,branch, int(self.programmer_total_day),d.subject,self.name,len(self.sub_task),self.status,self.is_group)
+						if status_before == "Completed" and self.status != "Completed":
+							update_employee_weight(employee_name,self.project,-d.weight,branch, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
-					# self.validate_working_date(branch)
+							# self.validate_working_date(branch)
 
-					if jumlah_total_elemen_checker_name > 0:
-						if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
-							frappe.throw(_("Please set {0} value between {1}")
-										.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+							if jumlah_total_elemen_checker_name > 0:
+								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+									frappe.throw(_("Please set {0} value between {1}")
+												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+								if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
+									update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
-						update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, int(self.qa_total_day),d.subject,self.name,len(self.sub_task),self.status,self.is_group)
-
-						# self.validate_working_date(branch_checker)	
+									# self.validate_working_date(branch_checker)	
 
 		else:
-
 			if flt(self.task_weight) > 4 or flt(self.task_weight) < 1:
 				frappe.throw(_("Please set {0} value between {1}")
 					.format(frappe.bold("Task Weight"), frappe.bold("1 to 4")))
 
 			subject = frappe.db.get_value('Task', self.name, '_assign')
 			if subject is not None:
+				print("MASUK SINI")
 				result = json.loads(subject)
 				for emp in result:
 					emp_name = frappe.db.get_value('User', emp, 'full_name')
 					branch = frappe.db.get_value("User", emp, "role")
-					# print("INI BRANCH : ", branch)
+					print("INI BRANCH : ", branch)
 
-					# print(emp_name," ",branch)
+					print(emp_name," ",branch)
+					for timesheets_data in self.timesheets_data:
+						if timesheets_data.employee_name == emp_name:
+							if self.status == "Completed":
 
-					if self.status == "Completed":
+								if branch == "Quality Assurance":
+									update_employee_weight(emp_name,self.project,self.task_weight,branch, timesheets_data.total_working_hours,self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
-						if branch == "Quality Assurance":
-							update_employee_weight(emp_name,self.project,self.task_weight,branch, self.qa_total_day,self.name,self.name,len(self.sub_task),self.status,self.is_group)
+									# self.validate_working_date(branch)
+								else:
+									update_employee_weight(emp_name,self.project,self.task_weight,branch, timesheets_data.total_working_hours,self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
-							# self.validate_working_date(branch)
-						else:
-							update_employee_weight(emp_name,self.project,self.task_weight,branch, self.programmer_total_day,self.name,self.name,len(self.sub_task),self.status,self.is_group)
+									# self.validate_working_date(branch)
 
-							# self.validate_working_date(branch)
+							if timesheets_data.employee_name == emp_name:
+								if status_before == "Completed" and self.status != "Completed":
 
+									if branch == "Quality Assurance":
+										update_employee_weight(emp_name,self.project,-self.task_weight,branch, timesheets_data.total_working_hours,self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
-					if status_before == "Completed" and self.status != "Completed":
-
-						if branch == "Quality Assurance":
-							update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.qa_total_day),self.name,self.name,len(self.sub_task),self.status,self.is_group)
-
-							# self.validate_working_date(branch)
-						else:
-							update_employee_weight(emp_name,self.project,-self.task_weight,branch, -int(self.programmer_total_day),self.name,self.name,len(self.sub_task),self.status,self.is_group)
+										# self.validate_working_date(branch)
+									else:
+										update_employee_weight(emp_name,self.project,-self.task_weight,branch, timesheets_data.total_working_hours,self.name,self.name,len(self.sub_task),self.status,self.is_group)
 
 
 
@@ -247,16 +254,61 @@ class Task(NestedSet):
 				getdate(expected_end_date), self, "act_start_date", "act_end_date", "Actual"
 			)
 
+ 
 	def validate_sub_task(self):
 
 		if self.is_group == 1 and len(self.sub_task) > 0 :
 			frappe.throw(_("{0} cannot have {1}")
 							.format(frappe.bold("Parent Task"), frappe.bold("Sub Task")))
+		arr_timesheet_data = []
+		arr_sub_task_data = []
+		sub_task_dict = {}
 		arr = []
 		arr_qa = []
 		check_val = dict([])
 		has_error = []
 		# has_hypen= []
+
+		if len(self.timesheets_data) > 0:
+			for d in self.timesheets_data:
+				sub_task_timesheet = frappe.get_doc("SD Sub Task", d.sub_task)
+				arr_timesheet_data.append((d.employee_name, sub_task_timesheet.subject))
+		# print(arr_timesheet_data)
+
+		if len(self.sub_task) > 0:
+			for d in self.sub_task:
+				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
+				arr_sub_task_data.append((d.employee_name, sub_task_doc.subject, d.checker_name, d.completion,d.qa_completion))
+		# print(arr_sub_task_data)
+
+		for entry in arr_timesheet_data:
+			employee_name = entry[0]
+			subject = entry[1]
+			if employee_name not in sub_task_dict:
+				sub_task_dict[employee_name] = []
+			sub_task_dict[employee_name].append(subject)
+
+		for entry in arr_sub_task_data:
+			employee_name = entry[0]
+			subject = entry[1]
+			completion = entry[3]
+			checker_name = entry[2]
+			qa_completion = entry[4]
+
+			if completion:
+				person_name = employee_name
+			elif qa_completion:
+				person_name = checker_name
+			else:
+				continue
+
+			if person_name in sub_task_dict:
+				if subject in sub_task_dict[person_name]:
+					print(f"Employee {person_name} has task: {subject} in both lists")
+				else:
+					frappe.throw(_("{0} hasn't submitted the timesheet with sub task: {1}").format(frappe.bold(person_name), frappe.bold(subject)), title=_("Invalid Sub Task"))
+			else:
+				frappe.throw(_("{0} hasn't submitted the timesheet with sub task: {1}").format(frappe.bold(person_name), frappe.bold(subject)), title=_("Invalid Sub Task"))
 
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
@@ -270,12 +322,12 @@ class Task(NestedSet):
 				# if d.sub_task.count("-") > 0:
 				# 	has_hypen.append(d.sub_task)
      
-				if d.completion == True:
-					print(frappe.db.get_value('SD Sub Task', d.sub_task, 'status'))
+				if d.completion == True and d.qa_completion ==  True:
 					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Working":
 						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Completed')
+						
 				
-				if d.completion == False:
+				if (d.completion == True and d.qa_completion ==  False) or (d.completion == False and d.qa_completion ==  True):
 					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Completed":
 						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Working')
 					
@@ -636,15 +688,15 @@ class Task(NestedSet):
 			existing_in_sub_task = frappe.db.get_value('SD Sub Task', row.sub_task, '_assign')
 
 			existing_in_task = json.loads(existing_in_sub_task) if existing_in_sub_task else []
-			print("existing_in_task: ", existing_in_task)
+			# print("existing_in_task: ", existing_in_task)
    
 			emp_checker = frappe.db.get_value('Employee', {'name': row.checker_name}, ['user_id'])
 
-			print("checker name: ", row.checker_name)
+			# print("checker name: ", row.checker_name)
    
 			if emp_checker not in existing_in_task and emp_checker is not None:
 				
-				print("existing_in_task: ", existing_in_task)
+				# print("existing_in_task: ", existing_in_task)
 				existing_in_task.append(emp_checker)
      
 				updated_assign_str = json.dumps(existing_in_task)
@@ -668,16 +720,16 @@ class Task(NestedSet):
 			existing_in_sub_task = frappe.db.get_value('SD Sub Task', row.sub_task, '_assign')
 
 			existing_in_task = json.loads(existing_in_sub_task) if existing_in_sub_task else []
-			print("existing_in_task: ", existing_in_task)
+			# print("existing_in_task: ", existing_in_task)
    
 			emp_name = frappe.db.get_value('User', {'full_name': row.employee_name}, ['email'])
 
-			print("emp name: ", row.checker_name)
+			# print("emp name: ", row.checker_name)
 
 			if emp_name not in existing_in_task:
      
 				existing_in_task.append(emp_name)
-				print("existing_in_task: ", existing_in_task)
+				# print("existing_in_task: ", existing_in_task)
 
 				updated_assign_str = json.dumps(existing_in_task)
 
@@ -706,12 +758,12 @@ class Task(NestedSet):
 		deleted_sub_tasks_checkers = sub_tasks_checker1 - sub_tasks_checker2
   
 		for deleted_sub_task_checker, checker_name in deleted_sub_tasks_checkers:
-			print("Checker dihapus: ", deleted_sub_task_checker)
+			# print("Checker dihapus: ", deleted_sub_task_checker)
 			employee_checker_email = frappe.db.get_value('Employee', {'name': checker_name}, ['user_id'])
 			assign_to.remove("SD Sub Task", deleted_sub_task_checker, employee_checker_email)
 
 		for deleted_sub_task, employee_name in deleted_sub_tasks:
-			print("Sub task dihapus: ", deleted_sub_task)
+			# print("Sub task dihapus: ", deleted_sub_task)
 			employee_email = frappe.db.get_value('Employee', {'name': employee_name}, ['user_id'])
 			frappe.db.set_value('SD Sub Task', deleted_sub_task, 'status', 'Open')
 			assign_to.remove("SD Sub Task", deleted_sub_task, employee_email)
@@ -1241,6 +1293,7 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 		)
 
 def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status,is_parent):
+	print("Start Executing Update Employee Weight for : ", employee_name)
 	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch,is_parent = is_parent, total_days=total_day)
 
 	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)
@@ -1260,13 +1313,14 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 			
 			if task_name + " - " +task_item.task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent, 'is_subtask' : True}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name + " - " +task_item.task_name,"task_weight":weight,"hours_taken":total_day,"is_parent":is_parent, 'is_subtask' : True}
 														)
 				parent.save()
 				# user.db_update()
 
 		elif status != "Completed":
 			item_to_remove = task_name + " - " + task_item.task_name
+			# print("item_to_remove : ", item_to_remove)
 			item_to_remove_parent = task_name
 
 			if any(row.task_name == item_to_remove for row in parent.task):
@@ -1279,7 +1333,7 @@ def update_employee_weight(employee_name,project,weight,branch,total_day,subject
 		if status == "Completed" :
 			if task_name not in [row.task_name for row in parent.task]:
 				parent.append(
-										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"days":total_day,"is_parent":is_parent, 'is_subtask' : False}
+										"task", {"doctype": "SD Data Report Item", "task_name":  task_name,"task_weight":weight,"hours_taken":total_day,"is_parent":is_parent, 'is_subtask' : False}
 														)
 				parent.save()
 

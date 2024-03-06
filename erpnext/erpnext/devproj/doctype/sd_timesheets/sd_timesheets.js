@@ -601,6 +601,8 @@ frappe.ui.form.on("Timesheet Detail", {
 		console.log("Script executed");
 		let row = frm.selected_doc;
 
+		frappe.model.set_value(cdt, cdn, "sub_task", null);
+
 		// frm.fields_dict['time_logs'].grid.grid_rows[1].grid.toggle_reqd("sub_task", true);
 		console.log(frm.fields_dict['time_logs'].grid.docfields[6].reqd = 1)
 		// cur_frm.get_field("time_logs").grid.fieldinfo["sub_task"].read_only = 1

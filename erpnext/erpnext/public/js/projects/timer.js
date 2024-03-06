@@ -162,6 +162,8 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
     // var child = locals[cdt][cdn];
     var project = cur_dialog.fields_dict.project.value;
 
+    cur_dialog.fields_dict.sub_task.set_input(null);
+
     // var userRole = frappe.user_roles.includes("Administrator");
     var userRole = frappe.user_roles
       .join(",")

@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"UKcDuy6jJz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Sub Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"6cJCid5347\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Daily Report Timesheets\",\"col\":3}},{\"id\":\"9S369ytH4x\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
+ "content": "[{\"id\":\"GOi1F8ojVF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Project</b></span>\",\"col\":12}},{\"id\":\"vXDdTgv7WQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Summary Report\",\"col\":3}},{\"id\":\"_ZLo8N1c67\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"WZ-Ad4mXuM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Timesheets\",\"col\":3}},{\"id\":\"h8DCCrWWxU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"UKcDuy6jJz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Sub Task\",\"col\":3}},{\"id\":\"cM20NQhN--\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Issues\",\"col\":3}},{\"id\":\"MmafQ8ZxuU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Note\",\"col\":3}},{\"id\":\"HYisPU2kYG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sprint\",\"col\":3}},{\"id\":\"6cJCid5347\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Daily Report Timesheets\",\"col\":3}},{\"id\":\"NFEKTyCn8U\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Sub Task Data Import\",\"col\":3}},{\"id\":\"3cKkR6rO8A\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SD Task Data Import\",\"col\":3}},{\"id\":\"wvzARc2lDq\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F2z_uph1qZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\",\"col\":12}},{\"id\":\"cV9nxRYFMF\",\"type\":\"card\",\"data\":{\"card_name\":\"Projects\",\"col\":4}},{\"id\":\"5fLzp2l8rD\",\"type\":\"card\",\"data\":{\"card_name\":\"Time Tracking\",\"col\":4}},{\"id\":\"lZrJTSvhyZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"fn4oC46-pz\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}}]",
  "creation": "2020-03-02 15:46:04.874669",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -62,47 +62,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Projects",
-   "link_count": 3,
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project",
-   "link_count": 0,
-   "link_to": "Project",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Task",
-   "link_count": 0,
-   "link_to": "Task",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Project Type",
-   "link_count": 0,
-   "link_to": "Project Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Reports",
    "link_count": 2,
    "onboard": 0,
@@ -129,9 +88,60 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Projects",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project",
+   "link_count": 0,
+   "link_to": "Project",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "SD Sub Task",
+   "link_count": 0,
+   "link_to": "SD Sub Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Type",
+   "link_count": 0,
+   "link_to": "Project Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-02-09 14:25:47.852023",
+ "modified": "2024-03-05 16:30:00.679971",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Projects",
@@ -164,6 +174,15 @@
    "type": "Report"
   },
   {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Total",
+   "label": "SD Sub Task Data Import",
+   "link_to": "Data Import",
+   "stats_filter": "{\"reference_doctype\":[\"=\",\"SD Sub Task\"]}",
+   "type": "DocType"
+  },
+  {
    "color": "Blue",
    "doc_view": "List",
    "format": "{} Total",
@@ -178,6 +197,15 @@
    "label": "SD Daily Report Timesheets",
    "link_to": "SD Daily Report Timesheets",
    "stats_filter": "{\"date\":[\"Timespan\",\"today\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Total",
+   "label": "SD Task Data Import",
+   "link_to": "Data Import",
+   "stats_filter": "{\"reference_doctype\":[\"=\",\"Task\"]}",
    "type": "DocType"
   },
   {

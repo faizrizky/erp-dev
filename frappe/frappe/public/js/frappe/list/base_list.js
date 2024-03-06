@@ -47,9 +47,6 @@ frappe.views.BaseList = class BaseList {
 			this.user_settings.List.sort_by = 'modified';
 		}
 
-		console.log(this.user_settings)
-
-
 		this.start = 0;
 		this.page_length = 20;
 		this.data = [];

@@ -45,10 +45,15 @@ frappe.ui.Tags = class {
     let sdRole = frappe.user_roles
       .join(",")
       .toLowerCase()
+      .includes("technical architect");
+
+    let sdLeadRole = frappe.user_roles
+      .join(",")
+      .toLowerCase()
       .includes("leader software");
 
     const me = this;
-    const select_tag = function() {
+    const select_tag = function () {
       const tagValue = frappe.utils.xss_sanitise(me.$input.val());
       me.addTag(tagValue);
       me.$input.val("");
@@ -63,7 +68,7 @@ frappe.ui.Tags = class {
       this.deactivate();
     });
 
-    if (sdRole || frappe.session.user === "Administrator") {
+    if (sdLeadRole || sdRole || frappe.session.user === "Administrator") {
       this.$placeholder.on("click", () => {
         this.activate();
         this.$input.focus(); // focus only when clicked

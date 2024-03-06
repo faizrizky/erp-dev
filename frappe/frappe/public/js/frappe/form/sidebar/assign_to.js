@@ -17,11 +17,11 @@ frappe.ui.form.AssignTo = class AssignTo {
       .toLowerCase()
       .includes("hod content");
 
-    let sdRole = frappe.user_roles
+    let sdLeadRole = frappe.user_roles
       .join(",")
       .toLowerCase()
       .includes("leader software");
-    // if (!(sdRole || cdRole || frappe.session.user === "Administrator")) {
+    // if (!(sdLeadRole || cdRole || frappe.session.user === "Administrator")) {
     //   this.parent.find(".add-assignment-btn").remove();
     // }
 
@@ -831,10 +831,15 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
     let me = this;
 
     // if (frappe.user.has_role("Software Developer") != 1) {
-    let sdRole = frappe.user_roles
+    let sdLeadRole = frappe.user_roles
       .join(",")
       .toLowerCase()
       .includes("leader software");
+
+    let sdRole = frappe.user_roles
+      .join(",")
+      .toLowerCase()
+      .includes("technical architect");
 
     var cdRole = frappe.user_roles
       .join(",")
@@ -843,11 +848,11 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 
     // let filters = { name: ["like", "%" + frappe.session.user + "%"] };
 
-    // if (cdRole || sdRole || frappe.session.user === "Administrator") {
+    // if (cdRole || sdLeadRole || frappe.session.user === "Administrator") {
     //   filters = {};
     // }
 
-    if (sdRole) {
+    if (sdLeadRole) {
       return [
         {
           label: __("Assign to me"),
@@ -936,7 +941,89 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
           fieldname: "description",
         },
       ];
-    } else if (cdRole) {
+    } if (sdRole) {
+      return [
+        {
+          label: __("Assign to me"),
+          fieldtype: "Check",
+          fieldname: "assign_to_me",
+          default: 0,
+          onchange: () => me.assign_to_me(),
+        },
+
+        {
+          label: __("Level Design"),
+          fieldtype: "Check",
+          fieldname: "assign_ld",
+          default: 0,
+          onchange: () => me.assign_ld(),
+        },
+        {
+          label: __("Backend Programmer"),
+          fieldtype: "Check",
+          fieldname: "assign_be",
+          default: 0,
+          onchange: () => me.assign_be(),
+        },
+        {
+          label: __("Frontend Programmer"),
+          fieldtype: "Check",
+          fieldname: "assign_fe",
+          default: 0,
+          onchange: () => me.assign_fe(),
+        },
+        {
+          fieldtype: "Column Break",
+        },
+        {
+          label: __("Unity Programmer"),
+          fieldtype: "Check",
+          fieldname: "assign_unityprog",
+          default: 0,
+          onchange: () => me.assign_unityprog(),
+        },
+        {
+          label: __("Document Engineer"),
+          fieldtype: "Check",
+          fieldname: "assign_de",
+          default: 0,
+          onchange: () => me.assign_de(),
+        },
+        {
+          label: __("Quality Assurance"),
+          fieldtype: "Check",
+          fieldname: "assign_qa",
+          default: 0,
+          onchange: () => me.assign_qa(),
+        },
+
+        {
+          fieldtype: "Section Break",
+        },
+        {
+          fieldtype: "MultiSelectPills",
+          fieldname: "assign_to",
+          label: __("Assign To"),
+          reqd: true,
+          get_data: function (txt) {
+            return frappe.db.get_link_options("User", txt, {
+              user_type: "System User",
+              enabled: 1,
+            });
+          },
+        },
+
+        {
+          fieldtype: "Section Break",
+        },
+        {
+          label: __("Comment"),
+          fieldtype: "Small Text",
+          fieldname: "description",
+        },
+      ];
+    }
+    else if (cdRole) {
       return [
         {
           label: __("Assign to me"),
@@ -1019,10 +1106,15 @@ frappe.ui.form.AssignmentDialog = class {
   make() {
     let juan = [];
 
-    let sdRole = frappe.user_roles
+    let sdLeadRole = frappe.user_roles
       .join(",")
       .toLowerCase()
       .includes("leader software");
+
+    let sdRole = frappe.user_roles
+      .join(",")
+      .toLowerCase()
+      .includes("technical architect");
 
     var cdRole = frappe.user_roles
       .join(",")
@@ -1031,7 +1123,7 @@ frappe.ui.form.AssignmentDialog = class {
 
     let filters = { name: ["like", "%" + frappe.session.user + "%"] };
 
-    if (cdRole || sdRole || frappe.session.user === "Administrator") {
+    if (cdRole || sdLeadRole || sdRole || frappe.session.user === "Administrator") {
       filters = {};
     }
 
@@ -1114,7 +1206,7 @@ frappe.ui.form.AssignmentDialog = class {
     }
   }
   get_assignment_row(assignment) {
-    let sdRole = frappe.user_roles
+    let sdLeadRole = frappe.user_roles
       .join(",")
       .toLowerCase()
       .includes("leader software");
@@ -1136,7 +1228,7 @@ frappe.ui.form.AssignmentDialog = class {
     if (
       assignment === frappe.session.user ||
       this.frm.perm[0].write ||
-      sdRole ||
+      sdLeadRole ||
       cdRole
     ) {
       row.append(`

@@ -11,14 +11,13 @@
   "employee_name",
   "project_name",
   "total_days",
+  "total_hours_taken",
   "total_weight",
-  "start_date",
-  "end_date",
   "column_break_cxj3z",
   "branch",
-  "weight",
   "task_taken",
-  "qa_idle_total_day",
+  "start_date",
+  "end_date",
   "section_break_uzzci",
   "task"
  ],
@@ -29,12 +28,6 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Employee Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "weight",
-   "fieldtype": "Int",
-   "label": "Weight",
    "read_only": 1
   },
   {
@@ -72,7 +65,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "read_only": 1
   },
   {
    "fieldname": "task_taken",
@@ -89,22 +83,25 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "label": "Start Date"
+   "label": "Start Date",
+   "read_only": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End Date"
+   "label": "End Date",
+   "read_only": 1
   },
   {
-   "fieldname": "qa_idle_total_day",
-   "fieldtype": "Int",
-   "label": "QA Total Idle Day"
+   "fieldname": "total_hours_taken",
+   "fieldtype": "Data",
+   "label": "Total Hours Taken",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-29 10:50:45.204452",
+ "modified": "2024-03-05 09:36:40.262773",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Data Report",

@@ -6,7 +6,8 @@ from frappe import _
 from frappe.model.document import Document
 import json
 import frappe
-from datetime import datetime
+from datetime import datetime,timedelta
+
 
 
 class SDDataReport(Document):
@@ -20,6 +21,7 @@ class SDDataReport(Document):
 		if self.start_date and self.end_date != None:
 			self.validate_total_days(self.start_date,self.end_date)
 		
+		self.validate_total_working_hours()
 			
 	def validate_task_count(self):
 
@@ -81,4 +83,24 @@ class SDDataReport(Document):
 		# print("TOTAL DAYS : ", self.total_days)
 
 		return self.total_days
-		
+
+	def validate_total_working_hours(self):
+		self.total_hours_taken = timedelta()
+
+		for d in self.task:
+			try:
+				# Parse hours_taken as timedelta
+				actual_time_timedelta = datetime.strptime(d.hours_taken, "%H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+			except ValueError:
+				try:
+					actual_time_timedelta = datetime.strptime(d.hours_taken, "%Y-%m-%d %H:%M:%S") - datetime.strptime("00:00:00", "%H:%M:%S")
+				except ValueError:
+					try:
+						days, time_str = d.hours_taken.split(", ")
+						days = int(days.split()[0])
+						hours, minutes, seconds = map(int, time_str.split(":"))
+						actual_time_timedelta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)                  
+					except ValueError:
+						raise ValueError("Unknown time format: {}".format(d.hours_taken))
+			# Add the calculated timedelta to total_hours_taken
+			self.total_hours_taken += actual_time_timedelta

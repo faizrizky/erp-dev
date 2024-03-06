@@ -107,7 +107,10 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
         options: user_roles.join(",").toLowerCase().includes("content")
           ? "CD Project"
           : "Project",
-        filters: { _assign: ["like", "%" + frappe.session.user + "%"] },
+        filters: {
+          _assign: ["like", "%" + frappe.session.user + "%"],
+          status: ["=", ["Open"]],
+        },
       },
       {
         fieldtype: "Link",
@@ -169,7 +172,7 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
       return {
         filters: {
           project: project,
-          status: ["!=", "Cancelled"],
+          status: ["not in", ["Cancelled", "Completed"]],
           _assign: ["like", "%" + frappe.session.user + "%"],
         },
       };
@@ -177,7 +180,7 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
       return {
         filters: {
           project: project,
-          status: ["!=", "Cancelled"],
+          status: ["not in", ["Cancelled", "Completed"]],
           ongoing_sprint: ["!=", ""],
           _assign: ["like", "%" + frappe.session.user + "%"],
         },
@@ -337,7 +340,7 @@ erpnext.timesheet.control_timer = function (frm, dialog, row, timestamp = 0) {
       row.completed = 0;
       let d = moment(row.from_time);
       if (row.expected_hours) {
-        d.add(row.expected_hours, "hours");
+        d.add(row.expected_hours, "minute");
         row.to_time = d.format(frappe.defaultDatetimeFormat);
       }
       frm.refresh_field("time_logs");

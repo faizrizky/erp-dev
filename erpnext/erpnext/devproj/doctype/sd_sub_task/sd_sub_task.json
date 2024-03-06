@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "format:SD-ST-{YY}-{####}",
  "creation": "2023-12-29 15:43:18.341424",
  "default_view": "List",
@@ -58,17 +59,17 @@
    "description": "Value between 1 - 4",
    "fieldname": "weight",
    "fieldtype": "Int",
-   "label": "Weight",
-   "reqd": 1
+   "hidden": 1,
+   "label": "Weight"
   },
   {
    "description": "Value between 1 - 4",
    "fieldname": "qa_weight",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "QA Weight",
    "mandatory_depends_on": "eval:doc.department != \"Document Engineer\" && doc.department != \"Technical Architect Document Engineer\"",
-   "read_only_depends_on": "eval:doc.department == \"Document Engineer\" || doc.department == \"Technical Architect Document Engineer\"",
-   "reqd": 1
+   "read_only_depends_on": "eval:doc.department == \"Document Engineer\" || doc.department == \"Technical Architect Document Engineer\""
   },
   {
    "fieldname": "project",
@@ -80,7 +81,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-11 16:56:43.475126",
+ "modified": "2024-02-24 14:54:17.855090",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Sub Task",

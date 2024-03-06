@@ -61,7 +61,7 @@ frappe.ui.form.on("SD Timesheets", {
 					filters: {
 						project: child.project,
 						ongoing_sprint: ["!=", ""],
-						status: ["!=", "Cancelled"],
+						status: ["not in", ["Cancelled", "Completed"]],
 						_assign: ["like", "%" + frappe.session.user + "%"],
 					},
 				};
@@ -104,7 +104,7 @@ frappe.ui.form.on("SD Timesheets", {
 				return {
 					filters: {
 						company: frm.doc.company,
-						status: ["!=", "Cancelled"],
+						status: ["=", ["Open"]],
 						_assign: ["like", "%" + frappe.session.user + "%"],
 					},
 				};
@@ -126,37 +126,38 @@ frappe.ui.form.on("SD Timesheets", {
 				fieldname: ["employee_name"],
 			},
 			callback: function (response) {
+
 				if (response && response.message) {
 					var user_employee_name = response.message.employee_name;
-					console.log("User Employee Name:", user_employee_name);
+					if (user_employee_name === frm.doc.employee_name && frm.doc.start_date == frappe.datetime.get_today() && frm.doc.docstatus == 1) {
+						frappe.call({
+							method: "frappe.client.get_list",
+							args: {
+								doctype: "SD Timesheets",
+								filters: {
+									start_date: frappe.datetime.get_today(),
+									employee_name: user_employee_name,
+									docstatus: 1
+								},
 
-					frappe.call({
-						method: "frappe.client.get_list",
-						args: {
-							doctype: "SD Timesheets",
-							filters: {
-								start_date: frappe.datetime.get_today(),
-								employee_name: user_employee_name,
-								docstatus: 1
 							},
+							callback: function (response) {
+								if (response && response.message) {
+									console.log("Number of SD Timesheets Today:", response.message.length);
+									console.log("Date:", frappe.datetime.get_today());
+									if (response.message.length >= 1) {
+										frappe.msgprint({
+											title: __("Multiple Timesheets Detected"),
+											indicator: 'red',
+											message: __("You cannot create multiple Timesheets in a day. Redirecting to SD Timesheets page."),
+										});
 
-						},
-						callback: function (response) {
-							if (response && response.message) {
-								console.log("Number of SD Timesheets Today:", response.message.length);
-								console.log("Date:", frappe.datetime.get_today());
-								if (response.message.length >= 1) {
-									frappe.msgprint({
-										title: __("Multiple Timesheets Detected"),
-										indicator: 'red',
-										message: __("You cannot create multiple Timesheets in a day. Redirecting to SD Timesheets page."),
-									});
-
-									frappe.set_route("List", "SD Timesheets");
+										frappe.set_route("List", "SD Timesheets");
+									}
 								}
 							}
-						}
-					});
+						});
+					}
 
 				}
 			}
@@ -600,15 +601,19 @@ frappe.ui.form.on("Timesheet Detail", {
 		console.log("Script executed");
 		let row = frm.selected_doc;
 
+		// frm.fields_dict['time_logs'].grid.grid_rows[1].grid.toggle_reqd("sub_task", true);
+		console.log(frm.fields_dict['time_logs'].grid.docfields[6].reqd = 1)
+		// cur_frm.get_field("time_logs").grid.fieldinfo["sub_task"].read_only = 1
 
+		// frm.fields_dict['time_logs'].grid.docfields[6].grid.toggle_reqd("sub_task", true)
+		console.log(frm.fields_dict['time_logs'].grid.grid_rows[1].grid.get_field('sub_task'))
 
 		if (checkSubTaskLength(row.task).length > 0) {
 			frm.cur_grid.grid.toggle_display("sub_task", true);
-			frm.cur_grid.grid.toggle_reqd("sub_task", true);
-
+			// frm.cur_grid.grid.toggle_reqd("sub_task", true);
 		} else {
 			frm.cur_grid.grid.toggle_display("sub_task", false);
-			frm.cur_grid.grid.toggle_reqd("sub_task", false);
+			// frm.cur_grid.grid.toggle_reqd("sub_task", false);
 			frappe.model.set_value(cdt, cdn, "sub_task", null);
 		}
 
@@ -618,6 +623,7 @@ frappe.ui.form.on("Timesheet Detail", {
 			});
 		}
 	},
+
 
 	from_time: function (frm, cdt, cdn) {
 		alert("employee");

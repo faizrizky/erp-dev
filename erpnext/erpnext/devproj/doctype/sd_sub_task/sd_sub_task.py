@@ -9,12 +9,13 @@ from frappe import _
 class SDSubTask(Document):
     def validate(self):
         self.validate_name()
-        self.validate_weight()
+        # self.validate_weight()
         
     def validate_name(self):
         if '-' in self.subject:
             frappe.throw(("{0} is using hyphen (-). You can't add hypen (-) on Sub Task.").format(frappe.bold(self.subject)),title=_("Invalid Sub Task Name"))
     
+    '''
     def validate_weight(self):
         if self.weight != None:
             if self.weight > 4 or self.weight < 1:
@@ -35,6 +36,6 @@ class SDSubTask(Document):
             else:
                 frappe.throw(_("{0} cannot be {1}.")
                                             .format(frappe.bold("QA Weight"), frappe.bold("0")),title=_("Invalid QA Weight"))
-			
+	'''	
   	
 

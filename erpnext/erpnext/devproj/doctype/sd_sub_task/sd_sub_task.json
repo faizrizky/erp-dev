@@ -12,11 +12,9 @@
   "subject",
   "project",
   "task",
-  "weight",
   "column_break_vdxag",
   "status",
-  "department",
-  "qa_weight"
+  "department"
  ],
  "fields": [
   {
@@ -56,22 +54,6 @@
    "reqd": 1
   },
   {
-   "description": "Value between 1 - 4",
-   "fieldname": "weight",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Weight"
-  },
-  {
-   "description": "Value between 1 - 4",
-   "fieldname": "qa_weight",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "QA Weight",
-   "mandatory_depends_on": "eval:doc.department != \"Document Engineer\" && doc.department != \"Technical Architect Document Engineer\"",
-   "read_only_depends_on": "eval:doc.department == \"Document Engineer\" || doc.department == \"Technical Architect Document Engineer\""
-  },
-  {
    "fieldname": "project",
    "fieldtype": "Link",
    "label": "Project",
@@ -81,7 +63,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-24 14:54:17.855090",
+ "modified": "2024-03-08 10:54:00.439516",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Sub Task",

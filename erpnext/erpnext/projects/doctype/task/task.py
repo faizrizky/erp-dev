@@ -127,26 +127,30 @@ class Task(NestedSet):
 				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
 				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
-
-				print ("sub_task:", d.sub_task)
+				#ganti cara ceknya sama kaya validate sub task
+				#akan ada 2 array employee dan checker
+				# print ("sub_task:", d.sub_task)
 				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
-				print("Sub Task Subject:", sub_task_doc.subject)
+				# print("Sub Task Subject:", sub_task_doc.subject)
 				for timesheets_data in self.timesheets_data:
 					sub_task_timesheet = frappe.get_doc("SD Sub Task", timesheets_data.sub_task)
-					print("timesheets_data :", sub_task_timesheet.subject)
+					# print("timesheets_data :", sub_task_timesheet.subject)
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.employee_name:
-						print("timesheets_data subtask :", sub_task_timesheet.subject, " || sub_task : ", sub_task_doc.subject)
+						# print("timesheets_data subtask :", sub_task_timesheet.subject, " || sub_task : ", sub_task_doc.subject)
 						if d.completion == 1 and self.status == "Completed":
 							update_employee_weight(employee_name,self.project,d.weight,branch, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 							
 							# self.validate_working_date(branch)
 
 							if jumlah_total_elemen_checker_name > 0:
+								#disini akan append array
+								print("MASUK QA")
 								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
 									frappe.throw(_("Please set {0} value between {1}")
 												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-								if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
-									update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+								# print(f"sub_task_timesheet : {sub_task_timesheet.subject} || timesheets_data.employee_name : {timesheets_data.employee_name}")
+								# print(f"sub_task_doc : {sub_task_doc.subject} || checker_name : {d.checker_name}")
+								update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
 
 						if status_before == "Completed" and self.status != "Completed":
@@ -155,11 +159,11 @@ class Task(NestedSet):
 							# self.validate_working_date(branch)
 
 							if jumlah_total_elemen_checker_name > 0:
+								#disini akan append array checker
 								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
 									frappe.throw(_("Please set {0} value between {1}")
 												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-								if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
-									update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+								update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
 									# self.validate_working_date(branch_checker)	
 
@@ -273,13 +277,13 @@ class Task(NestedSet):
 			for d in self.timesheets_data:
 				sub_task_timesheet = frappe.get_doc("SD Sub Task", d.sub_task)
 				arr_timesheet_data.append((d.employee_name, sub_task_timesheet.subject))
-		# print(arr_timesheet_data)
+		print(arr_timesheet_data)
 
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:
 				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
 				arr_sub_task_data.append((d.employee_name, sub_task_doc.subject, d.checker_name, d.completion,d.qa_completion))
-		# print(arr_sub_task_data)
+		print(arr_sub_task_data)
 
 		for entry in arr_timesheet_data:
 			employee_name = entry[0]
@@ -292,23 +296,31 @@ class Task(NestedSet):
 			employee_name = entry[0]
 			subject = entry[1]
 			completion = entry[3]
-			checker_name = entry[2]
-			qa_completion = entry[4]
-
 			if completion:
-				person_name = employee_name
-			elif qa_completion:
-				person_name = checker_name
-			else:
-				continue
-
-			if person_name in sub_task_dict:
-				if subject in sub_task_dict[person_name]:
-					print(f"Employee {person_name} has task: {subject} in both lists")
+				if employee_name in sub_task_dict:
+					if subject in sub_task_dict[employee_name]:
+						print(f"Employee {employee_name} memiliki tugas: {subject} di kedua daftar")
+					else:
+						# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
 				else:
-					frappe.throw(_("{0} hasn't submitted the timesheet with sub task: {1}").format(frappe.bold(person_name), frappe.bold(subject)), title=_("Invalid Sub Task"))
-			else:
-				frappe.throw(_("{0} hasn't submitted the timesheet with sub task: {1}").format(frappe.bold(person_name), frappe.bold(subject)), title=_("Invalid Sub Task"))
+					# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+
+		for entry in arr_sub_task_data:
+			checker_name = entry[2]
+			subject = entry[1]
+			qa_completion = entry[4]
+			if qa_completion:
+				if checker_name in sub_task_dict:
+					if subject in sub_task_dict[checker_name]:
+						print(f"Employee {checker_name} memiliki tugas: {subject} di kedua daftar")
+					else:
+						# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+				else:
+					# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
 
 		if len(self.sub_task) > 0:
 			for d in self.sub_task:

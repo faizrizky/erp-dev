@@ -603,16 +603,10 @@ frappe.ui.form.on("Timesheet Detail", {
 
 		frappe.model.set_value(cdt, cdn, "sub_task", null);
 
-		// frm.fields_dict['time_logs'].grid.grid_rows[1].grid.toggle_reqd("sub_task", true);
-		console.log(frm.fields_dict['time_logs'].grid.docfields[6].reqd = 1)
-		// cur_frm.get_field("time_logs").grid.fieldinfo["sub_task"].read_only = 1
-
-		// frm.fields_dict['time_logs'].grid.docfields[6].grid.toggle_reqd("sub_task", true)
-		console.log(frm.fields_dict['time_logs'].grid.grid_rows[1].grid.get_field('sub_task'))
-
 		if (checkSubTaskLength(row.task).length > 0) {
 			frm.cur_grid.grid.toggle_display("sub_task", true);
 			// frm.cur_grid.grid.toggle_reqd("sub_task", true);
+
 		} else {
 			frm.cur_grid.grid.toggle_display("sub_task", false);
 			// frm.cur_grid.grid.toggle_reqd("sub_task", false);

@@ -20,19 +20,19 @@ def get_column():
     return [
         {"fieldname": "employee_name", "fieldtype": "", "label": _("User"), "height": 150, "width": 200},
         {"fieldname": "branch", "fieldtype": "", "label": _("Team"), "height": 150, "width": 320, "align": "left"},
-        {"fieldname": "task_name", "fieldtype": "", "label": _("Task (Days)"), "height": 500, "width": 350},
-        {"fieldname": "days", "fieldtype": "", "label": _("Days"), "height": 500, "width": 150},
+        {"fieldname": "task_name", "fieldtype": "", "label": _("Task"), "height": 500, "width": 350},
         {"fieldname": "task_taken", "fieldtype": "", "label": _("Task Taken")},
         {"fieldname": "total_weight", "fieldtype": "", "label": _("Total Weight"), "width": 120, "height": 150},
-        {"fieldname": "total_days", "fieldtype": "", "label": _("Total Days"), "height": 150, "width": 150,
-         "align": "left"},
+        {"fieldname": "total_hours_taken", "fieldtype": "", "label": _("Total Hours Taken"), "height": 500, "width": 150},
+        # {"fieldname": "total_days", "fieldtype": "", "label": _("Total Days"), "height": 150, "width": 150,
+        #  "align": "left"},
     ]
 
 
 def get_data(filters):
     result = frappe.db.get_all(
         "SD Data Report",
-        fields=["name", "total_weight", "employee_name", "branch", "task.task_name"],
+        fields=["name", "total_weight", "employee_name", "branch", "task.task_name","total_hours_taken"],
         filters=filters,
         as_list=False,
         debug=False,
@@ -47,7 +47,9 @@ def get_data(filters):
         concatenated_days = ""
         if hasattr(parent_doc, "task") and parent_doc.task:
             child_records = parent_doc.get("task")
-            total_days = parent_doc.total_days
+            print("total_hours_taken : ", row)
+            print("total_hours_taken : ", row.total_hours_taken)
+            # total_days = parent_doc.total_days
             total_weight = 0
             task_taken = len(child_records)
             concatenated_str += "<ol style='padding-left: 30px;padding-right:30px;'>"
@@ -111,9 +113,9 @@ def get_data(filters):
                 "employee_name": row.employee_name,
                 "branch": row.branch,
                 "task_taken": task_taken,
-                "days": concatenated_days,
+                "total_hours_taken": row.total_hours_taken,
                 "task_name": concatenated_str,
-                "total_days": total_days,
+                # "total_days": total_days,
                 "total_weight": total_weight
             })
 
@@ -126,14 +128,14 @@ def get_chart_data(data):
     labels = []
     task_taken = []
     total_weight = []
-    total_days = []
+    # total_days = []
     # overdue_tasks = []
 
     for project in data:
         labels.append(project["employee_name"])
         task_taken.append(project["task_taken"])
         total_weight.append(project["total_weight"])
-        total_days.append(project["total_days"])
+        # total_days.append(project["total_days"])
         # overdue_tasks.append(project["task_taken"] - project["total_days"])
 
     return {
@@ -142,7 +144,7 @@ def get_chart_data(data):
             "datasets": [
                 {"name": "Task Taken", "values": task_taken[:30]},
                 {"name": "Total Weight", "values": total_weight[:30]},
-                {"name": "Total Days", "values": total_days[:30]},
+                # {"name": "Total Days", "values": total_days[:30]},
             ],
         },
         "type": "bar",
@@ -156,7 +158,7 @@ def get_report_summary(data):
         return None
     total_task_taken = sum(row["task_taken"] for row in data)
     total_weight = sum(row["total_weight"] for row in data)
-    total_days = sum(row["total_days"] for row in data)
+    # total_days = sum(row["total_days"] for row in data)
     return [
         {
             "value": total_task_taken,
@@ -170,10 +172,10 @@ def get_report_summary(data):
             "label": _("Total Weight"),
             "datatype": "Int",
         },
-        {
-            "value": total_days,
-            "indicator": "Blue",
-            "label": _("Total Days"),
-            "datatype": "Int",
-        },
+        # {
+        #     "value": total_days,
+        #     "indicator": "Blue",
+        #     "label": _("Total Days"),
+        #     "datatype": "Int",
+        # },
     ]

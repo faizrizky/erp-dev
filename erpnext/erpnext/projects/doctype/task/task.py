@@ -127,30 +127,25 @@ class Task(NestedSet):
 				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
 				branch_checker = frappe.db.get_value("Employee", d.checker_name, "branch")
-				#ganti cara ceknya sama kaya validate sub task
-				#akan ada 2 array employee dan checker
-				# print ("sub_task:", d.sub_task)
+	
 				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
-				# print("Sub Task Subject:", sub_task_doc.subject)
 				for timesheets_data in self.timesheets_data:
 					sub_task_timesheet = frappe.get_doc("SD Sub Task", timesheets_data.sub_task)
-					# print("timesheets_data :", sub_task_timesheet.subject)
+					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
+						print("Checker Name : ", d.checker_name , " || ", "Total Hours Count : ", timesheets_data.total_working_hours)
+						if jumlah_total_elemen_checker_name > 0:
+							if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+								frappe.throw(_("Please set {0} value between {1}")
+											.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+							
+							update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+       
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.employee_name:
-						# print("timesheets_data subtask :", sub_task_timesheet.subject, " || sub_task : ", sub_task_doc.subject)
+
 						if d.completion == 1 and self.status == "Completed":
 							update_employee_weight(employee_name,self.project,d.weight,branch, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 							
 							# self.validate_working_date(branch)
-
-							if jumlah_total_elemen_checker_name > 0:
-								#disini akan append array
-								print("MASUK QA")
-								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
-									frappe.throw(_("Please set {0} value between {1}")
-												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-								# print(f"sub_task_timesheet : {sub_task_timesheet.subject} || timesheets_data.employee_name : {timesheets_data.employee_name}")
-								# print(f"sub_task_doc : {sub_task_doc.subject} || checker_name : {d.checker_name}")
-								update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
 
 						if status_before == "Completed" and self.status != "Completed":

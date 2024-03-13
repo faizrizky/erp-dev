@@ -79,7 +79,6 @@
   },
   {
    "columns": 1,
-   "fetch_from": "sub_task.qa_weight",
    "fieldname": "qa_weight",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -96,7 +95,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-23 10:03:11.907204",
+ "modified": "2024-03-13 08:55:04.738071",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "Assignment Sub Task",

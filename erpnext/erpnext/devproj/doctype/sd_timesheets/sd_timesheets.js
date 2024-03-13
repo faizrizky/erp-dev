@@ -250,8 +250,9 @@ frappe.ui.form.on("SD Timesheets", {
 		});
 	},
 
-	refresh: function (frm) {
+	refresh: function (frm, cdt, cdn) {
 		console.log("Executed on refresh")
+
 		if (frm.doc.docstatus == 1) {
 			if (
 				frm.doc.per_billed < 100 &&
@@ -263,17 +264,6 @@ frappe.ui.form.on("SD Timesheets", {
 				});
 			}
 		}
-
-		// frm.fields_dict['time_logs'].grid.get_field('sub_task').get_query = function (doc, cdt, cdn) {
-		// 	var child = locals[cdt][cdn];
-		// 	if (child.sub_task === null) {
-		// 		// sub_task is null
-		// 		console.log("sub_task is null");
-		// 	} else {
-		// 		// sub_task is not null
-		// 		console.log("sub_task is not null");
-		// 	}
-		// }
 
 		var timeLogs = frm.doc.time_logs;
 		var subTaskField = frm.fields_dict['time_logs'];
@@ -299,6 +289,7 @@ frappe.ui.form.on("SD Timesheets", {
 						
 						// console.log("Total Sub Task : ", response.message.sub_task.length)
 						*/
+
 						if (response.message && doc.sub_task.length > 0) {
 							subTaskField.grid.toggle_display('sub_task', true);
 							if (timeLogs[timeLogs.length - 1].sub_task == undefined) {
@@ -312,7 +303,6 @@ frappe.ui.form.on("SD Timesheets", {
 							// console.log("TASK MASUK ELSE : ", timeLogs[timeLogs.length - 1].task)
 						}
 					}
-					//eval: (function () { var subTaskLength = checkSubTaskLength(doc.task).length; if (subTaskLength > 0) { return true; } else { doc.sub_task = null; return false; } })()
 				});
 			}
 			else {
@@ -338,6 +328,11 @@ frappe.ui.form.on("SD Timesheets", {
 					if (flag && row.activity_type && !row.from_time) {
 						erpnext.timesheet.timer(frm, row);
 						row.from_time = frappe.datetime.now_datetime();
+						let d = moment(row.from_time);
+						if (row.expected_hours) {
+							d.add(row.expected_hours, "minute");
+							row.to_time = d.format(frappe.defaultDatetimeFormat);
+						}
 						frm.refresh_fields("time_logs");
 						frm.save();
 						flag = false;
@@ -602,8 +597,8 @@ frappe.ui.form.on("Timesheet Detail", {
 		let row = frm.selected_doc;
 
 		frappe.model.set_value(cdt, cdn, "sub_task", null);
-
-		if (checkSubTaskLength(row.task).length > 0) {
+		console.log(checkSubTaskLength(row.task))
+		if (checkSubTaskLength(row.task).length >= 1) {
 			frm.cur_grid.grid.toggle_display("sub_task", true);
 			// frm.cur_grid.grid.toggle_reqd("sub_task", true);
 
@@ -622,7 +617,6 @@ frappe.ui.form.on("Timesheet Detail", {
 
 
 	from_time: function (frm, cdt, cdn) {
-		alert("employee");
 		calculate_end_time(frm, cdt, cdn);
 	},
 
@@ -721,7 +715,9 @@ var calculate_end_time = function (frm, cdt, cdn) {
 	}
 
 	let d = moment(child.from_time);
+	console.log(child)
 	if (child.hours) {
+		console.log(child.hours)
 		d.add(child.hours, "hours");
 		frm._setting_hours = true;
 		frappe.model

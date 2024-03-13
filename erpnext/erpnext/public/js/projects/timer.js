@@ -207,7 +207,7 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
       async: false,
 
       callback: function (result) {
-        console.log(result);
+        // console.log(result);
         employeeName = result.message.employee_name;
         deptName = result.message.branch;
       }
@@ -387,8 +387,8 @@ erpnext.timesheet.control_timer = function (frm, dialog, row, timestamp = 0) {
     grid_row.doc.project = args.project;
     grid_row.doc.task = args.task;
     grid_row.doc.sub_task = args.sub_task;
-    console.log(grid_row.doc)
-    console.log(grid_row.doc.sub_task)
+    // console.log(grid_row.doc)
+    // console.log(grid_row.doc.sub_task)
     grid_row.doc.expected_hours = args.expected_hours;
     grid_row.doc.expected_hours_count = moment
       .utc(((args.expected_hours * 1000) / 60) * 3600)

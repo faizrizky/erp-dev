@@ -158,6 +158,12 @@ erpnext.timesheet.timer = function (frm, row, timestamp = 0) {
     ],
   });
 
+  dialog.fields_dict.project.get_query = function (frm, cdt, cdn) {
+    // var child = locals[cdt][cdn];
+    cur_dialog.fields_dict.task.set_input(null);
+    cur_dialog.fields_dict.sub_task.set_input(null);
+  };
+
   dialog.fields_dict.task.get_query = function (frm, cdt, cdn) {
     // var child = locals[cdt][cdn];
     var project = cur_dialog.fields_dict.project.value;

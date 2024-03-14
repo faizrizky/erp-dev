@@ -592,6 +592,11 @@ frappe.ui.form.on("Timesheet Detail", {
 		calculate_time_and_amount(frm);
 	},
 
+	project: (frm, cdt, cdn) => {
+		frappe.model.set_value(cdt, cdn, "task", null);
+		frappe.model.set_value(cdt, cdn, "sub_task", null);
+	},
+
 	task: (frm, cdt, cdn) => {
 		console.log("Script executed");
 		let row = frm.selected_doc;

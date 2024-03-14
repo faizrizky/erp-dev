@@ -612,7 +612,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2024-03-06 14:52:16.355927",
+ "modified": "2024-03-13 14:05:40.751337",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
@@ -640,6 +640,19 @@
    "read": 1,
    "report": 1,
    "role": "Leader Software Developer",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Technical Architect Software Developer",
    "select": 1,
    "share": 1,
    "write": 1

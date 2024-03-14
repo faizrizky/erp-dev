@@ -46,10 +46,11 @@
   },
   {
    "fieldname": "branch",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Department",
+   "options": "Branch",
    "read_only": 1
   },
   {
@@ -101,7 +102,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-12 13:40:32.376106",
+ "modified": "2024-03-14 11:28:09.959670",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Data Report",

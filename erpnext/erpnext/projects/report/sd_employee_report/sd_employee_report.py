@@ -22,10 +22,10 @@ def get_column():
         {"fieldname": "branch", "fieldtype": "", "label": _("Team"), "height": 150, "width": 320, "align": "left"},
         {"fieldname": "task_name", "fieldtype": "", "label": _("Task"), "height": 500, "width": 350},
         {"fieldname": "task_taken", "fieldtype": "", "label": _("Task Taken")},
+        {"fieldname": "hours_taken", "fieldtype": "", "label": _("Hours Taken"), "height": 150, "width": 150,
+         "align": "left"},
         {"fieldname": "total_weight", "fieldtype": "", "label": _("Total Weight"), "width": 120, "height": 150},
         {"fieldname": "total_hours_taken", "fieldtype": "", "label": _("Total Hours Taken"), "height": 500, "width": 150},
-        # {"fieldname": "total_days", "fieldtype": "", "label": _("Total Days"), "height": 150, "width": 150,
-        #  "align": "left"},
     ]
 
 
@@ -47,8 +47,8 @@ def get_data(filters):
         concatenated_days = ""
         if hasattr(parent_doc, "task") and parent_doc.task:
             child_records = parent_doc.get("task")
-            print("total_hours_taken : ", row)
-            print("total_hours_taken : ", row.total_hours_taken)
+            # print("total_hours_taken : ", row)
+            # print("total_hours_taken : ", row.total_hours_taken)
             # total_days = parent_doc.total_days
             total_weight = 0
             task_taken = len(child_records)
@@ -60,7 +60,7 @@ def get_data(filters):
 
             for child in child_records:
                 task_name = child.task_name
-                task_days = str(child.days)
+                task_days = str(child.hours_taken)
                 total_weight += child.task_weight
 
                 pname = task_name.split('-')[0].strip()
@@ -113,9 +113,9 @@ def get_data(filters):
                 "employee_name": row.employee_name,
                 "branch": row.branch,
                 "task_taken": task_taken,
+                "hours_taken": concatenated_days,
                 "total_hours_taken": row.total_hours_taken,
                 "task_name": concatenated_str,
-                # "total_days": total_days,
                 "total_weight": total_weight
             })
 

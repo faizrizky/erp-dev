@@ -268,56 +268,57 @@ class Task(NestedSet):
 		has_error = []
 		# has_hypen= []
 
-		if len(self.timesheets_data) > 0:
-			for d in self.timesheets_data:
-				sub_task_timesheet = frappe.get_doc("SD Sub Task", d.sub_task)
-				arr_timesheet_data.append((d.employee_name, sub_task_timesheet.subject))
-		print(arr_timesheet_data)
 
 		if len(self.sub_task) > 0:
-			for d in self.sub_task:
-				sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
-				arr_sub_task_data.append((d.employee_name, sub_task_doc.subject, d.checker_name, d.completion,d.qa_completion))
-		print(arr_sub_task_data)
+			if len(self.timesheets_data) > 0:
+				for d in self.timesheets_data:
+					sub_task_timesheet = frappe.get_doc("SD Sub Task", d.sub_task)
+					arr_timesheet_data.append((d.employee_name, sub_task_timesheet.subject))
+			print(arr_timesheet_data)
 
-		for entry in arr_timesheet_data:
-			employee_name = entry[0]
-			subject = entry[1]
-			if employee_name not in sub_task_dict:
-				sub_task_dict[employee_name] = []
-			sub_task_dict[employee_name].append(subject)
+			if len(self.sub_task) > 0:
+				for d in self.sub_task:
+					sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
+					arr_sub_task_data.append((d.employee_name, sub_task_doc.subject, d.checker_name, d.completion,d.qa_completion))
+			print(arr_sub_task_data)
 
-		for entry in arr_sub_task_data:
-			employee_name = entry[0]
-			subject = entry[1]
-			completion = entry[3]
-			if completion:
-				if employee_name in sub_task_dict:
-					if subject in sub_task_dict[employee_name]:
-						print(f"Employee {employee_name} memiliki tugas: {subject} di kedua daftar")
+			for entry in arr_timesheet_data:
+				employee_name = entry[0]
+				subject = entry[1]
+				if employee_name not in sub_task_dict:
+					sub_task_dict[employee_name] = []
+				sub_task_dict[employee_name].append(subject)
+
+			for entry in arr_sub_task_data:
+				employee_name = entry[0]
+				subject = entry[1]
+				completion = entry[3]
+				if completion:
+					if employee_name in sub_task_dict:
+						if subject in sub_task_dict[employee_name]:
+							print(f"Employee {employee_name} memiliki tugas: {subject} di kedua daftar")
+						else:
+							# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
 					else:
 						# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
-				else:
-					# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
 
-		for entry in arr_sub_task_data:
-			checker_name = entry[2]
-			subject = entry[1]
-			qa_completion = entry[4]
-			if qa_completion:
-				if checker_name in sub_task_dict:
-					if subject in sub_task_dict[checker_name]:
-						print(f"Employee {checker_name} memiliki tugas: {subject} di kedua daftar")
+			for entry in arr_sub_task_data:
+				checker_name = entry[2]
+				subject = entry[1]
+				qa_completion = entry[4]
+				if qa_completion:
+					if checker_name in sub_task_dict:
+						if subject in sub_task_dict[checker_name]:
+							print(f"Employee {checker_name} memiliki tugas: {subject} di kedua daftar")
+						else:
+							# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
+							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
 					else:
 						# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
-				else:
-					# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-						frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
-
-		if len(self.sub_task) > 0:
+							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+       
 			for d in self.sub_task:
 				# check if the same pa aji
 				key = (d.sub_task, d.employee_name)

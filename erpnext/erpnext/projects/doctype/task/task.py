@@ -122,7 +122,11 @@ class Task(NestedSet):
 					frappe.throw(_("Please set {0} value between {1}")
 							.format(frappe.bold("Sub Task Weight"), frappe.bold("1 to 4")))
 
-
+				if jumlah_total_elemen_checker_name > 0:
+							if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+								frappe.throw(_("Please set {0} value between {1}")
+											.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+        
 				employee_name = frappe.db.get_value("Employee", d.employee_name, "employee_name")
 				checker_name = frappe.db.get_value("Employee", d.checker_name, "employee_name")
 				branch = frappe.db.get_value("Employee", d.employee_name, "branch")
@@ -133,12 +137,7 @@ class Task(NestedSet):
 					sub_task_timesheet = frappe.get_doc("SD Sub Task", timesheets_data.sub_task)
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
 						print("Checker Name : ", d.checker_name , " || ", "Total Hours Count : ", timesheets_data.total_working_hours)
-						if jumlah_total_elemen_checker_name > 0:
-							if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
-								frappe.throw(_("Please set {0} value between {1}")
-											.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-							
-							update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+						update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
        
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.employee_name:
 
@@ -153,12 +152,12 @@ class Task(NestedSet):
 
 							# self.validate_working_date(branch)
 
-							if jumlah_total_elemen_checker_name > 0:
-								#disini akan append array checker
-								if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
-									frappe.throw(_("Please set {0} value between {1}")
-												.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
-								update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
+							# if jumlah_total_elemen_checker_name > 0:
+							# 	#disini akan append array checker
+							# 	if flt(d.qa_weight) > 4 or flt(d.qa_weight) < 1:
+							# 		frappe.throw(_("Please set {0} value between {1}")
+							# 					.format(frappe.bold("Sub Task QA Weight"), frappe.bold("1 to 4")))
+							update_employee_weight(checker_name,self.project,-d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
 
 									# self.validate_working_date(branch_checker)	
 

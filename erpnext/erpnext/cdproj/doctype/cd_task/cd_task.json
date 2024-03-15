@@ -376,7 +376,7 @@
    "fieldtype": "Table",
    "label": "Dependent Tasks",
    "options": "CD Task Depends On",
-   "read_only_depends_on": "eval:frappe.user.has_role('\tHOD Content Division') == 1"
+   "read_only_depends_on": "eval: frappe.user.has_role('Content Developer Staff') ? 1 : 0"
   },
   {
    "fieldname": "depends_on_tasks",
@@ -555,7 +555,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2023-12-08 15:21:10.564153",
+ "modified": "2024-03-15 10:46:57.092581",
  "modified_by": "Administrator",
  "module": "CDProj",
  "name": "CD Task",

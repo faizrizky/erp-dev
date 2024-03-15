@@ -166,7 +166,7 @@
    "fieldname": "color",
    "fieldtype": "Color",
    "label": "Color",
-   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') == 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1"
   },
   {
    "bold": 1,
@@ -270,7 +270,7 @@
    "fieldtype": "Table",
    "label": "Dependent Tasks",
    "options": "Task Depends On",
-   "read_only_depends_on": "eval:frappe.user.has_role('Leader Software Developer') != 1"
+   "read_only_depends_on": "eval:frappe.user.has_role('Chief Technology Officer') || frappe.user.has_role('Technical Architect Software Developer') || frappe.user.has_role('Leader Software Developer') ? 0 : 1"
   },
   {
    "fieldname": "depends_on_tasks",
@@ -598,7 +598,8 @@
    "fieldname": "timesheets_data",
    "fieldtype": "Table",
    "label": "Timesheets Data",
-   "options": "SD Assignment Timesheets Data"
+   "options": "SD Assignment Timesheets Data",
+   "read_only_depends_on": "eval:frappe.user.has_role('Software Developer') || frappe.user.has_role('Technical Architect Software Developer') ? 1 : 0"
   },
   {
    "fieldname": "employee_working_hours_section",
@@ -612,7 +613,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2024-03-13 14:05:40.751337",
+ "modified": "2024-03-15 10:42:42.339377",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
@@ -639,7 +640,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Leader Software Developer",
+   "role": "Technical Architect Software Developer",
    "select": 1,
    "share": 1,
    "write": 1
@@ -652,7 +653,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Technical Architect Software Developer",
+   "role": "Leader Software Developer",
    "select": 1,
    "share": 1,
    "write": 1

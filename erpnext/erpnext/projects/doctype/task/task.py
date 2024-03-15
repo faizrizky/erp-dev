@@ -298,10 +298,20 @@ class Task(NestedSet):
 							print(f"Employee {employee_name} memiliki tugas: {subject} di kedua daftar")
 						else:
 							# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
+							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(
+           					frappe.bold(employee_name),
+							frappe.bold(sub_task_error_format),
+       						frappe.bold("Sub Task Table")),
+                    		title=_("Invalid Sub Task"))
 					else:
 						# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(employee_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
+							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(
+           					frappe.bold(employee_name),
+                			frappe.bold(sub_task_error_format),
+                   			frappe.bold("Sub Task Table")),
+                    		title=_("Invalid Sub Task"))
 
 			for entry in arr_sub_task_data:
 				checker_name = entry[2]
@@ -313,10 +323,20 @@ class Task(NestedSet):
 							print(f"Employee {checker_name} memiliki tugas: {subject} di kedua daftar")
 						else:
 							# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
+							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(
+							frappe.bold(checker_name),
+							frappe.bold(sub_task_error_format),
+							frappe.bold("Sub Task Table")),
+							title=_("Invalid Sub Task"))
 					else:
 						# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
-							frappe.throw(_("{0} haven't submitted the timesheet with sub task : {1}").format(frappe.bold(checker_name),frappe.bold(subject)),title=_("Invalid Sub Task"))
+							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
+							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(
+							frappe.bold(checker_name),
+							frappe.bold(sub_task_error_format),
+							frappe.bold("Sub Task Table")),
+							title=_("Invalid Sub Task"))
        
 			for d in self.sub_task:
 				# check if the same pa aji

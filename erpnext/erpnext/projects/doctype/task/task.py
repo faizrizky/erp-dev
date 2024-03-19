@@ -267,6 +267,38 @@ class Task(NestedSet):
 		has_error = []
 		# has_hypen= []
 
+		printed_pairs = set()
+
+		for i, task1 in enumerate(self.sub_task):
+			for j, task2 in enumerate(self.sub_task):
+				if i != j and task1.sub_task == task2.sub_task:
+					if task1.employee_name != task2.employee_name and task1.completion == task2.completion and task1.qa_completion == task2.qa_completion:
+						pair = tuple(sorted((task1.employee_name, task2.employee_name)))
+
+						if pair not in printed_pairs:
+							'''
+							print(f"Terdapat sub tugas yang sama yang dikerjakan oleh employee_name dan completion serta qa_completion yang sama:")
+							print(f"Sub Task: {task1.sub_task}")
+							print(f"Employee 1: {task1.employee_name}, Completion 1: {task1.completion}, QA Completion 1: {task1.qa_completion}")
+							print(f"Employee 2: {task2.employee_name}, Completion 2: {task2.completion}, QA Completion 2: {task2.qa_completion}")
+							'''
+							printed_pairs.add(pair)
+       
+							if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Working":
+								frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Completed')
+			
+					else:
+						if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Completed":
+							frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Working')
+
+
+
+		# for d in self.sub_task:
+		# 	if d.completion and d.qa_completion:
+		# 		prog_has_completed.append((True, d.employee_name, d.sub_task))
+		# 		print("Employee : ", d.employee_name, "||", "Completion : ",d.completion, "||", "Checker Name : ", "||", d.checker_name, "||","QA Completion : ",d.qa_completion, "Sub Task : ", d.sub_task)
+
+			
 
 		if len(self.sub_task) > 0:
 			if len(self.timesheets_data) > 0:
@@ -349,14 +381,14 @@ class Task(NestedSet):
 				# if d.sub_task.count("-") > 0:
 				# 	has_hypen.append(d.sub_task)
      
-				if d.completion == True and d.qa_completion ==  True:
-					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Working":
-						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Completed')
+				# if d.completion == True and d.qa_completion ==  True:
+				# 	if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Working":
+				# 		frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Completed')
 						
 				
-				if (d.completion == True and d.qa_completion ==  False) or (d.completion == False and d.qa_completion ==  True):
-					if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Completed":
-						frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Working')
+				# if (d.completion == True and d.qa_completion ==  False) or (d.completion == False and d.qa_completion ==  True):
+				# 	if frappe.db.get_value('SD Sub Task', d.sub_task, 'status') == "Completed":
+				# 		frappe.db.set_value('SD Sub Task', d.sub_task, 'status', 'Working')
 					
 
 				if check_val[key] <= 1:

@@ -231,7 +231,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Open\nCompleted\nClosed"
+   "options": "Open\nSoon\nCompleted\nClosed"
   },
   {
    "collapsible": 1,
@@ -316,7 +316,7 @@
  "idx": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2023-04-28 10:47:53.756936",
+ "modified": "2024-03-18 13:26:29.290582",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",

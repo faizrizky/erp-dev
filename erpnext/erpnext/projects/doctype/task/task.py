@@ -17,6 +17,7 @@ from frappe.utils import nowdate
 from frappe import db
 import re
 from frappe.desk.form import assign_to
+from collections import defaultdict
 
 
 
@@ -266,43 +267,48 @@ class Task(NestedSet):
 		check_val = dict([])
 		has_error = []
 		# has_hypen= []
+  
+		task_dict = {}
+		unpaired_tasks = []
 
-		printed_pairs = set() 
-
-		for i, task1 in enumerate(self.sub_task):
-			found_pair = False  
-			for j, task2 in enumerate(self.sub_task):
-				if i != j and task1.sub_task == task2.sub_task and task1.checker_name == task2.checker_name and task1.employee_name != task2.employee_name:
-					pair = tuple(sorted((task1.employee_name, task2.employee_name)))
-
-					if pair not in printed_pairs:
-						'''
-						print(f"Terdapat sub tugas yang sama yang dikerjakan oleh employee_name dan completion serta qa_completion yang sama:")
-						print(f"Sub Task: {task1.sub_task}")
-						print(f"Employee 1: {task1.employee_name}, Completion 1: {task1.completion}, QA Completion 1: {task1.qa_completion}")
-						print(f"Employee 2: {task2.employee_name}, Completion 2: {task2.completion}, QA Completion 2: {task2.qa_completion}")
-						'''
-						printed_pairs.add(pair)
-						if task1.completion and task1.qa_completion and task2.completion and task2.qa_completion:
-							if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Working":
-								frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Completed')
-						found_pair = True 
-						break 
-				else:
-					if task1.completion != task1.qa_completion and task2.completion != task2.qa_completion:
-						if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Completed":
-							frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Working')
-
-			if not found_pair:
-				# print(f"Tidak ditemukan pasangan sub tugas untuk task1: {task1.sub_task}")
-				if task1.completion and task1.qa_completion:
-					if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Working":
-						frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Completed')
-				elif task1.completion != task1.qa_completion:
-					if frappe.db.get_value('SD Sub Task', task1.sub_task, 'status') == "Completed":
-						frappe.db.set_value('SD Sub Task', task1.sub_task, 'status', 'Working')
+		for row in self.sub_task:
+			sub_task = row.get('sub_task')
+			if sub_task in task_dict:
+				task_dict[sub_task].append(row)
 			else:
-				break 
+				task_dict[sub_task] = [row]
+
+		# print("Paired Tasks:")
+		for task_name, tasks in task_dict.items():
+			# print(f"Task Name: {task_name}")
+			for i, task in enumerate(tasks):
+				if all(task.get('completion', False) and task.get('qa_completion', False) for task in tasks):
+					if task.get('completion') and task.get('qa_completion'):
+						# print(f"Task {i + 1}: {task_name}")
+						status = frappe.db.get_value('SD Sub Task', task_name, 'status')
+						if status in ["Working", "Open"]:
+							frappe.db.set_value('SD Sub Task', task_name, 'status', 'Completed')
+				else:
+					# print(f"Uncompleted Task {i + 1}: {task_name}")
+					status = frappe.db.get_value('SD Sub Task', task_name, 'status')
+					if status == "Completed":
+						frappe.db.set_value('SD Sub Task', task_name, 'status', 'Working')
+
+		unpaired_tasks = [task for tasks in task_dict.values() for task in tasks if len(tasks) == 1]
+
+		# print("\nUnpaired Tasks:")
+		for task in unpaired_tasks:
+			if task.get('completion') and task.get('qa_completion'):
+				# print(f"Task (Unpaired): {task.get('sub_task')}")
+				status = frappe.db.get_value('SD Sub Task', task.get('sub_task'), 'status')
+				if status in ["Working", "Open"]:
+					frappe.db.set_value('SD Sub Task', task.get('sub_task'), 'status', 'Completed')
+			else:
+				# print(f"Uncompleted Task (Unpaired): {task.get('sub_task')}")
+				status = frappe.db.get_value('SD Sub Task', task.get('sub_task'), 'status')
+				if status == "Completed":
+					frappe.db.set_value('SD Sub Task', task.get('sub_task'), 'status', 'Working')
+
 
 		if len(self.sub_task) > 0:
 			if len(self.timesheets_data) > 0:
@@ -330,9 +336,7 @@ class Task(NestedSet):
 				completion = entry[3]
 				if completion:
 					if employee_name in sub_task_dict:
-						if subject in sub_task_dict[employee_name]:
-							print(f"Employee {employee_name} memiliki tugas: {subject} di kedua daftar")
-						else:
+						if subject not in sub_task_dict[employee_name]:
 							# print(f"Employee {employee_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
 							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
 							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(
@@ -355,9 +359,7 @@ class Task(NestedSet):
 				qa_completion = entry[4]
 				if qa_completion:
 					if checker_name in sub_task_dict:
-						if subject in sub_task_dict[checker_name]:
-							print(f"Employee {checker_name} memiliki tugas: {subject} di kedua daftar")
-						else:
+						if subject not in sub_task_dict[checker_name]:
 							# print(f"Employee {checker_name} memiliki tugas: {subject} di arr_sub_task_data, tetapi tidak di arr_timesheet_data")
 							sub_task_error_format = """<a href="#app/Task/{0}">{0}</a>""".format(subject)
 							frappe.throw(_("{0} is unable to complete Sub Task : {1}, because he/she has never worked on task : {1}. Please review the : {2} or contact your Supervisor.").format(

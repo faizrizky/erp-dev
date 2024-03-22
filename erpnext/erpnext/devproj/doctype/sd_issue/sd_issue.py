@@ -75,14 +75,14 @@ class SDIssue(Document):
 
 	def set_responded_on(self):
 		if self.status == "Replied" and self.first_responded_on != "":
-			self.first_responded_on = datetime.now()
+			self.first_responded_on = datetime.now() + timedelta(hours=7)
 
 		if self.status == "Open":
 			self.first_responded_on = ""
 
 	def set_resolved_on(self):
 		if self.status == "Resolved":
-			self.resolved_time = datetime.now()
+			self.resolved_time = datetime.now() + timedelta(hours=7)
 
 		if self.status == "Open":
 			self.resolved_time = ""

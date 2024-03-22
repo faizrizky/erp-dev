@@ -1102,7 +1102,7 @@ class Task(NestedSet):
 		if self.status not in ("Cancelled", "Completed", "QA Open", "Integration", "Parent Task", "Backlog") and self.exp_end_date:
 			from datetime import datetime
 
-			if self.exp_end_date + timedelta(days=2) < datetime.now().date():
+			if self.exp_end_date + timedelta(days=1) < datetime.now().date():
 				self.db_set("status", "Overdue", update_modified=False)
 				self.update_project()
 

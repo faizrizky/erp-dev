@@ -137,7 +137,7 @@ class Task(NestedSet):
 				for timesheets_data in self.timesheets_data:
 					sub_task_timesheet = frappe.get_doc("SD Sub Task", timesheets_data.sub_task)
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.checker_name:
-						print("Checker Name : ", d.checker_name , " || ", "Total Hours Count : ", timesheets_data.total_working_hours)
+						# print("Checker Name : ", d.checker_name , " || ", "Total Hours Count : ", timesheets_data.total_working_hours)
 						update_employee_weight(checker_name,self.project,d.qa_weight,branch_checker, timesheets_data.total_working_hours,sub_task_doc.subject,self.name,len(self.sub_task),self.status,self.is_group)
        
 					if sub_task_timesheet.subject == sub_task_doc.subject and timesheets_data.employee_name == d.employee_name:
@@ -169,14 +169,14 @@ class Task(NestedSet):
 
 			subject = frappe.db.get_value('Task', self.name, '_assign')
 			if subject is not None:
-				print("MASUK SINI")
+				# print("MASUK SINI")
 				result = json.loads(subject)
 				for emp in result:
 					emp_name = frappe.db.get_value('User', emp, 'full_name')
 					branch = frappe.db.get_value("User", emp, "role")
-					print("INI BRANCH : ", branch)
+					# print("INI BRANCH : ", branch)
 
-					print(emp_name," ",branch)
+					# print(emp_name," ",branch)
 					for timesheets_data in self.timesheets_data:
 						if timesheets_data.employee_name == emp_name:
 							if self.status == "Completed":
@@ -315,13 +315,13 @@ class Task(NestedSet):
 				for d in self.timesheets_data:
 					sub_task_timesheet = frappe.get_doc("SD Sub Task", d.sub_task)
 					arr_timesheet_data.append((d.employee_name, sub_task_timesheet.subject))
-			print(arr_timesheet_data)
+			# print(arr_timesheet_data)
 
 			if len(self.sub_task) > 0:
 				for d in self.sub_task:
 					sub_task_doc = frappe.get_doc("SD Sub Task", d.sub_task)
 					arr_sub_task_data.append((d.employee_name, sub_task_doc.subject, d.checker_name, d.completion,d.qa_completion))
-			print(arr_sub_task_data)
+			# print(arr_sub_task_data)
 
 			for entry in arr_timesheet_data:
 				employee_name = entry[0]
@@ -937,7 +937,7 @@ class Task(NestedSet):
 
 				if getdate(start_date) < getdate(end_date):
 					user_roles = get_roles()
-					print(user_roles)
+					# print(user_roles)
      
 					existing_late_submit_count = existing_row.get("late_submit_count")
 					existing_late_submit_count += 1
@@ -945,7 +945,7 @@ class Task(NestedSet):
 					# Check if the user has either "administrator" or "lead" role
 					# if "Administrator" not in user_roles and "Lead" not in user_roles:
 					if "Administrator" not in user_roles:
-						print("Updating Late Submite Timesheet : " + employee_info.name, str(new_total_hours_str), str(task), str(sub_task))
+						# print("Updating Late Submite Timesheet : " + employee_info.name, str(new_total_hours_str), str(task), str(sub_task))
 						existing_row.update({
 							"late_submit_count": existing_late_submit_count,
 						})
@@ -1113,7 +1113,7 @@ def validate_sprint():
 
 	event = frappe.db.get_list('Event', pluck='name',
 		filters={
-			'starts_on': ['<=', getdate(nowdate())],
+			'starts_on': ['<=', getdate(datetime.now() + timedelta(days=1))],
 			'event_category': ['=', 'Sprint']
 		},
 						fields=['starts_on', 'name'],
@@ -1149,7 +1149,7 @@ def validate_sprint():
 
 	before_assignment_task_val = {"status" : ""}
  
-	print(sql_bulk.format(name = "('" + "', ".join(ongoing_sprint) + "')"))
+	# print(sql_bulk.format(name = "('" + "', ".join(ongoing_sprint) + "')"))
 	frappe.db.sql(sql_bulk.format(name = "('" + "', '".join(before_assignment_task) + "')"), before_assignment_task_val, debug=True)
 	frappe.db.commit()
 	frappe.db.sql(sql_bulk.format(name = "('" + "', '".join(ongoing_sprint) + "')"), ongoing_sprint_val,  debug=True, auto_commit=0, update=True, as_dict=1)
@@ -1358,7 +1358,7 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 		)
 
 def update_employee_weight(employee_name,project,weight,branch,total_day,subject,task_name,has_sub_task,status,is_parent):
-	print("Start Executing Update Employee Weight for : ", employee_name)
+	# print("Start Executing Update Employee Weight for : ", employee_name)
 	user = frappe.get_doc(doctype='SD Data Report', employee_name=employee_name,project_name=project, branch=branch,is_parent = is_parent, total_days=total_day)
 
 	task_item = frappe.get_doc(doctype='SD Data Report Item', task_name=subject)

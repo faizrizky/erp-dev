@@ -20,8 +20,7 @@
   {
    "fieldname": "subject",
    "fieldtype": "Data",
-   "label": "Subject",
-   "unique": 1
+   "label": "Subject"
   },
   {
    "fieldname": "department",
@@ -63,7 +62,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-13 08:55:29.331864",
+ "modified": "2024-03-25 11:02:10.754245",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Sub Task",

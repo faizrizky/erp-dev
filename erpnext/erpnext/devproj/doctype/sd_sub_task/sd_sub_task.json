@@ -34,9 +34,8 @@
   {
    "depends_on": "eval: doc.project != \"\" && doc.project != null",
    "fieldname": "task",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Task",
-   "options": "Task",
    "reqd": 1
   },
   {
@@ -55,6 +54,8 @@
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Project",
    "options": "Project",
    "reqd": 1
@@ -62,7 +63,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-25 11:02:10.754245",
+ "modified": "2024-03-26 13:45:01.781574",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Sub Task",

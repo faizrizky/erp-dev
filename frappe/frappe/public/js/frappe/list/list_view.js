@@ -1634,6 +1634,21 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		const actions_menu_items = [];
 		const bulk_operations = new BulkOperations({ doctype: this.doctype });
 
+		let sdLeadRole = frappe.user_roles
+			.join(",")
+			.toLowerCase()
+			.includes("leader software");
+
+		let sdRole = frappe.user_roles
+			.join(",")
+			.toLowerCase()
+			.includes("technical architect");
+
+		var cdRole = frappe.user_roles
+			.join(",")
+			.toLowerCase()
+			.includes("hod content");
+
 		const is_field_editable = (field_doc) => {
 			return (
 				field_doc.fieldname &&
@@ -1849,21 +1864,27 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			actions_menu_items.push(bulk_edit());
 		}
 
-		actions_menu_items.push(bulk_export());
+		if (cdRole || sdLeadRole || sdRole || frappe.session.user === "Administrator") {
+			// bulk tagging
+			actions_menu_items.push(bulk_add_tags());
 
-		// bulk assignment
-		actions_menu_items.push(bulk_assignment());
+			// bulk assignment
+			actions_menu_items.push(bulk_assignment());
 
-		actions_menu_items.push(bulk_assignment_rule());
+			// bulk printing
+			if (frappe.model.can_print(doctype)) {
+				actions_menu_items.push(bulk_printing());
+			}
 
-		actions_menu_items.push(bulk_add_tags());
+			//bulk exporting
+			actions_menu_items.push(bulk_export());
+
+			//bulk assigment rule
+			actions_menu_items.push(bulk_assignment_rule());
+		}
 
 		// actions_menu_items.push(bulk_assignment_multi_sprint());
 
-		// bulk printing
-		if (frappe.model.can_print(doctype)) {
-			actions_menu_items.push(bulk_printing());
-		}
 
 		// bulk submit
 		if (

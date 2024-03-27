@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "format:SD-ST-{YY}-{####}",
+ "autoname": "naming_series:",
  "creation": "2023-12-29 15:43:18.341424",
  "default_view": "List",
  "doctype": "DocType",
@@ -13,6 +13,7 @@
   "project",
   "task",
   "column_break_vdxag",
+  "naming_series",
   "status",
   "department"
  ],
@@ -60,15 +61,22 @@
    "label": "Project",
    "options": "Project",
    "reqd": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "ST-.YYYY.-",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-26 14:20:05.849937",
+ "modified": "2024-03-27 15:07:20.885359",
  "modified_by": "Administrator",
  "module": "DevProj",
  "name": "SD Sub Task",
- "naming_rule": "Expression",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

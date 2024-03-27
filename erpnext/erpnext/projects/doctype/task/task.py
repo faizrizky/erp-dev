@@ -334,6 +334,7 @@ class Task(NestedSet):
 				employee_name = entry[0]
 				subject = entry[1]
 				completion = entry[3]
+				'''
 				if completion:
 					if employee_name in sub_task_dict:
 						if subject not in sub_task_dict[employee_name]:
@@ -352,11 +353,13 @@ class Task(NestedSet):
                 			frappe.bold(sub_task_error_format),
                    			frappe.bold("Sub Task Table")),
                     		title=_("Invalid Sub Task"))
-
+				'''
+    
 			for entry in arr_sub_task_data:
 				checker_name = entry[2]
 				subject = entry[1]
 				qa_completion = entry[4]
+				'''
 				if qa_completion:
 					if checker_name in sub_task_dict:
 						if subject not in sub_task_dict[checker_name]:
@@ -375,7 +378,7 @@ class Task(NestedSet):
 							frappe.bold(sub_task_error_format),
 							frappe.bold("Sub Task Table")),
 							title=_("Invalid Sub Task"))
-       
+				'''
 			for d in self.sub_task:
 				# check if the same pa aji
 				key = (d.sub_task, d.employee_name)
